@@ -20,12 +20,12 @@
     },
     {
       "name": "On Call Team",
-      "url": "./new-call-team.html",
+      "url": "./call-team.html",
       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     },
     {
       "name": "Print Drug Label",
-      "url": "./new-drug-labels.html",
+      "url": "./drug-labels.html",
       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     }
   ]

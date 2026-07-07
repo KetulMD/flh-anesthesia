@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLH Anesthesia — On Call Team</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface2:#fbfcfd; --text:#1f2933; --muted:#6b7280; --muted2:#9aa3af;
+    --border:#e6e8ec; --border-hover:#cdd3da;
+    --accent:#2f6fed; --accent-bg:#eef4ff; --accent-border:#cfe0fb;
+    --phys:#2563eb; --nurse:#15803d; --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); margin:0; padding:24px 18px;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+  .wrap{max-width:640px; margin:0 auto}
+  header{text-align:center; margin-bottom:18px}
+  header h1{font-size:21px; font-weight:700; letter-spacing:.2px; margin:0}
+  header .sub{font-size:13px; color:var(--muted); margin:4px 0 0}
+  .seclabel{font-size:12px; font-weight:600; letter-spacing:1.1px; text-transform:uppercase; color:var(--muted); margin:24px 2px 12px}
+  /* Featured selected-day card */
+  .feat{background:var(--surface); border:1px solid var(--border); border-radius:16px; box-shadow:0 1px 3px rgba(18,24,33,.04); overflow:hidden}
+  .feat.is-today{border-color:var(--accent-border); box-shadow:0 6px 18px rgba(47,111,237,.10)}
+  .feat-nav{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px 14px; background:var(--surface2); border-bottom:1px solid var(--border)}
+  .feat.is-today .feat-nav{background:var(--accent-bg); border-bottom-color:var(--accent-border)}
+  .navbtn{flex:none; width:40px; height:40px; border-radius:10px; border:1px solid var(--border); background:#fff; color:var(--text); font-size:17px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.15s}
+  .navbtn:hover{border-color:var(--border-hover); background:var(--surface2)}
+  .feat-date{flex:1; display:flex; justify-content:center}
+  .feat-datebtn{display:flex; flex-direction:column; align-items:center; gap:3px; background:transparent; border:1px solid transparent; border-radius:11px; padding:5px 14px; cursor:pointer; font-family:inherit; color:inherit; transition:.15s}
+  .feat-datebtn:hover{background:rgba(18,24,33,.04); border-color:var(--border)}
+  .feat.is-today .feat-datebtn:hover{background:rgba(47,111,237,.07)}
+  .feat-datebtn.open{background:#fff; border-color:var(--border-hover); box-shadow:0 1px 3px rgba(18,24,33,.06)}
+  .feat-datebtn .dn{font-size:19px; font-weight:800; letter-spacing:.2px; display:flex; align-items:center; gap:7px}
+  .feat-datebtn .caret{font-size:11px; color:var(--muted2); font-weight:700}
+  .tag{display:inline-block; font-size:10px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:#fff; background:var(--accent); padding:2px 9px; border-radius:999px}
+  /* Calendar popover */
+  .cal{border-bottom:1px solid var(--border); background:var(--surface2); padding:12px 12px 14px}
+  .cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:9px}
+  .cal-title{font-size:14px; font-weight:700}
+  .cal-nav{width:32px; height:32px; border-radius:8px; border:1px solid var(--border); background:#fff; color:var(--text); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center}
+  .cal-nav:hover:not(:disabled){border-color:var(--border-hover)}
+  .cal-nav:disabled{opacity:.35; cursor:default}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px}
+  .cal-dow span{text-align:center; font-size:10px; font-weight:700; color:var(--muted2); letter-spacing:.3px; padding-bottom:5px}
+  .cal-day{aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-radius:9px; font-size:13px; font-weight:600; border:1px solid transparent; background:transparent; color:var(--muted2); cursor:default; position:relative; padding:0; font-family:inherit}
+  .cal-day.has-data{background:#fff; border-color:var(--border); color:var(--text); cursor:pointer}
+  .cal-day.has-data:hover{border-color:var(--accent-border); background:var(--accent-bg); color:var(--accent)}
+  .cal-day.sel{background:var(--accent); border-color:var(--accent); color:#fff}
+  .cal-day.today:after{content:""; position:absolute; bottom:4px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--accent)}
+  .cal-day.sel.today:after{background:#fff}
+  .cal-day.pad{visibility:hidden}
+  .cal-foot{margin-top:10px; text-align:center}
+  .cal-foot button{border:1px solid var(--accent-border); background:var(--accent-bg); color:var(--accent); font-weight:600; font-size:13px; border-radius:8px; padding:7px 15px; cursor:pointer}
+  .cal-foot button:hover{background:#e2ecfd}
+  .team{padding:14px 18px}
+  .team + .team{border-top:1px solid var(--border)}
+  .team-h{font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; margin-bottom:8px}
+  .team.phys .team-h{color:var(--phys)}
+  .team.nurse .team-h{color:var(--nurse)}
+  .team-h small{display:block; font-size:10.5px; font-weight:600; letter-spacing:.3px; color:var(--muted2); text-transform:none; margin-top:1px}
+  ul.lines{list-style:none; margin:0; padding:0}
+  ul.lines li{padding:4px 0 4px 16px; position:relative; font-size:15px; line-height:1.45}
+  ul.lines li:before{content:""; position:absolute; left:0; top:11px; width:6px; height:6px; border-radius:50%; background:var(--border-hover)}
+  .team.phys ul.lines li:before{background:#9bbcf7}
+  .team.nurse ul.lines li:before{background:#9ed3b4}
+  .team .empty{color:var(--muted2); font-style:italic; font-size:14px}
+  .todaybtn{display:block; margin:14px auto 0; border:1px solid var(--accent-border); background:var(--accent-bg); color:var(--accent); font-weight:600; font-size:13.5px; border-radius:10px; padding:9px 16px; cursor:pointer}
+  .todaybtn:hover{background:#e2ecfd}
+  .todaybtn[hidden]{display:none}
+  .state{text-align:center; color:var(--muted); padding:30px 10px; font-size:14px}
+  .state a{color:var(--accent)}
+  .foot{margin-top:26px; text-align:center; font-size:12px; color:var(--muted2); line-height:1.6}
+  .foot a{color:var(--accent); text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>On Call Team</h1>
+    <p class="sub">FLH Anesthesia · daily OR call schedule</p>
+  </header>
+
+  <div id="app"><div class="state">Loading on‑call schedule…</div></div>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+  const SHEET_ID = "1ckXQphQmybkF2pA6rLnitlmBn7apbIaBSRshFIKh5n4";
+  const GID = "1209762071";
+  // Published-to-web CSV (CORS-friendly; works in the live embed)
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTVtZ4MO_kwrnsUqihqR5G3kP-unINeC-KfYV5HgKQ9bBj0j2uqVw8cxByARE2pqwIJ_Awg6AqMM-8l/pub?output=csv";
+  const SHEET_VIEW = "https://docs.google.com/spreadsheets/d/"+SHEET_ID+"/edit?gid="+GID;
+
+  const app = document.getElementById('app');
+  const foot = document.getElementById('foot');
+  let entries = [], selected = 0, todayIdx = -1;
+  let years = [], dayMap = {}, calOpen = false, calY = null, calM = null;
+  const MONTHS=['','January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOW=['S','M','T','W','T','F','S'];
+
+  // Robust CSV parser (handles quoted fields with embedded commas and newlines)
+  function parseCSV(text){
+    const rows=[]; let row=[], field='', inQ=false; text=text.replace(/\r/g,'');
+    for(let i=0;i<text.length;i++){
+      const c=text[i];
+      if(inQ){
+        if(c==='"'){ if(text[i+1]==='"'){ field+='"'; i++; } else inQ=false; }
+        else field+=c;
+      } else {
+        if(c==='"') inQ=true;
+        else if(c===','){ row.push(field); field=''; }
+        else if(c==='\n'){ row.push(field); rows.push(row); row=[]; field=''; }
+        else field+=c;
+      }
+    }
+    if(field.length||row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+  function md(dstr){ const m=(dstr||'').match(/(\d{1,2})\/(\d{1,2})/); return m?{mo:+m[1],d:+m[2]}:null; }
+  function lines(cell){ return (cell||'').split('\n').map(s=>s.trim()).filter(Boolean); }
+  function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function dateParts(dstr){
+    const m=(dstr||'').trim().match(/^(\S+)\s+(.*)$/);
+    return m ? {dow:m[1], date:m[2]} : {dow:'', date:(dstr||'').trim()};
+  }
+
+  function teamHTML(cell){
+    const ls=lines(cell);
+    if(!ls.length) return '<div class="empty">Not listed</div>';
+    return '<ul class="lines">'+ls.map(l=>'<li>'+esc(l)+'</li>').join('')+'</ul>';
+  }
+
+  // Infer a full year for each entry (dates in the sheet are M/D only).
+  // Anchor on today (real year); walk out, bumping year when the month wraps.
+  function buildIndex(){
+    const now=new Date(), curY=now.getFullYear();
+    const p=entries.map(e=>md(e.date));
+    years=new Array(entries.length);
+    let a = todayIdx>=0 ? todayIdx : 0;
+    years[a]=curY;
+    for(let i=a+1;i<entries.length;i++){ years[i]=years[i-1]; if(p[i]&&p[i-1]&&p[i].mo<p[i-1].mo) years[i]++; }
+    for(let i=a-1;i>=0;i--){ years[i]=years[i+1]; if(p[i]&&p[i+1]&&p[i].mo>p[i+1].mo) years[i]--; }
+    dayMap={};
+    entries.forEach((e,i)=>{ if(p[i]) dayMap[years[i]+'-'+p[i].mo+'-'+p[i].d]=i; });
+  }
+  function monthVal(y,m){ return y*12+m; }
+  function bounds(){
+    let lo=Infinity, hi=-Infinity;
+    entries.forEach((e,i)=>{ const q=md(e.date); if(q){ const v=monthVal(years[i],q.mo); if(v<lo)lo=v; if(v>hi)hi=v; } });
+    return {lo,hi};
+  }
+
+  function calendarHTML(){
+    const b=bounds(), cur=monthVal(calY,calM);
+    let h='<div class="cal">';
+    h+='<div class="cal-head">';
+    h+='<button class="cal-nav" id="calPrev"'+(cur<=b.lo?' disabled':'')+' aria-label="Previous month">‹</button>';
+    h+='<div class="cal-title">'+MONTHS[calM]+' '+calY+'</div>';
+    h+='<button class="cal-nav" id="calNext"'+(cur>=b.hi?' disabled':'')+' aria-label="Next month">›</button>';
+    h+='</div>';
+    h+='<div class="cal-grid cal-dow">'+DOW.map(d=>'<span>'+d+'</span>').join('')+'</div>';
+    const startDow=new Date(calY,calM-1,1).getDay();
+    const dim=new Date(calY,calM,0).getDate();
+    const now=new Date(), tY=now.getFullYear(), tM=now.getMonth()+1, tD=now.getDate();
+    let cells='';
+    for(let k=0;k<startDow;k++) cells+='<span class="cal-day pad"></span>';
+    for(let d=1;d<=dim;d++){
+      const idx=dayMap[calY+'-'+calM+'-'+d];
+      const isT=(calY===tY&&calM===tM&&d===tD);
+      if(idx!==undefined){
+        cells+='<button class="cal-day has-data'+(idx===selected?' sel':'')+(isT?' today':'')+'" data-i="'+idx+'">'+d+'</button>';
+      } else {
+        cells+='<span class="cal-day'+(isT?' today':'')+'">'+d+'</span>';
+      }
+    }
+    h+='<div class="cal-grid cal-days">'+cells+'</div>';
+    if(todayIdx>=0) h+='<div class="cal-foot"><button id="calToday">Jump to today</button></div>';
+    h+='</div>';
+    return h;
+  }
+
+  function render(){
+    if(!entries.length){
+      app.innerHTML='<div class="state">No schedule rows found. <a href="'+SHEET_VIEW+'" target="_blank" rel="noopener">Open the spreadsheet</a></div>';
+      return;
+    }
+    selected=Math.max(0,Math.min(entries.length-1,selected));
+    const e=entries[selected];
+    const dp=dateParts(e.date);
+    const isToday=selected===todayIdx;
+    let h='<div class="feat'+(isToday?' is-today':'')+'">';
+    h+='<div class="feat-nav">';
+    h+='<button class="navbtn" id="prev" aria-label="Previous day"'+(selected===0?' disabled style="opacity:.4;cursor:default"':'')+'>‹</button>';
+    h+='<div class="feat-date"><button class="feat-datebtn'+(calOpen?' open':'')+'" id="dateBtn" aria-expanded="'+calOpen+'">';
+    h+='<span class="dn">'+esc(dp.dow)+' '+esc(dp.date)+' <span class="caret">'+(calOpen?'▲':'▼')+'</span></span>';
+    h+=(isToday?'<span class="tag">Today</span>':'')+'</button></div>';
+    h+='<button class="navbtn" id="next" aria-label="Next day"'+(selected===entries.length-1?' disabled style="opacity:.4;cursor:default"':'')+'>›</button>';
+    h+='</div>';
+    if(calOpen) h+=calendarHTML();
+    h+='<div class="team phys"><div class="team-h">Physician Team <small>On call / FA or Flex</small></div>'+teamHTML(e.phys)+'</div>';
+    h+='<div class="team nurse"><div class="team-h">Nursing Team <small>RN / Tech / SS Leader</small></div>'+teamHTML(e.nurse)+'</div>';
+    h+='</div>';
+    app.innerHTML=h;
+
+    const prev=document.getElementById('prev'), next=document.getElementById('next'), db=document.getElementById('dateBtn');
+    if(prev) prev.onclick=()=>{ if(selected>0){selected--; render();} };
+    if(next) next.onclick=()=>{ if(selected<entries.length-1){selected++; render();} };
+    if(db) db.onclick=()=>{ if(!calOpen){ const q=md(entries[selected].date); calY=years[selected]; calM=q?q.mo:1; } calOpen=!calOpen; render(); };
+    if(calOpen){
+      const cp=document.getElementById('calPrev'), cn=document.getElementById('calNext'), ct=document.getElementById('calToday');
+      if(cp) cp.onclick=()=>{ calM--; if(calM<1){calM=12; calY--;} render(); };
+      if(cn) cn.onclick=()=>{ calM++; if(calM>12){calM=1; calY++;} render(); };
+      if(ct) ct.onclick=()=>{ selected=todayIdx; calOpen=false; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+      app.querySelectorAll('.cal-day.has-data').forEach(c=>c.onclick=()=>{ selected=+c.getAttribute('data-i'); calOpen=false; render(); window.scrollTo({top:0,behavior:'smooth'}); });
+    }
+  }
+
+  function load(){
+    fetch(CSV_URL + "&_=" + Date.now())
+      .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
+      .then(txt=>{
+        const rows=parseCSV(txt);
+        entries=rows.slice(1).filter(r=>r[0] && r[0].trim()).map(r=>({date:r[0].trim(), phys:r[1]||'', nurse:r[2]||''}));
+        const now=new Date(), tMo=now.getMonth()+1, tD=now.getDate();
+        todayIdx=entries.findIndex(e=>{ const x=md(e.date); return x && x.mo===tMo && x.d===tD; });
+        selected = todayIdx>=0 ? todayIdx : 0;
+        buildIndex();
+        render();
+        foot.innerHTML='Live from the FLH Call Schedule. <a href="'+SHEET_VIEW+'" target="_blank" rel="noopener">Open full spreadsheet</a>';
+      })
+      .catch(err=>{
+        app.innerHTML='<div class="state">Couldn’t load the schedule here.<br><a href="'+SHEET_VIEW+'" target="_blank" rel="noopener">Open the spreadsheet &rsaquo;</a></div>';
+        foot.textContent='';
+        console.error(err);
+      });
+  }
+  load();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>

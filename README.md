@@ -7,10 +7,10 @@ Static migration of https://www.gghanesthesia.com/ (Google Sites). One self-cont
 | File | Page |
 |---|---|
 | index.html | Home portal (tile grid) |
-| new-schedule.html | Schedules (year archives, OR staff, long weekends, federal holidays) |
-| new-call-team.html | On Call Team — live daily view from published Google Sheet CSV |
-| new-drug-labels.html | Anesthesia drug label printer (React) — drug list from published Sheet CSV |
-| trial-block-schedule.html | Block Schedule — iframe wrapper around the "Block Schedule Viewer" Apps Script web app |
+| schedule.html | Schedules (year archives, OR staff, long weekends, federal holidays) |
+| call-team.html | On Call Team — live daily view from published Google Sheet CSV |
+| drug-labels.html | Anesthesia drug label printer (React) — drug list from published Sheet CSV |
+| block-schedule.html | Block Schedule — iframe wrapper around the "Block Schedule Viewer" Apps Script web app |
 | or-emergencies.html | OR Emergency Manual (ACLS / critical events) |
 | useful-links.html | Useful Links resource hub |
 | sab-notes.html | Spinal (SAB) note label generator |
