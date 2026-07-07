@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BMI & Height Calculator</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
 <style>
   :root{
     --bg:#f6f7f9; --surface:#ffffff; --text:#1f2933; --muted:#8a93a0; --muted2:#6b7280;
@@ -226,6 +232,11 @@
   wInchT._set(DEF.inch); wInch._set(DEF.inch); wCm._set(DEF.cm);
   wLb._set(DEF.lb); wKg._set(round0(DEF.lb * LB_PER_KG));
   renderBMI();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 </body>
 </html>

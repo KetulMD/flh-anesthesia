@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FLH Anesthesia — On Call Team</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
 <style>
   :root{
     --bg:#f6f7f9; --surface:#ffffff; --surface2:#fbfcfd; --text:#1f2933; --muted:#6b7280; --muted2:#9aa3af;
@@ -239,6 +245,11 @@
       });
   }
   load();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 </body>
 </html>

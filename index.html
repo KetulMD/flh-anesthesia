@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="FLH Anesthesia Department Portal - Quick access to schedules, resources, and tools">
 <title>FLH Anesthesia Portal</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
 <style>
   :root{
     --bg:#f6f7f9; --surface:#ffffff; --text:#1f2933; --muted:#6b7280;
@@ -110,5 +116,10 @@
     <p style="font-size:12px; margin-top:8px">Last updated: June 2026</p>
   </footer>
 </div>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 </body>
 </html>

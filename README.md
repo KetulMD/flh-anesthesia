@@ -35,6 +35,12 @@ To use the custom domain www.gghanesthesia.com later, add it under Settings → 
 
 If any of these ever stops loading, check that the sheet is still File → Share → Publish to web, and the Apps Script deployment is still active.
 
+## Installable app (PWA)
+
+The site is a Progressive Web App. On a phone, open the site in the browser and choose **Add to Home Screen** (iPhone: Share button → Add to Home Screen; Android: menu → Install app). It opens full-screen with its own icon. After the first visit, all pages — including the OR Emergency Manual — keep working offline. Live data (call team, drug list, block schedule) still needs a connection.
+
+Files involved: `manifest.json` (app identity + icons), `sw.js` (offline caching), `icons/` (app icons). If you change any page, also bump `CACHE_VERSION` in `sw.js` (e.g. `flh-v1` → `flh-v2`) so installed apps pick up the update promptly.
+
 ## Updating a page
 
 Edit the matching `.html` file on GitHub (pencil icon), commit, and the live site updates automatically in about a minute.

@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Spinal (SAB) Note Labels</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
 <style>*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1f2937;background:#f3f4f6}.wrap{max-width:760px;margin:0 auto;padding:20px 16px 40px}h1{font-size:20px;margin:0 0 4px}.sub{color:#6b7280;font-size:12px;margin:0 0 16px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:16px}label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}textarea{width:100%;min-height:110px;font-size:14px;line-height:1.4;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;resize:vertical;font-family:inherit}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-top:14px}.field{display:flex;flex-direction:column}.field input{width:110px;padding:8px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px}.btns{display:flex;gap:10px;flex-wrap:wrap}button{cursor:pointer;border:none;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:700}.primary{background:#2563eb;color:#fff}.ghost{background:#eef2ff;color:#2563eb}.meta{font-size:12px;color:#6b7280;margin-top:8px}.meta .pill{display:inline-block;background:#f1f5f9;border-radius:999px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.previewArea{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}.labelPreview{width:504px;height:192px;border:1px dashed #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;padding:6px;background:#fff;overflow:hidden}.labelText{text-align:center;line-height:1.12;word-break:break-word;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif}.sheetNote{font-size:12px;color:#6b7280;max-width:300px}</style>
 </head>
 <body>
@@ -25,6 +31,11 @@
   function waitJsPDF(){if(ready()){render();}else{setTimeout(waitJsPDF,150);}}
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
 </script>
 </body>
 </html>
