@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI & Height Calculator</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --text:#1f2933; --muted:#8a93a0; --muted2:#6b7280;
+    --border:#ebedf0; --faint:#c7cdd6;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); margin:0; padding:22px 16px;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:20px;
+    box-shadow:0 6px 22px rgba(18,24,33,.05); padding:30px 24px; max-width:440px; width:100%; text-align:center;}
+  h1{margin:0 0 4px; font-size:22px; font-weight:700; letter-spacing:.2px}
+  .subtitle{color:var(--muted2); margin:0 0 26px; font-size:13.5px}
+  .group{display:flex; align-items:center; gap:14px; text-align:left}
+  .group + .group{border-top:1px solid var(--border); margin-top:16px; padding-top:16px}
+  .field-label{flex:none; width:66px; font-size:12px; text-transform:uppercase; letter-spacing:1.3px; color:var(--muted); font-weight:600; line-height:1.3}
+  .vals{flex:1; min-width:0}
+
+  /* iOS-style picker wheel */
+  .wheel{position:relative; width:100%; overflow:hidden; touch-action:pan-y}
+  .wheel + .wheel{margin-top:2px}
+  .wheel-scroll{height:100%; overflow-y:scroll; scroll-snap-type:y mandatory; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; -ms-overflow-style:none;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 32%,#000 68%,transparent 100%);
+            mask-image:linear-gradient(to bottom,transparent 0%,#000 32%,#000 68%,transparent 100%);}
+  .wheel-scroll::-webkit-scrollbar{display:none}
+  .wheel-item{display:flex; align-items:baseline; justify-content:center; gap:8px; scroll-snap-align:center;
+    color:var(--faint); transition:color .12s ease, transform .12s ease; transform:scale(.78)}
+  .wheel-item .n{font-weight:700}
+  .wheel-item.is-sel{transform:scale(1)}
+  .wprimary .wheel-item .n{font-size:44px; letter-spacing:.5px}
+  .wprimary .wheel-item .u{font-size:18px; font-weight:500}
+  .wprimary .wheel-item.is-sel{color:var(--text)}
+  .wprimary .wheel-item.is-sel .u{color:var(--muted)}
+  .wsecondary .wheel-item .n{font-size:26px; font-weight:600}
+  .wsecondary .wheel-item .u{font-size:15px; font-weight:500}
+  .wsecondary .wheel-item.is-sel{color:var(--muted2)}
+  .wsecondary .wheel-item.is-sel .u{color:var(--muted)}
+
+  .bmi-section{}
+  .bmi-section .vals{text-align:center}
+  .bmi-section .bmi-value{margin-top:0}
+  .bmi-value{font-size:60px; font-weight:700; line-height:1.02; transition:color .15s}
+  .category{display:inline-block; margin-top:14px; padding:9px 20px; border-radius:999px; font-weight:600; font-size:15px}
+  .malnutrition{background:#f4dcc0; color:#7a4310}
+  .mod-thin{background:#f6e2c2; color:#8a5a1a}
+  .mild-thin{background:#fbf2d6; color:#8a6d1a}
+  .normal{background:#e3f1e1; color:#2f6b3a}
+  .overweight{background:#fbe7d0; color:#8a571a}
+  .obese1{background:#fbdcde; color:#9a3338}
+  .obese2{background:#f4c6c9; color:#88272c}
+  .obese3{background:#eeb0b4; color:#7a2024}
+  .superobese{background:#e59aa0; color:#6a181d}
+  .supersuper{background:#d9858b; color:#561318}
+  .reset{display:block; margin:22px auto 0; border:none; background:transparent; color:var(--muted);
+    font-size:13.5px; font-weight:500; letter-spacing:.3px; cursor:pointer; padding:6px}
+  .reset:hover{color:var(--text)}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>BMI &amp; Height Calculator</h1>
+    <p class="subtitle">Spin a wheel to set height and weight</p>
+
+    <div class="group">
+      <div class="field-label">Height</div>
+      <div class="vals">
+        <div class="wheel" id="w_inchT"></div>
+        <div class="wheel" id="w_inch"></div>
+        <div class="wheel" id="w_cm"></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="field-label">Weight</div>
+      <div class="vals">
+        <div class="wheel" id="w_lb"></div>
+        <div class="wheel" id="w_kg"></div>
+      </div>
+    </div>
+
+    <div class="group bmi-section">
+      <div class="field-label">BMI</div>
+      <div class="vals">
+        <div class="bmi-value" id="bmi">—</div>
+        <div id="category" class="category"></div>
+      </div>
+    </div>
+    <button class="reset" id="resetBtn">Reset</button>
+  </div>
+<script>
+  const $ = id => document.getElementById(id);
+  const LB_PER_KG = 0.453592;
+  const DEF = { inch:68, cm:173, lb:160, kg:73 };
+  const CATCOLOR = {malnutrition:'#7a4310',['mod-thin']:'#8a5a1a',['mild-thin']:'#8a6d1a',normal:'#2f6b3a',
+    overweight:'#8a571a',obese1:'#9a3338',obese2:'#88272c',obese3:'#7a2024',superobese:'#6a181d',supersuper:'#561318'};
+  let heightCm = DEF.inch * 2.54;
+  let weightKg = DEF.lb * LB_PER_KG;
+  function round0(v){ return Math.round(v); }
+  function ftIn(inch){ return Math.floor(inch/12)+"' "+(inch%12)+'"'; }
+
+  /* ---- iOS-style picker wheel ---- */
+  function makeWheel(el, min, max, primary, format, onChange){
+    const itemH = primary ? 56 : 38;
+    const containerH = Math.round(itemH * 1.85);   // shows centre + faded neighbours
+    const pad = (containerH - itemH) / 2;
+    el.classList.add(primary ? 'wprimary' : 'wsecondary');
+    el.style.height = containerH + 'px';
+    const scroll = document.createElement('div');
+    scroll.className = 'wheel-scroll';
+    scroll.style.paddingTop = pad + 'px';
+    scroll.style.paddingBottom = pad + 'px';
+    for (let v = min; v <= max; v++){
+      const it = document.createElement('div');
+      it.className = 'wheel-item';
+      it.style.height = itemH + 'px';
+      const f = format(v);
+      it.innerHTML = '<span class="n">' + f.n + '</span>' + (f.u ? '<span class="u">' + f.u + '</span>' : '');
+      scroll.appendChild(it);
+    }
+    el.appendChild(scroll);
+
+    let programmatic = false, lastIdx = -1, raf = null, settle = null;
+    function setSel(idx){
+      if (idx === lastIdx) return;
+      if (lastIdx >= 0 && scroll.children[lastIdx]) scroll.children[lastIdx].classList.remove('is-sel');
+      if (scroll.children[idx]) scroll.children[idx].classList.add('is-sel');
+      lastIdx = idx;
+    }
+    function onScroll(){
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setSel(Math.max(0, Math.min(max - min, Math.round(scroll.scrollTop / itemH)))));
+      if (programmatic) return;
+      clearTimeout(settle);
+      settle = setTimeout(() => {
+        const v = min + Math.max(0, Math.min(max - min, Math.round(scroll.scrollTop / itemH)));
+        onChange(v);
+      }, 110);
+    }
+    scroll.addEventListener('scroll', onScroll, { passive:true });
+    // Mouse-wheel / trackpad: move one step per notch (desktop)
+    el.addEventListener('wheel', e => { e.preventDefault(); scroll.scrollTop += (e.deltaY > 0 ? itemH : -itemH); }, { passive:false });
+
+    el._set = function(v){
+      v = Math.max(min, Math.min(max, Math.round(v)));
+      programmatic = true;
+      scroll.scrollTop = (v - min) * itemH;
+      setSel(v - min);
+      setTimeout(() => { programmatic = false; }, 70);
+    };
+    el._get = function(){ return min + Math.max(0, Math.min(max - min, Math.round(scroll.scrollTop / itemH))); };
+    return el;
+  }
+
+  /* ---- render BMI ---- */
+  function renderBMI(){
+    const m = heightCm / 100, bmi = weightKg / (m * m);
+    $('bmi').textContent = round0(bmi);
+    let label, cls;
+    if (bmi < 16)        { label='Severe thinness · malnutrition'; cls='malnutrition'; }
+    else if (bmi < 17)   { label='Moderate thinness'; cls='mod-thin'; }
+    else if (bmi < 18.5) { label='Mild thinness · underweight'; cls='mild-thin'; }
+    else if (bmi < 25)   { label='Normal weight'; cls='normal'; }
+    else if (bmi < 30)   { label='Overweight · pre-obese'; cls='overweight'; }
+    else if (bmi < 35)   { label='Obesity class I'; cls='obese1'; }
+    else if (bmi < 40)   { label='Obesity class II · severe'; cls='obese2'; }
+    else if (bmi < 50)   { label='Obesity class III · morbid'; cls='obese3'; }
+    else if (bmi < 60)   { label='Super obesity · super-morbid'; cls='superobese'; }
+    else                 { label='Super-super obesity · class V'; cls='supersuper'; }
+    $('category').textContent = label;
+    $('category').className = 'category ' + cls;
+    $('bmi').style.color = CATCOLOR[cls];
+  }
+
+  /* ---- linking ---- */
+  let syncing = false;
+  function setHeightInch(inch){
+    if (syncing) return; syncing = true;
+    heightCm = inch * 2.54;
+    wInchT._set(inch); wInch._set(inch); wCm._set(round0(heightCm));
+    renderBMI(); syncing = false;
+  }
+  function setHeightCm(cm){
+    if (syncing) return; syncing = true;
+    heightCm = cm;
+    const inch = Math.max(12, Math.min(90, round0(cm / 2.54)));
+    wInchT._set(inch); wInch._set(inch); wCm._set(cm);
+    renderBMI(); syncing = false;
+  }
+  function setWeightLb(lb){
+    if (syncing) return; syncing = true;
+    weightKg = lb * LB_PER_KG;
+    wLb._set(lb); wKg._set(round0(weightKg));
+    renderBMI(); syncing = false;
+  }
+  function setWeightKg(kg){
+    if (syncing) return; syncing = true;
+    weightKg = kg;
+    wKg._set(kg); wLb._set(round0(kg / LB_PER_KG));
+    renderBMI(); syncing = false;
+  }
+
+  const wInchT = makeWheel($('w_inchT'), 12, 90, false, v => ({ n:v, u:'in' }), setHeightInch);
+  const wInch  = makeWheel($('w_inch'),  12, 90, true,  v => ({ n:ftIn(v) }),  setHeightInch);
+  const wCm    = makeWheel($('w_cm'),    30, 230, false, v => ({ n:v, u:'cm' }), setHeightCm);
+  const wLb    = makeWheel($('w_lb'),    1, 551, true,  v => ({ n:v, u:'lb' }), setWeightLb);
+  const wKg    = makeWheel($('w_kg'),    1, 250, false, v => ({ n:v, u:'kg' }), setWeightKg);
+
+  $('resetBtn').addEventListener('click', () => {
+    heightCm = DEF.inch * 2.54; weightKg = DEF.lb * LB_PER_KG;
+    wInchT._set(DEF.inch); wInch._set(DEF.inch); wCm._set(DEF.cm);
+    wLb._set(DEF.lb); wKg._set(round0(DEF.lb * LB_PER_KG));
+    renderBMI();
+  });
+
+  // initial positions
+  wInchT._set(DEF.inch); wInch._set(DEF.inch); wCm._set(DEF.cm);
+  wLb._set(DEF.lb); wKg._set(round0(DEF.lb * LB_PER_KG));
+  renderBMI();
+</script>
+</body>
+</html>

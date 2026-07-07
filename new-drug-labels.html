@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anesthesia Labels</title>
+    <style>
+        /* Portal theme tokens (matches FLH home / schedule pages) */
+        :root{
+            --bg:#f6f7f9; --surface:#ffffff; --surface2:#fbfcfd;
+            --text:#1f2933; --muted:#6b7280; --border:#e6e8ec; --border-hover:#cdd3da;
+            --accent:#2f6fed; --accent-bg:#eef4ff; --accent-border:#cfe0fb;
+            --red:#b3261e; --red-bg:#fff5f5; --red-border:#f0c5c5;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+            padding-bottom: 160px;
+        }
+        .container { width: 100%; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .p-4 { padding: 1rem; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-medium { font-weight: 500; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-4 { margin-top: 1rem; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .text-xl { font-size: 1.15rem; }
+        .text-2xl { font-size: 1.4rem; }
+        .w-full { width: 100%; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .shadow { box-shadow: 0 1px 3px rgba(18,24,33,0.06); }
+        .bg-white { background-color: var(--surface); }
+        .text-white { color: #ffffff; }
+        .max-w-md { max-width: 22.4rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 0.5rem; }
+        .w-16 { width: 4.5rem; }
+        .ml-4 { margin-left: 1rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .text-center { text-align: center; }
+        .block { display: block; }
+        /* Card wrapper (portal look) */
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 3px rgba(18,24,33,0.04); margin-top: 16px; }
+        input, select {
+            box-sizing: border-box;
+            border: 1px solid var(--border);
+            background-color: var(--surface);
+            color: var(--text);
+            padding: 0.7rem 0.8rem;
+            font-size: 1rem;
+            border-radius: 10px;
+            width: 100%;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47,111,237,.12); }
+        /* Hide the native datalist dropdown arrow on the Provider field (keeps only the custom gray arrow; does not affect the datetime picker) */
+        input[list]::-webkit-calendar-picker-indicator { display: none !important; }
+        input[list]::-webkit-list-button { display: none !important; }
+        input[type="checkbox"] { width: auto; appearance: auto; -webkit-appearance: auto; box-shadow: none; }
+        input:disabled { background-color: #f1f3f6; opacity: 0.7; }
+        /* Buttons (themed; high-contrast) */
+        .btn { cursor: pointer; border-radius: 10px; padding: 0.7rem 1.1rem; font-size: 1rem; font-weight: 600; border: 1px solid transparent; transition: .16s ease; }
+        .btn:disabled { cursor: not-allowed; opacity: 0.45; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover:not(:disabled) { background: #2558c9; }
+        .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--border-hover); background: var(--surface2); }
+        .btn-refresh { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); font-weight: 600; }
+        .btn-refresh:hover:not(:disabled) { background: #e2ecfd; }
+        .btn-refresh svg { width: 18px; height: 18px; }
+        .bg-gray-200 { background-color: #eef1f5; }
+        .hover\:bg-gray-300:hover { background-color: #e3e7ee; }
+        .drug-label-item { padding: 0.4rem 0.8rem; border-radius: 0.375rem; display: inline-block; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 1.3rem 0; }
+        .text-red-600 { color: #dc2626; }
+        /* highlighted quantity input — accent tint to match theme */
+        .quantity-input-active { background-color: var(--accent-bg); font-weight: 700; border-color: var(--accent-border); }
+        .spinner-sm { border: 3px solid rgba(0,0,0,0.1); width: 20px; height: 20px; border-radius: 50%; border-left-color: var(--accent); animation: spin 1s ease infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+        .input-wrapper { position: relative; width: 100%; }
+        .input-wrapper::after {
+            content: ' '; position: absolute; right: 15px; top: 50%; margin-top: -3px;
+            border-left: 5px solid transparent; border-right: 5px solid transparent;
+            border-top: 6px solid #8e8e93; pointer-events: none;
+        }
+        /* Cap notice */
+        .cap-note { font-size: 0.8rem; color: var(--red); background: var(--red-bg); border: 1px solid var(--red-border); border-radius: 8px; padding: 7px 10px; margin-bottom: 10px; }
+        .atcap { color: var(--red); }
+        /* Live label preview */
+        .preview-empty { font-size: 0.85rem; color: var(--muted); font-style: italic; padding: 8px 0; }
+        .preview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 4px; }
+        @media (min-width: 380px){ .preview-grid { grid-template-columns: repeat(3, 1fr); } }
+        .plabel { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fff; }
+        .plabel-top { padding: 4px 4px; text-align: center; font-weight: 700; font-size: 0.6rem; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .plabel-bot { padding: 3px 4px; text-align: center; color: #000; background: #fff; font-size: 0.52rem; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* Fixed footer */
+        .fixed-footer {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(246, 247, 249, 0.85);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border);
+            display: flex; justify-content: center; z-index: 100;
+        }
+        .footer-content { max-width: 22.4rem; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .footer-top-row { width: 100%; display: flex; justify-content: center; align-items: center; gap: 1rem; }
+        .footer-note { font-size: 0.75rem; color: var(--muted); }
+        /* Back to portal link */
+        .portal-link { display:block; text-align:center; margin: 20px auto 0; font-size: 13px; color: var(--accent); text-decoration: none; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.20.6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div id="root" class="container mx-auto p-4"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useCallback } = React;
+        const { jsPDF } = window.jspdf;
+        const LS = { provider: 'anesLabels.provider', preset: 'anesLabels.preset' };
+        function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+        function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e){} }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim().replace(/^"|"$/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim().replace(/^"|"$/g, ''));
+            return result;
+        }
+        function parseSheetData(text) {
+            const lines = text.trim().replace(/\r/g, '').split('\n');
+            if (lines.length < 2) return { drugs: [], presets: {} };
+            const headers = parseCSVLine(lines[0]);
+            const drugInfoIndices = { providers: 0, label: 1, fillColor: 2, textColor: 3 };
+            const drugs = [];
+            const presets = {};
+            const presetIndices = {};
+            headers.forEach((header, index) => {
+                if (header && !Object.values(drugInfoIndices).includes(index)) {
+                    const presetName = header.split('\n')[0].trim();
+                    if (presetName) {
+                        presets[presetName] = {};
+                        presetIndices[presetName] = index;
+                    }
+                }
+            });
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i]) continue;
+                const values = parseCSVLine(lines[i]);
+                const drugLabel = values[drugInfoIndices.label];
+                if (drugLabel) {
+                    const drugObject = {
+                        label: drugLabel,
+                        fillColor: values[drugInfoIndices.fillColor] || '#FFFFFF',
+                        textColor: values[drugInfoIndices.textColor] || '#000000',
+                        providers: values[drugInfoIndices.providers] || ''
+                    };
+                    drugs.push(drugObject);
+                    Object.keys(presetIndices).forEach(presetName => {
+                        const quantity = parseInt(values[presetIndices[presetName]], 10) || 0;
+                        presets[presetName][drugLabel] = quantity;
+                    });
+                }
+            }
+            return { drugs, presets };
+        }
+        function App() {
+            const [initials, setInitials] = useState(lsGet(LS.provider) || "");
+            const [expiration, setExpiration] = useState("");
+            const [selectedPreset, setSelectedPreset] = useState("Custom");
+            const [quantities, setQuantities] = useState({});
+            const [labels, setLabels] = useState([]);
+            const [totalQuantity, setTotalQuantity] = useState(0);
+            const [printBlank, setPrintBlank] = useState(false);
+            const [drugs, setDrugs] = useState([]);
+            const [providers, setProviders] = useState([]);
+            const [isLoading, setIsLoading] = useState(true);
+            const [error, setError] = useState(null);
+            const [sheetPresets, setSheetPresets] = useState({});
+            const googleSheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTMayyDtVgXQ59RJD4F4GwiBbkNrQ23Mw_IoV3lj2FcZ9Af8olY11WcEopliTeB_ISudLd89mW1IKET/pub?gid=2021611766&single=true&output=csv";
+
+            const fetchData = useCallback(async (isInitialLoad = false) => {
+                setIsLoading(true);
+                setError(null);
+                try {
+                    const url = `${googleSheetURL}&_=${new Date().getTime()}`;
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error("Network response was not ok.");
+                    const csvText = await response.text();
+                    const { drugs: parsedDrugs, presets: parsedPresets } = parseSheetData(csvText);
+                    if (parsedDrugs.length === 0) throw new Error("No drugs found in CSV.");
+                    setDrugs(parsedDrugs);
+                    setSheetPresets(parsedPresets);
+                    const uniqueProviders = [...new Set(parsedDrugs.map(d => d.providers).filter(p => p))];
+                    setProviders(uniqueProviders);
+                    if (!isInitialLoad) {
+                        if (selectedPreset !== 'Custom' && !parsedPresets[selectedPreset]) {
+                            alert(`The preset "${selectedPreset}" is no longer available.`);
+                            setSelectedPreset('Custom');
+                            const newQuantities = {};
+                            parsedDrugs.forEach((_, index) => { newQuantities[index] = 0; });
+                            setQuantities(newQuantities);
+                        } else if (selectedPreset !== 'Custom') {
+                            const presetData = parsedPresets[selectedPreset];
+                            const newQuantities = {};
+                            parsedDrugs.forEach((drug, index) => { newQuantities[index] = presetData[drug.label] || 0; });
+                            setQuantities(newQuantities);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Failed to load data:", err);
+                    if (window.location.protocol === 'file:') {
+                        setError("This page can't load the live drug list when opened directly from a file. Please open it from the website instead.");
+                    } else {
+                        setError("Could not load data. Check Google Sheet URL and format.");
+                    }
+                } finally {
+                    setIsLoading(false);
+                }
+            }, [googleSheetURL, selectedPreset]);
+
+            useEffect(() => { fetchData(true); }, []);
+
+            // Persist provider name
+            useEffect(() => { lsSet(LS.provider, initials); }, [initials]);
+
+            useEffect(() => { if (drugs.length > 0) generateLabels(); }, [quantities, initials, expiration, printBlank]);
+
+            useEffect(() => {
+                const timer = setTimeout(() => {
+                    const now = new Date();
+                    now.setHours(now.getHours() + 24);
+                    const year = now.getFullYear();
+                    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                    const day = now.getDate().toString().padStart(2, '0');
+                    const hours = now.getHours().toString().padStart(2, '0');
+                    const minutes = now.getMinutes().toString().padStart(2, '0');
+                    setExpiration(`${year}-${month}-${day}T${hours}:${minutes}`);
+                }, 10);
+                return () => clearTimeout(timer);
+            }, []);
+
+            const handlePresetChange = (presetName) => {
+                setSelectedPreset(presetName);
+                const presetData = sheetPresets[presetName];
+                const newQuantities = {};
+                drugs.forEach((drug, index) => {
+                    if (presetName === 'Custom') { newQuantities[index] = 0; }
+                    else if (presetData) { newQuantities[index] = presetData[drug.label] || 0; }
+                });
+                setQuantities(newQuantities);
+            };
+
+            // Refresh & Reset: reload the latest sheet AND clear everything to default
+            const handleRefreshReset = () => {
+                setSelectedPreset('Custom');
+                setQuantities({});
+                setPrintBlank(false);
+                const now = new Date(); now.setHours(now.getHours() + 24);
+                const pad = (n) => n.toString().padStart(2, '0');
+                setExpiration(`${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`);
+                fetchData(true);
+            };
+
+            const updateQuantity = (index, qty) => {
+                const newQty = Math.max(0, parseInt(qty) || 0);
+                const oldQty = quantities[index] || 0;
+                const currentTotal = Object.values(quantities).reduce((sum, q) => (sum || 0) + (q || 0), 0);
+                let adjustedQty = newQty;
+                if (currentTotal - oldQty + newQty > 80) {
+                    adjustedQty = 80 - (currentTotal - oldQty);
+                }
+                setQuantities({ ...quantities, [index]: adjustedQty });
+                setSelectedPreset("Custom");
+            };
+
+            const generateLabels = () => {
+                const providerText = `By: ${initials.trim() ? initials.trim() : "___"}`;
+                const dateText = printBlank ? "Exp: _______ @ ____" : `Exp: ${formatExpiration(expiration)}`;
+                const bottomLineText = `${dateText}  ${providerText}`;
+                const drugsWithQuantities = drugs.map((drug, index) => ({ ...drug, quantity: quantities[index] || 0 })).filter(d => d.quantity > 0);
+                drugsWithQuantities.sort((a, b) => b.quantity - a.quantity);
+                const newLabels = [];
+                let count = 0;
+                drugsWithQuantities.forEach(drug => {
+                    for (let i = 0; i < drug.quantity && count < 80; i++) {
+                        newLabels.push({ topLine: drug.label, fillColor: drug.fillColor, textColor: drug.textColor, bottomLine: bottomLineText });
+                        count++;
+                    }
+                });
+                setLabels(newLabels);
+                setTotalQuantity(count);
+            };
+
+            const formatExpiration = (exp) => {
+                if (!exp) return '';
+                const d = new Date(exp);
+                return `${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getDate().toString().padStart(2, '0')}/${d.getFullYear().toString().slice(2)} @ ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+            }
+            const generatePDF = () => {
+                const doc = new jsPDF({ unit: "in", format: "letter" });
+                const labelWidth = 1.75;
+                const labelHeight = 0.5;
+                const marginLeft = 0.33;
+                const marginTop = 0.5;
+                const gapX = 0.28125;
+                const gapY = 0;
+                const labelsPerColumn = 20;
+                labels.forEach((label, index) => {
+                    const col = Math.floor(index / labelsPerColumn);
+                    const row = index % labelsPerColumn;
+                    const x = marginLeft + col * (labelWidth + gapX);
+                    const y = marginTop + row * (labelHeight + gapY);
+                    doc.setFillColor(label.fillColor);
+                    doc.rect(x, y, labelWidth, labelHeight / 2, "F");
+                    doc.setFillColor("#FFFFFF");
+                    doc.rect(x, y + (labelHeight / 2), labelWidth, labelHeight / 2, "F");
+                    doc.setTextColor(label.textColor);
+                    doc.setFontSize(8);
+                    doc.setFont("helvetica", "bold");
+                    doc.text(label.topLine, x + (labelWidth / 2), y + 0.125, { align: "center", baseline: "middle" });
+                    doc.setTextColor("#000000");
+                    doc.setFontSize(7);
+                    doc.setFont("helvetica", "normal");
+                    doc.text(label.bottomLine, x + (labelWidth / 2), y + 0.375, { align: "center", baseline: "middle" });
+                });
+                return doc;
+            };
+            const handlePrint = () => {
+                if (totalQuantity > 0) {
+                    const doc = generatePDF();
+                    const pdfBlob = doc.output('blob');
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+                    window.open(pdfUrl, '_blank');
+                }
+            };
+            const handleDownload = () => { if (totalQuantity > 0) generatePDF().save("syringe_labels.pdf"); };
+
+            if (isLoading && drugs.length === 0) return <div className="text-center p-4 font-semibold" style={{marginTop:'24px'}}>Loading drug list…</div>;
+            if (error) return (
+                <div className="max-w-md mx-auto card p-4 text-center">
+                    <div className="text-red-600 font-bold mb-4">{error}</div>
+                    <button className="btn btn-primary" onClick={() => fetchData(false)}>Try again</button>
+                </div>
+            );
+
+            const atCap = totalQuantity >= 80;
+            return (
+                <>
+                    <div className="max-w-md mx-auto card p-4">
+                        <h1 className="text-2xl font-bold mb-4 text-center">Anesthesia Labels</h1>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium">Preset</label>
+                            <div className="input-wrapper w-full mt-1">
+                                <select value={selectedPreset} onChange={(e) => handlePresetChange(e.target.value)} className="w-full">
+                                    <option value="Custom">Custom</option>
+                                    {Object.keys(sheetPresets).length > 0 && (
+                                        <optgroup label="Sheet Presets">
+                                            {Object.keys(sheetPresets).map(name => <option key={name} value={name}>{name}</option>)}
+                                        </optgroup>
+                                    )}
+                                </select>
+                            </div>
+                            <button onClick={handleRefreshReset} disabled={isLoading} className="btn btn-refresh w-full mt-2" title="Reload the latest drug list and clear all entries back to default">
+                                {isLoading ? <div className="spinner-sm"></div> : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path>
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+                                        <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+                                    </svg>
+                                )}
+                                <span>Refresh &amp; Reset</span>
+                            </button>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium mt-4">Provider Name</label>
+                            <div className="flex items-center gap-2 mt-1">
+                                <div className="input-wrapper w-full">
+                                    <input type="text" value={initials} onChange={(e) => setInitials(e.target.value)} list="providerOptions" className="w-full" placeholder="Select or enter name"/>
+                                    <datalist id="providerOptions">
+                                        {providers.map((p, i) => <option key={i} value={p} />)}
+                                    </datalist>
+                                </div>
+                                <div style={{width: '44px', height: '44px', flexShrink: 0}}></div>
+                            </div>
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium">Expiration Date/Time</label>
+                            <div className="flex items-center gap-2 mt-1">
+                                <input type="datetime-local" value={expiration} onChange={(e) => setExpiration(e.target.value)} className="w-full" disabled={printBlank} autoComplete="off"/>
+                                <div style={{width: '44px', height: '44px', flexShrink: 0}}></div>
+                            </div>
+                        </div>
+
+                        <div className="mb-4 flex items-center">
+                            <input type="checkbox" id="blankDateCheck" checked={printBlank} onChange={(e) => setPrintBlank(e.target.checked)} className="mr-2"/>
+                            <label htmlFor="blankDateCheck" className="text-sm font-medium">Print Blank Date Labels</label>
+                        </div>
+                        <hr />
+                        <div className="mt-4">
+                            <h2 className="text-xl font-semibold mb-2">Select Quantities</h2>
+                            {atCap && <div className="cap-note">Maximum of 80 labels reached — clear some to add others.</div>}
+                            <div className="drug-list-container">
+                                {drugs.map((drug, index) => (
+                                    <div key={index} className="mb-2 flex items-center">
+                                        <input
+                                            type="number"
+                                            value={quantities[index] || ''}
+                                            onChange={(e) => updateQuantity(index, e.target.value)}
+                                            className={`w-16 text-center ${quantities[index] > 0 ? 'quantity-input-active' : ''}`}
+                                            min="0"
+                                        />
+                                        <label className="text-sm font-medium ml-4">
+                                            <span className="drug-label-item" style={{ backgroundColor: drug.fillColor, color: drug.textColor, border: drug.fillColor.toUpperCase() === '#FFFFFF' ? '1px solid #e5e5ea' : 'none' }}>
+                                                {drug.label}
+                                            </span>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div className="mt-4">
+                            <h2 className="text-xl font-semibold mb-2">Preview</h2>
+                            {labels.length === 0
+                                ? <div className="preview-empty">Set quantities above to preview your labels.</div>
+                                : <div className="preview-grid">
+                                    {labels.map((l, i) => (
+                                        <div className="plabel" key={i}>
+                                            <div className="plabel-top" style={{ background: l.fillColor, color: l.textColor }}>{l.topLine}</div>
+                                            <div className="plabel-bot">{l.bottomLine}</div>
+                                        </div>
+                                    ))}
+                                  </div>}
+                        </div>
+                    </div>
+
+                    <div className="fixed-footer">
+                        <div className="footer-content">
+                            <div className="footer-top-row">
+                                <span className={`font-semibold ${atCap ? 'atcap' : ''}`}>Total: {totalQuantity}/80</span>
+                                <div className="flex gap-2">
+                                    <button onClick={handlePrint} className="btn btn-primary" disabled={totalQuantity === 0}>Print</button>
+                                    <button onClick={handleDownload} className="btn btn-secondary" disabled={totalQuantity === 0}>Download</button>
+                                </div>
+                            </div>
+                            <span className="footer-note">Use Avery 5167 labels for printing</span>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+        ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+</body>
+</html>

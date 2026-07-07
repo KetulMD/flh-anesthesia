@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLH Anesthesia — OR Emergency Manual (V4)</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --surface2:#fbfcfd;
+    --text:#1f2933; --muted:#6b7280; --muted2:#9aa3af;
+    --border:#e6e8ec; --border-hover:#cdd3da;
+    --red:#c0392b; --red-bg:#fff5f5; --red-border:#f0c5c5;
+    --orange:#d97706; --green:#15803d; --blue:#2563eb; --purple:#7c3aed;
+    --teal:#0891b2; --pink:#be3d7a; --link:#2f6fed;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:22px 18px 80px}
+  /* Header */
+  .hero{
+    background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius);
+    padding:16px 18px; text-align:center;
+  }
+  .hero h1{margin:0; font-size:1.4rem; font-weight:700; letter-spacing:.2px; color:var(--red)}
+  .hero p{margin:4px 0 0; font-size:.85rem; color:var(--muted)}
+  .hero .sub{font-size:.78rem; color:var(--muted2); margin-top:6px}
+  /* Search */
+  .search{
+    margin:18px 0 8px; width:100%; display:flex; align-items:center;
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:0 14px;
+    transition:border-color .16s;
+  }
+  .search:focus-within{border-color:var(--border-hover)}
+  .search input{
+    flex:1; background:transparent; border:0; outline:0; color:var(--text);
+    font-size:1.02rem; padding:13px 10px;
+  }
+  .search .ic{opacity:.5}
+  /* Section labels */
+  .seclabel{
+    text-transform:uppercase; letter-spacing:1.1px; font-size:.72rem; font-weight:600;
+    color:var(--muted); margin:26px 4px 12px; display:flex; align-items:center; gap:8px;
+  }
+  /* Grid of cards */
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  @media(max-width:560px){ .grid{grid-template-columns:1fr} }
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--orange);
+    border-radius:var(--radius); padding:14px 16px; cursor:pointer; transition:.16s ease;
+  }
+  .card:hover{border-color:var(--border-hover); transform:translateY(-1px); box-shadow:0 4px 14px rgba(18,24,33,.07)}
+  .card.acls{border-left-color:var(--red)}
+  .card.crit{border-left-color:var(--orange)}
+  .card.ddx{border-left-color:var(--green)}
+  .card.other{border-left-color:var(--blue)}
+  .card.crm{border-left-color:var(--purple)}
+  .card.ref{border-left-color:var(--blue)}
+  .card.add{border-left-color:var(--teal)}
+  .card.ob{border-left-color:var(--pink)}
+  .card .num{color:var(--muted2); font-size:.74rem; font-weight:600}
+  .card .ttl{font-size:1.04rem; font-weight:600; margin-top:2px; color:var(--text)}
+  .card .tag{color:var(--muted); font-size:.78rem; margin-top:3px}
+  .hidden{display:none !important}
+  .noresult{color:var(--muted); text-align:center; padding:30px; font-style:italic}
+  /* Modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(31,41,51,.45); backdrop-filter:blur(2px);
+    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:24px 14px; overflow:auto;
+  }
+  .overlay.open{display:flex}
+  .modal{
+    background:var(--surface); width:100%; max-width:760px; border-radius:14px;
+    border:1px solid var(--border); box-shadow:0 24px 60px rgba(18,24,33,.22); overflow:hidden;
+    animation:pop .16s ease-out;
+  }
+  @keyframes pop{from{transform:scale(.98);opacity:.5}to{transform:scale(1);opacity:1}}
+  .modal .mhead{
+    background:var(--red); color:#fff;
+    padding:15px 20px; display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .modal.acls .mhead{background:var(--red)}
+  .modal.crit .mhead{background:var(--orange)}
+  .modal.ddx .mhead{background:var(--green)}
+  .modal.other .mhead{background:var(--blue)}
+  .modal.crm .mhead{background:var(--purple)}
+  .modal.ref .mhead{background:var(--blue)}
+  .modal.add .mhead{background:var(--teal)}
+  .modal.ob  .mhead{background:var(--pink)}
+  .modal .mhead h2{margin:0; font-size:1.2rem; color:#fff; font-weight:700}
+  .modal .mhead .mnum{font-size:.78rem; opacity:.9; font-weight:600; color:#fff}
+  .closeb{
+    background:rgba(255,255,255,.22); border:0; color:#fff; width:34px; height:34px;
+    border-radius:50%; font-size:1.05rem; cursor:pointer; flex:none; line-height:1;
+  }
+  .closeb:hover{background:rgba(255,255,255,.38)}
+  .mbody{padding:18px 20px 24px; max-height:none}
+  /* Section blocks within modal */
+  .blk{margin-top:18px}
+  .blk:first-child{margin-top:4px}
+  .blk h3{
+    text-transform:uppercase; letter-spacing:1px; font-size:.72rem; color:var(--muted);
+    margin:0 0 8px; border-bottom:1px solid var(--border); padding-bottom:6px; font-weight:600;
+  }
+  /* colored callout banners */
+  .banner{border-radius:10px; padding:12px 14px; margin-top:14px; background:var(--surface2); border:1px solid var(--border)}
+  .banner .bt{font-weight:700; margin-bottom:2px; font-size:.78rem; letter-spacing:.4px; text-transform:uppercase; color:var(--muted)}
+  .banner.cpr{background:var(--red-bg); border:1px solid var(--red-border)}
+  .banner.cpr .bt{color:var(--red)}
+  .banner.help{background:#eff5ff; border:1px solid #cfe0fb}
+  .banner.help .bt{color:var(--blue)}
+  .banner.warn{background:#fff8ec; border:1px solid #f4ddb0}
+  .banner.warn .bt{color:#b45309}
+  .banner.crit2{background:var(--red-bg); border:1px dashed var(--red-border)}
+  .banner.crit2 .bt{color:var(--red)}
+  /* lists */
+  ol.steps,ul.bul{margin:0; padding:0; list-style:none}
+  ol.steps li{display:flex; gap:10px; padding:6px 0; border-bottom:1px solid #eef0f3; align-items:flex-start}
+  ol.steps li:last-child{border-bottom:0}
+  ol.steps li .n{
+    flex:none; width:22px; height:22px; border-radius:50%; background:#eef1f5;
+    color:#475569; font-size:.76rem; font-weight:700; display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  ul.bul li{position:relative; padding:5px 0 5px 18px}
+  ul.bul li:before{content:"•"; position:absolute; left:2px; color:var(--muted2)}
+  ul.sub{margin:4px 0 0; padding:0; list-style:none}
+  ul.sub li{position:relative; padding:3px 0 3px 16px; color:var(--muted); font-size:.92rem}
+  ul.sub li:before{content:"–"; position:absolute; left:0; color:var(--muted2)}
+  .hl{color:#b3261e; font-weight:700; background:rgba(192,57,43,.09); padding:0 4px; border-radius:4px}
+  .dose{font-weight:700; color:#0c2233; font-variant-numeric:tabular-nums}
+  .hl .dose{color:inherit}
+  .em{color:var(--text); font-weight:700}
+  .goto{color:var(--link); font-weight:600}
+  /* ddx grid */
+  .ddxgrid{display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:4px}
+  @media(max-width:560px){ .ddxgrid{grid-template-columns:1fr} }
+  .ddxgrid .chip{background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:.92rem}
+  .ddxgrid .chip[data-ev]{cursor:pointer; color:var(--link); border-color:#cfe0fb; transition:.14s}
+  .ddxgrid .chip[data-ev]:hover{background:rgba(47,111,237,.10); border-color:#9bc0f7}
+  .ddxgrid .chip[data-ev]:after{content:" ›"; color:var(--link); font-weight:700}
+  .footer{margin-top:40px; text-align:center; color:var(--muted); font-size:.8rem; line-height:1.6; padding-top:18px; border-top:1px solid var(--border)}
+  .footer a{color:var(--link)}
+  .disc{background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-top:24px; color:var(--muted); font-size:.85rem}
+  .pedinput{display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-weight:600; margin:4px 0 10px}
+  .pedinput input{width:130px; background:var(--surface); border:1px solid var(--border-hover); border-radius:8px; color:var(--text); font-size:1.12rem; padding:9px 11px; outline:0}
+  .pedinput input:focus{border-color:var(--blue)}
+  .pedref{color:var(--muted); font-size:.86rem}
+  .pedbmi{background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin:2px 0 10px}
+  .pedbmilabel{font-size:.7rem; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); font-weight:700; vertical-align:middle}
+  .pedbmival{font-size:1.45rem; font-weight:800; color:#0c2233; margin:0 3px; vertical-align:middle}
+  .pedwheel{position:relative; display:inline-block; width:104px; vertical-align:middle}
+  .pedwheel select{width:100%; appearance:none; -webkit-appearance:none; border:1px solid var(--border-hover); border-radius:8px; background:var(--surface); color:transparent; font-size:1.1rem; font-weight:600; padding:9px 8px; text-align:center; text-align-last:center; cursor:pointer; outline:0}
+  .pedwheel select:focus{border-color:var(--blue)}
+  .pedwheeldisp{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; font-size:1.08rem; font-weight:700; color:var(--text)}
+  .pedhint{color:var(--muted); font-style:italic; padding:8px 0}
+  .xref{color:var(--link); cursor:pointer; border-bottom:1px dotted var(--link); font-weight:600}
+  .xref:hover{background:rgba(47,111,237,.10)}
+  .cardfoot{margin-top:18px; padding-top:4px; border-top:1px dashed var(--border)}
+  .cardfoot .banner{opacity:1; font-size:.85rem; margin-top:10px}
+  .cardfoot .banner .bt{font-size:.72rem}
+  @media print{ body{background:#fff} .card,.banner,.modal{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>🚨 OR Emergency Manual</h1>
+    <p>FLH Anesthesia · Perioperative Critical Events</p>
+  </div>
+
+  <div class="search">
+    <span class="ic">🔍</span>
+    <input id="q" type="text" placeholder="Search emergencies, signs, or drugs…" autocomplete="off">
+  </div>
+
+  <div id="sections"></div>
+  <div id="noresult" class="noresult hidden">No matching events. Try another term.</div>
+
+  <div class="disc">
+    <strong>Disclaimer.</strong> This material is a cognitive aid and is not a substitute for sound medical knowledge,
+    training, and clinical judgment. Presentations vary; departure from this content is encouraged when appropriate.
+    Verify all doses against current institutional protocols.
+  </div>
+
+  <div class="footer">
+    Content adapted from the <em>Stanford Emergency Manual, Version 4 (2021)</em>, Stanford Anesthesia Cognitive Aid Program
+    (Goldhaber-Fiebert SN, Austin N, Sultan E, Burian BK, Burden A, Howard SK, Gaba DM, Harrison TK).
+    Distributed under Creative Commons BY-NC-ND 4.0. Latest version: emergencymanual.stanford.edu.<br>
+    MH Hotline (MHAUS): 1-800-644-9737 · LAST guidance: asra.com<br>
+    Added &amp; institution-specific events (CIED, obstetric, airway/cardiac, GGH MH detail) are not part of the Stanford manual — verify against local protocol.
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="mhead">
+      <div>
+        <div class="mnum" id="mnum"></div>
+        <h2 id="mttl"></h2>
+      </div>
+      <button class="closeb" id="closeb" aria-label="Close">✕</button>
+    </div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA — Stanford Emergency Manual Version 4 (2021) clinical content,
+   transcribed verbatim for doses/rates/joules/thresholds, plus
+   institution-specific and "Added" (verify-locally) events.
+   Section types: banner(cpr/help/warn/crit2), signs, immediate, treatment,
+   ddx, details, secondary, ruleout, postevent, prevention, note
+   ============================================================ */
+const CALLHELP = {type:'banner', cls:'help', title:'Crisis Resources',
+  bullets:['Inform team.','Identify leader.','Call a code.','Call for code cart.','Assign team member to read cognitive aid out loud.']};
+const CALLHELPQ = {type:'banner', cls:'help', title:'Crisis Resources',
+  bullets:['Inform team.','Identify leader.','Call for help.','Consider calling for code cart.']};
+const CPR = {type:'banner', cls:'cpr', title:'CPR',
+  bullets:['Rate 100–120 compressions/min, minimize breaks; depth ≥5 cm; allow chest recoil; consider backboard.','Keep EtCO₂ &gt;10 mmHg and diastolic BP &gt;20 mmHg.','Rotate compressors with rhythm check every 2 min.','Check pulse ONLY if signs of ROSC (sustained increased EtCO₂, spontaneous arterial waveform, rhythm change).','If mask ventilation: ratio 30 compressions to 2 breaths. If airway secured: 10 breaths/min, tidal volume 6–7 mL/kg.']};
+
+/* V4 #1 H's & T's — used by Asystole and PEA */
+const HT_DETAILS = {type:'details', title:"Differential Diagnosis — H's and T's", items:[
+  ['Heart Rate — Vagal Stimulus','Desufflate abdomen; remove surgical retractors and sponges; remove pressure from eyes, neck, ears, and brain; drain bladder.'],
+  ['Hypovolemia','Give rapid IV fluid bolus; check Hgb; if anemia or hemorrhage → Hemorrhage. Consider relative hypovolemia: if auto-PEEP disconnect circuit; IVC compression; obstructive or distributive shock → Anaphylaxis, High Spinal.'],
+  ['Hypoxemia','O₂ 100% 10–15 L/min; check breathing circuit connections; confirm ETT placement with CO₂; check breath sounds; suction ET tube; consider chest x-ray, bronchoscopy → Hypoxemia.'],
+  ['Hydrogen Ions — Acidosis','Consider bicarbonate; balance increasing ventilation with potential decrease in CPR quality.'],
+  ['Hyperkalemia','Calcium chloride 1 g IV; bicarbonate 1 amp IV (50 mEq); insulin 5–10 units IV with D50 1 amp IV (25 g) and monitor glucose; consider emergent dialysis.'],
+  ['Hypokalemia','Controlled potassium infusion; magnesium sulfate 1–2 g IV.'],
+  ['Hypoglycemia','Dextrose/D50 1 amp (25 g); monitor glucose.'],
+  ['Hypocalcemia','Calcium chloride 1 g IV.'],
+  ['Hyperthermia','→ Malignant Hyperthermia.'],
+  ['Hypothermia','Actively warm: forced air, warm IV fluid, warm room; consider ECMO or bypass.'],
+  ['Toxins','Consider anesthetic overdose; consider medication error; turn off volatile anesthetic and vasodilating drips; if local anesthetic has been given → Local Anesthetic Toxicity.'],
+  ['Tamponade — Cardiac','Consider TEE / TTE; perform pericardiocentesis.'],
+  ['Tension — Pneumothorax','Check for asymmetric breath sounds, distended neck veins, deviated trachea; consider ultrasound for normal lung sliding, abnormal lung point; consider chest x-ray, but do NOT delay treatment; perform empiric needle decompression in 4th or 5th intercostal space anterior to the mid-axillary line, then chest tube → Pneumothorax.'],
+  ['Thrombosis — Coronary','Consider TEE / TTE to evaluate ventricular wall motion; consider emergent coronary revascularization → Myocardial Ischemia.'],
+  ['Thrombosis — Pulmonary','Consider TEE / TTE to evaluate right ventricular function and RVSP; consider fibrinolytic agents or pulmonary thrombectomy → Pulmonary Embolism, Right Heart Failure.']
+]};
+
+const ADDED_NOTE = {type:'note', cls:'warn', title:'Added — Verify Locally',
+  html:'Added beyond the Stanford Emergency Manual. Verify all steps and doses against your institutional protocol.'};
+
+const EVENTS = [
+/* 1 */ {n:1, cat:'acls', title:'Asystole', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['No pulse AND non-shockable rhythm on ECG — asystole (flat line on monitor).']},
+  CALLHELP, CPR,
+  {type:'immediate', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'If mask ventilation: ratio 30 compressions to 2 breaths.',
+    'If airway secured: 10 breaths/min, tidal volume 6–7 mL/kg.'
+  ]},
+  {type:'treatment', title:'IV Access', steps:[
+    'Ensure functional IV or IO access.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Turn off volatile anesthetic and vasodilating drips.',
+    '<span class="hl">Epinephrine 1 mg IV push every 3–5 minutes.</span>',
+    'If hyperkalemia: calcium chloride 1 g IV; sodium bicarbonate 1 amp IV (50 mEq); regular insulin 5–10 units IV with dextrose/D50 1 amp IV (25 g).',
+    'If acidosis: sodium bicarbonate 1 amp IV (50 mEq).',
+    'If hypocalcemia: calcium chloride 1 g IV.',
+    'If hypoglycemia: dextrose/D50 1 amp IV (25 g).',
+    'Place defibrillator pads and check rhythm every 2 min. If becomes shockable VF/VT: defibrillate 200 J biphasic or 360 J monophasic → VF / Pulseless VT.',
+    'Consider ECMO or cardiopulmonary bypass.',
+    'If ROSC: arrange ICU care and consider cooling.'
+  ]},
+  PERIOP_DDX_PLACEHOLDER(), HT_DETAILS
+]},
+/* 2 */ {n:2, cat:'acls', title:'PEA — Pulseless Electrical Activity', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['No pulse AND non-shockable rhythm — organized electrical rhythm on monitor with no pulse.']},
+  CALLHELP, CPR,
+  {type:'immediate', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'If mask ventilation: ratio 30 compressions to 2 breaths.',
+    'If airway secured: 10 breaths/min, tidal volume 6–7 mL/kg.'
+  ]},
+  {type:'treatment', title:'IV Access', steps:[
+    'Ensure functional IV or IO access.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Turn off volatile anesthetic and vasodilating drips.',
+    '<span class="hl">Epinephrine 1 mg IV push every 3–5 minutes.</span>',
+    'If hyperkalemia: calcium chloride 1 g IV; sodium bicarbonate 1 amp IV (50 mEq); regular insulin 5–10 units IV with dextrose/D50 1 amp IV (25 g).',
+    'If acidosis: sodium bicarbonate 1 amp IV (50 mEq).',
+    'If hypocalcemia: calcium chloride 1 g IV.',
+    'If hypoglycemia: dextrose/D50 1 amp IV (25 g).',
+    'Place defibrillator pads and check rhythm every 2 min. If becomes shockable VF/VT: defibrillate 200 J biphasic or 360 J monophasic → VF / Pulseless VT.',
+    'Consider ECMO or cardiopulmonary bypass.',
+    'If ROSC: arrange ICU care and consider cooling.'
+  ]},
+  PERIOP_DDX_PLACEHOLDER(), HT_DETAILS
+]},
+/* 3 */ {n:3, cat:'acls', title:'Bradycardia — Unstable', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['Pulse present, heart rate &lt;50 bpm, and inadequate perfusion.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call a code.','Call for code cart.']},
+  {type:'treatment', title:'Pulse Check', steps:[
+    'If no pulse: start CPR and → Asystole/PEA.'
+  ]},
+  {type:'treatment', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Confirm adequate ventilation and oxygenation.'
+  ]},
+  {type:'treatment', title:'Stop Vagal Stimuli', steps:[
+    'Desufflate abdomen; remove pressure from eyes, neck, ears, and brain; remove retractors, surgical sponges, and packing; drain bladder.'
+  ]},
+  {type:'treatment', title:'IV Access', steps:[
+    'Ensure functional IV or IO access.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Consider decreasing anesthetics or analgesics.',
+    '<span class="hl">Atropine 0.5–1 mg IV every 3 min. May repeat, max 3 mg.</span>',
+    'If atropine ineffective: epinephrine 5–10 mcg IV.',
+    'Consider dopamine infusion of 5–20 mcg/kg/min.',
+    'Consider epinephrine infusion of 0.02–0.3 mcg/kg/min.',
+    'If stable: consider glycopyrrolate 0.2–0.4 mg IV.'
+  ]},
+  {type:'treatment', title:'Pacing', steps:[
+    'Place defibrillator pads.',
+    'Consider temporary transcutaneous, transvenous, or esophageal pacing.',
+    'Set pacer rate to at least 80 bpm.',
+    'Increase current (mA) until electrical capture. Confirm mechanical capture with patient pulse. Set pacer output 10 mA above mechanical capture.',
+    'Consult ICU and/or Cardiology.'
+  ]},
+  {type:'secondary', title:'Arterial Line, Labs & Ischemia Workup', steps:[
+    'Consider arterial line placement.',
+    'Send ABG, Hgb, electrolytes, troponin.',
+    'Obtain 12-lead ECG.',
+    'Consider checking BNP and serial troponins.'
+  ]}
+]},
+/* 4 */ {n:4, cat:'acls', title:'SVT — Stable Tachycardia', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:[
+    'Non-compensatory tachycardia and pulse present. Often rate &gt;150 or sudden onset.',
+    'If unstable at any point → SVT — Unstable. If no pulse → Asystole/PEA.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call a code.','Call for code cart.']},
+  {type:'treatment', title:'Stable SVT — Initial', steps:[
+    'STAT Expert consult strongly recommended for rhythm diagnosis and medication selection.',
+    'Obtain 12-lead ECG or print rhythm strip. Place defibrillator pads.',
+    'Consider arterial line placement, ABG, and electrolytes.',
+    'Rule out sinus tachycardia. Consider vagal maneuver before medication.'
+  ]},
+  {type:'treatment', title:'Meds: Narrow and Regular', steps:[
+    '<span class="hl">Adenosine</span> (avoid if WPW or asthma): push 6 mg IV, flush; monitor EKG. May follow with 12 mg IV.',
+    'If not converted, or slowing reveals afib/flutter, rate control: Esmolol (avoid if WPW, decreased EF, or asthma) 0.5 mg/kg IV over 1 min. May repeat after 1 min. Then infusion of 50–300 mcg/kg/min.',
+    'Metoprolol (avoid if WPW, decreased EF, or asthma) 1–2.5 mg IV push. May repeat or double after 3–5 min.',
+    'Diltiazem (avoid if WPW or decreased EF) 10–20 mg IV over 2 min. May repeat after 5 min. Then infusion of 5–10 mg/hr.'
+  ]},
+  {type:'treatment', title:'Meds: Wide and Regular', steps:[
+    'If CAD/MI, likely VT: SLOWLY give Amiodarone (avoid if WPW) 150 mg IV over 10 min to avoid cardiovascular collapse. May repeat once. Then infusion of 1 mg/min.',
+    'If SVT with aberrancy: Adenosine (avoid if WPW or asthma) push 6 mg IV, flush; monitor EKG. May follow with 12 mg IV.',
+    'May add Procainamide (avoid if decreased EF or increased QT interval) 20–50 mg/min IV (max 17 mg/kg) until arrhythmia suppressed. Then infusion of 1–4 mg/min.'
+  ]},
+  {type:'treatment', title:'Meds: Narrow and Irregular (rate control)', steps:[
+    'Esmolol (avoid if WPW, decreased EF, or asthma) 0.5 mg/kg IV over 1 min. May repeat after 1 min. Then infusion of 50–300 mcg/kg/min.',
+    'Metoprolol (avoid if WPW, decreased EF, or asthma) 1–2.5 mg IV push. May repeat or double after 3–5 min.',
+    'Diltiazem (avoid if WPW or decreased EF) 10–20 mg IV over 2 min. May repeat after 5 min. Then infusion of 5–10 mg/hr.',
+    'Consider SLOWLY giving Amiodarone (avoid if WPW) 150 mg IV over 10 min to avoid cardiovascular collapse. May repeat once. Then infusion of 1 mg/min.'
+  ]},
+  {type:'note', cls:'crit2', title:'If Wide and Irregular', html:
+    'This is likely polymorphic VT: Consult Cardiology STAT. Consider Magnesium for Torsades de Pointes.'}
+]},
+/* 5 */ {n:5, cat:'acls', title:'SVT — Unstable Tachycardia', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:[
+    'Non-compensatory tachycardia and pulse present. Often rate &gt;150 or sudden onset.',
+    'If no pulse: start CPR → Asystole/PEA.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call a code.','Call for code cart.']},
+  {type:'treatment', title:'Airway & Defib Pads', steps:[
+    '100% O₂ 10–15 L/min. Confirm adequate ventilation and oxygenation.',
+    'Place defibrillator pads for possible cardioversion.'
+  ]},
+  {type:'note', cls:'crit2', title:'Determine if Unstable', html:
+    'Unstable if ANY of: SBP &lt;75 mmHg · sudden SBP decrease below patient\'s baseline · acute ischemia or chest pain · acute congestive heart failure · acutely altered mental status. If stable: rule out sinus tachycardia → SVT — Stable. If unstable: continue below.'},
+  {type:'treatment', title:'Unstable SVT — Immediate Synchronized Cardioversion', steps:[
+    'If patient is not anesthetized: consider sedation.',
+    'Cardiovert with settings depending on QRS complex (narrow or wide) and rhythm (regular or irregular):',
+    'Narrow complex and regular: <span class="hl">Sync 50–100 J biphasic.</span>',
+    'Narrow complex and irregular: <span class="hl">Sync 120–200 J biphasic.</span>',
+    'Wide complex and regular: <span class="hl">Sync 100 J biphasic.</span>',
+    'Wide complex and irregular: <span class="hl">Unsync 200 J biphasic.</span>'
+  ]},
+  {type:'treatment', title:'Refractory Unstable SVT', steps:[
+    'Repeat synchronized shock with increased joules. Consider amiodarone 150 mg IV SLOW over 10 min.',
+    'If still unstable: End cognitive aid &amp; consult expert STAT.'
+  ]}
+]},
+/* 6 */ {n:6, cat:'acls', title:'VF / Pulseless VT', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['No pulse AND VFIB or VTACH on monitor.']},
+  CALLHELP, CPR,
+  {type:'immediate', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Defibrillation is higher priority than intubation. Mask ventilate with ratio of 30 compressions to 2 breaths.',
+    'If airway secured: 10 breaths/min; tidal volume 6–7 mL/kg.'
+  ]},
+  {type:'treatment', title:'Defib', steps:[
+    'Place pads and immediately defibrillate: <span class="hl">120–200 J biphasic or 360 J monophasic.</span>',
+    'Resume CPR. Increase electrical energy and repeat shock every 2 min.',
+    'If changes to non-shockable rhythm → Asystole/PEA.'
+  ]},
+  {type:'treatment', title:'IV Access', steps:[
+    'Ensure functional IV or IO access.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Turn off volatile anesthetic and vasodilating drips.',
+    'After 2nd shock: <span class="hl">epinephrine 1 mg IV every 3–5 min.</span>',
+    'After 3rd shock: amiodarone 300 mg IV push or lidocaine 1–1.5 mg/kg IV. May redose: amiodarone 150 mg or lidocaine 0.5–0.75 mg/kg.',
+    'If hypomagnesemia or torsades: magnesium 1–2 g IV.',
+    'If hyperkalemia: calcium chloride 1 g IV; sodium bicarbonate 1 amp IV (50 mEq); regular insulin 5–10 units IV with dextrose/D50 1 amp IV (25 g).',
+    'Consider ECMO or cardiopulmonary bypass.',
+    'If ROSC: arrange ICU care and consider cooling.'
+  ]},
+  {type:'note', cls:'crit2', title:'If still VF/VT', html:'Increase electrical energy and repeat shock every 2 minutes. Search for treatable causes (H\'s &amp; T\'s below).'},
+  HT_DETAILS
+]},
+/* 7 */ {n:7, cat:'crit', title:'Amniotic Fluid Embolism', sections:[
+  {type:'note', cls:'warn', title:'Retained from V3.1', html:'Retained from V3.1 — not a standalone card in Stanford V4 (V4 folds amniotic fluid embolism into Embolism).'},
+  {type:'signs', title:'Signs (sudden onset in pregnant/post-partum patient)', bullets:[
+    'Respiratory distress, decreased O₂ saturation.',
+    'Cardiovascular collapse: hypotension, tachycardia, arrhythmias, cardiac arrest.',
+    'Coagulopathy ± disseminated intravascular coagulation (DIC).',
+    'Seizures.','Altered mental status.','Unexplained fetal compromise.'
+  ]},
+  CALLHELP,
+  {type:'treatment', title:'Treatment', steps:[
+    'Anticipate possible cardiopulmonary arrest and emergent C-section.',
+    'Place patient in left uterine displacement (LUD).',
+    'Increase to 100% O₂, high flow.',
+    'Establish large-volume IV access (upper body best).',
+    'Support circulation with IV fluid, vasopressors, inotropes.',
+    'Prepare for emergent intubation.',
+    'When possible, place arterial line. Consider central venous access or IO line in humerus.',
+    'Anticipate massive hemorrhage and DIC. → Hemorrhage / MTG.',
+    'Consider circulatory support: IABP / ECMO / CPB.'
+  ]},
+  {type:'ruleout', title:'Rule Out Similar Presentations', grid:[
+    'Eclampsia','Hemorrhage','Air embolism','Aspiration','Anaphylaxis','Pulmonary embolism',
+    'Anesthetic overdose','Sepsis','Cardiomyopathy / valvular / MI','Local anesthetic toxicity','High spinal'
+  ]}
+]},
+/* 8 */ {n:8, cat:'crit', title:'Anaphylaxis', sections:[
+  {type:'signs', bullets:[
+    'Severe hypotension · Cardiac arrest · Bronchospasm · Wheezing · High inspiratory pressure · Angioedema · Airway swelling · Tachycardia · Arrhythmia · Flushing · Rash · Itching · Hives (or no skin findings).'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for code cart.','Consider pausing procedure.']},
+  {type:'treatment', title:'Airway & Access', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Secure airway. If angioedema: consider early intubation.',
+    'Ensure functional large bore IV or IO access.'
+  ]},
+  {type:'treatment', title:'Primary Meds', steps:[
+    'Give epinephrine to prevent mast cell degranulation:',
+    '<span class="hl">Epinephrine 10–100 mcg IV (if no IV: 500 mcg IM)</span>; increase IV dose every 2 min until clinical improvement. May require &gt;1 mg. Start early epinephrine infusion.',
+    'If hypotensive: turn off volatile anesthetics and vasodilating drips and consider amnestic agent (e.g. midazolam).'
+  ]},
+  {type:'treatment', title:'Fluid & Allergens', steps:[
+    'Give rapid IV fluid bolus. May require many liters.',
+    'Consider head down position; elevate legs.',
+    'Remove allergens: e.g. antibiotics, muscle relaxants, chlorhexidine, dyes, blood products, latex, contrast, colloids, protamine, sugammadex.'
+  ]},
+  {type:'note', cls:'crit2', title:'ACLS — If No Pulse or SBP &lt;50 mmHg', html:
+    'CPR rate 100–120 compressions/min; depth ≥5 cm; allow chest recoil; consider backboard. Keep EtCO₂ &gt;10 mmHg and diastolic BP &gt;20 mmHg. Rotate compressors with rhythm check every 2 min. Check pulse ONLY if signs of ROSC. If mask ventilation: ratio 30 compressions to 2 breaths; if airway secure: 10 breaths/min, tidal volume 6–7 mL/kg. Place defibrillator pads in case rhythm changes. Consider ECMO or cardiopulmonary bypass.'},
+  {type:'treatment', title:'Secondary Meds', steps:[
+    'If hypotension: Continue epinephrine infusion. May add vasopressin and/or norepinephrine.',
+    'If bronchospasm, give bronchodilator. If unable to ventilate, treat intravenously: epinephrine 5–10 mcg IV (or 200 mcg subq) or ketamine 10–50 mg IV (or 40 mg IM) or magnesium sulfate 1–2 g IV.',
+    'If able to ventilate: albuterol 4–8 puffs MDI or 2.5 mg nebulized and sevoflurane titrated to 1 MAC.',
+    'If persistent bronchospasm, consider: H1 antagonist diphenhydramine 25–50 mg IV; H2 antagonist famotidine 20 mg IV; corticosteroid hydrocortisone 100 mg IV or methylprednisolone 125 mg IV.',
+    'Consider additional IV access; consider arterial line placement.',
+    'Consider TEE / TTE to assess volume status and function.'
+  ]},
+  {type:'postevent', title:'Labs, Dispo & Follow-up', steps:[
+    'Send peak serum tryptase 1–2 hr after reaction onset.',
+    'Monitor for at least 6 hr. If severe, biphasic response is more likely so monitor in ICU for 12–24 hours.',
+    'If intubated: consider keeping intubated.',
+    'Consider adding allergens to patient\'s allergy list.',
+    'Refer the patient for follow-up allergy testing.'
+  ]},
+  {type:'ruleout', title:'Rule Out', grid:[
+    'Anesthetic overdose','Aspiration','Distributive or obstructive shock','Embolism (air, clot, fat)',
+    'Hemorrhage','Hypotension','Myocardial infarction','Pneumothorax','Sepsis'
+  ]}
+]},
+/* 9 */ {n:9, cat:'crit', title:'Bronchospasm', sections:[
+  {type:'signs', bullets:[
+    'Inability to ventilate · High peak inspiratory pressure · Wheezing · Absent breath sounds if severe · Increased expiratory time · Increased EtCO₂ · Upsloping EtCO₂ waveform · Decreased tidal volumes · Hypotension if air-trapping.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Consider pausing procedure.','Calling for code cart.']},
+  {type:'note', cls:'crit2', title:'Early Actions', html:
+    'If hypotensive, may be air-trapping: briefly disconnect circuit. If hypotension, tachycardia, and/or rash → Anaphylaxis.'},
+  {type:'treatment', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'If stridor or hypoxemia: consider intubation.',
+    'Optimize exhalation: change I:E ratio (e.g. 1:3 or 1:4); minimize PEEP (0–5 cmH₂O); avoid hyperinflation (goal tidal volume is 6 mL/kg).'
+  ]},
+  {type:'treatment', title:'Deepen Anesthesia & Check Airway', steps:[
+    'Bolus propofol; increase sevoflurane or isoflurane.',
+    'Consider additional neuromuscular blockade.',
+    'Check CO₂ waveform to confirm airway placement.',
+    'Auscultate lungs to check for endobronchial intubation.',
+    'Soft suction ET tube to check for kinking or mucous plug.',
+    'Check for malpositioned supraglottic airway.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'If severe: epinephrine 5–10 mcg IV every 3–5 min or 200 mcg subq, escalate doses as needed. Consider adding glycopyrrolate 0.2–0.4 mg IV. Monitor for tachycardia and hypertension.',
+    'If stridor or tachycardia concerns: give nebulized racemic L-epinephrine 0.5 mL of 2.25% soln in 3 mL saline.',
+    'If able to ventilate, give bronchodilators: albuterol 4–8 puffs MDI or 2.5 mg nebulized with or without ipratropium.',
+    'Consider giving ketamine 10–50 mg IV, magnesium sulfate 1–2 g IV, or hydrocortisone 100 mg IV.',
+    'Consider ABG and serum tryptase.',
+    'If severe: consider ECMO or cardiopulmonary bypass.'
+  ]}
+]},
+/* 10 */ {n:10, cat:'crit', title:'Delayed Emergence', sections:[
+  {type:'signs', bullets:[
+    'Patient less responsive than expected during emergence · Abnormal neurological exam in postoperative period.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.']},
+  {type:'treatment', title:'Stop Meds & Vital Signs', steps:[
+    'Confirm all volatile and IV anesthetics are off.',
+    'Check for and correct any hypoxemia, hypercarbia, hypothermia, or hypotension.',
+    'Check for signs of high ICP: widened pulse pressure (increased systolic, decreased diastolic), bradycardia, irregular respirations.'
+  ]},
+  {type:'treatment', title:'Paralysis & Neuro Exam', steps:[
+    'Check for and reverse residual neuromuscular paralysis with sugammadex or neostigmine with glycopyrrolate.',
+    'Perform neurological exam.',
+    'Check for pupil changes, motor asymmetry, and gag.',
+    'If abnormal or suspect stroke: Call Stroke Code or equivalent if available, obtain STAT head CT scan and/or STAT Neurology/Neurosurgery consult.'
+  ]},
+  {type:'treatment', title:'Med Reversal', steps:[
+    'Consider opioid reversal: naloxone 40 mcg IV; may double dose and repeat every 2 minutes up to 400 mcg.',
+    'Consider benzodiazepine reversal: flumazenil 0.2 mg IV every 1 minute; max dose 1 mg.',
+    'Consider anticholinergic syndrome (e.g. scopolamine): physostigmine 1 mg IV with atropine available for cholinergic crisis with severe bradycardia.',
+    'Re-treat because reversal agents have short half lives.'
+  ]},
+  {type:'treatment', title:'Sugar, Labs & Medication', steps:[
+    'Check for and correct hypoglycemia.',
+    'Send ABG plus electrolytes to evaluate for hypercarbia, hyponatremia, hypernatremia, and hypercalcemia.',
+    'Check for possible medication error.',
+    'Consider delayed med clearance (e.g. hepatic, renal).'
+  ]},
+  {type:'ddx', title:'Rare Causes', grid:[
+    'High spinal','Serotonin syndrome','Malignant hyperthermia','Myxedema coma','Seizure','Thyroid storm','Hepatic/uremic encephalopathy'
+  ]},
+  {type:'postevent', title:'Follow-up', steps:[
+    'If residual mental status abnormalities, monitor patient in ICU with neurologic follow up.'
+  ]}
+]},
+/* 11 */ {n:11, cat:'crit', title:'Difficult Airway — Unanticipated', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['Failed laryngoscopy or difficulty oxygenating or ventilating.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Call for airway help.','Call for anesthesia tech.','Call for difficult airway cart.']},
+  {type:'treatment', title:'Optimize Conditions', steps:[
+    'Ensure paralysis (e.g. rocuronium 1.2 mg/kg).',
+    'Ensure anesthetic depth (e.g. re-bolus or infuse propofol).',
+    'Optimize positioning (e.g. sniffing position, head of bed elevation to 30°, neck extension, bed height).'
+  ]},
+  {type:'treatment', title:'Oxygenate (max 2 attempts each modality)', steps:[
+    'Do not fixate on intubation.',
+    'Monitor CO₂ return by capnography and SpO₂. If SpO₂ critically low at any time: go to CICO red box below.',
+    'Mask: use two-handed grip; insert oral/nasal airway.',
+    'Supraglottic airway SGA/LMA: optimize size and fit (change position of head or device, cuff inflation); consider 2nd generation.',
+    'Laryngoscopy: video preferred. Consider alternate blade, rigid stylet, bougie, external laryngeal manipulation, release of cricoid pressure.',
+    'Choose experienced operator and familiar equipment.'
+  ]},
+  {type:'note', cls:'warn', title:'Can Oxygenate', html:
+    'While oxygenating, options include: Awaken patient · Finish case with SGA/LMA or mask · Intubate through SGA/LMA · Combined video/fiberoptic · Other advanced airway techniques. Monitor CO₂ return by capnography and SpO₂. If cannot oxygenate at any time: go to CICO red box.'},
+  {type:'note', cls:'crit2', title:'CICO — Cannot Intubate, Cannot Oxygenate', html:
+    '<strong>Priority is cutting the neck!</strong> Call for Cric-capable help. Get Cric kit: scalpel (e.g. #10 blade), bougie, and 6.0 ET tube. Additional operator can attempt to oxygenate from above (e.g. mask, SGA/LMA, video laryngoscopy). Start Cric/eFONA below.'},
+  {type:'treatment', title:'Cric / Emergency Front of Neck Access (eFONA)', steps:[
+    'Expose and extend neck. Laryngeal handshake to identify midline.',
+    'Make 8 cm long vertical midline skin incision. Cut away from your hand.',
+    'Palpate cricothyroid membrane.',
+    'Stab horizontally through cricothyroid membrane. Extend to width of trachea.',
+    'Rotate scalpel 90° (blade toward patient\'s feet) and pull toward you.',
+    'Insert bougie along scalpel. Remove scalpel.',
+    'Pass 6.0 ET tube over bougie.',
+    'Inflate cuff, ventilate, confirm CO₂, check breath sounds.'
+  ]},
+  {type:'treatment', title:'eFONA Task List', steps:[
+    'Inform Team: Announce emergency cric / front of neck access.',
+    'Call for Help: ENT, Gen Surgery, ICU, Anesthesiology, Code Team.',
+    'Prep: Expose and extend neck; obtain scalpel, bougie, and lubricated 6.0 ET tube.',
+    'Meds: Give paralytic and anesthetic.',
+    'Oxygenate and Monitor: Additional operator can attempt to oxygenate from above (e.g. mask, SGA/LMA, video laryngoscopy); monitor vital signs and pulse.'
+  ]},
+  {type:'prevention', title:'Prevention', bullets:[
+    'If risks for difficult airway, make contingency plans and consider:',
+    'Advanced airway equipment in room (e.g. difficult airway cart, second generation SGA/LMA, intubating SGA/LMA, intubation catheter, fiberoptic bronchoscope, rigid bronchoscope, scalpel/bougie cric kit).',
+    'Awake intubation.',
+    'High flow apneic oxygenation.',
+    'Video laryngoscopy as first attempt.',
+    'ENT or General Surgery in room.',
+    'Awake tracheostomy (in consultation with surgeon).',
+    'ECMO pre-cannulation with perfusionist in room.'
+  ]}
+]},
+/* 12 */ {n:12, cat:'crit', title:'Pulmonary Embolism', sections:[
+  {type:'signs', bullets:[
+    'Sudden decrease in EtCO₂, BP, or SpO₂ · Sudden increase in central venous pressure · Dyspnea, respiratory distress, or cough in awake patient.',
+    'Increased risk in long bone orthopedic surgery, pregnancy, cancer (especially renal tumor), high BMI, laparoscopic surgery, or surgical site above level of the heart.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for help.','Get code cart.','Consider terminating procedure.']},
+  {type:'treatment', title:'Pulse Check & Airway', steps:[
+    'If no pulse: start CPR, check rhythm, and follow appropriate algorithm → Asystole/PEA / VF/VT.',
+    '100% O₂ 10–15 L/min.'
+  ]},
+  {type:'treatment', title:'Circulation', steps:[
+    'Turn off volatile anesthetic and vasodilating drips.',
+    'Give IV vasopressor bolus to support circulation.',
+    'Consider rapid fluid bolus.'
+  ]},
+  {type:'treatment', title:'Evaluate Right Heart', steps:[
+    'If unstable or RV function decreased on TEE / TTE, use medication and diuresis to: Maintain sinus rhythm; Maintain normal RV volume status; Maintain RV contractility; Decrease RV afterload → Right Heart Failure.',
+    'If severe decompensation: consider ECMO or cardiopulmonary bypass.'
+  ]},
+  {type:'details', title:'Further Management by Embolism Type', items:[
+    ['Pulmonary Thromboembolism','Risk factors: chronic illness, neoplasm, immobility, missed anticoagulation. Discuss feasibility and safety of urgent thrombolysis vs. thrombectomy with surgical team. Thrombolysis (if safe): recombinant tissue plasminogen activator (rtPA) alteplase 10 mg IV followed by infusion of 90 mg over 2 hours. Thrombectomy: consider STAT Cardiovascular Surgery consult (open) or STAT Interventional Radiology consult (percutaneous). Supportive: airway, breathing, circulation.'],
+    ['Air or CO₂ Embolism','Air visible on TEE / TTE. Limit entrainment of air: check IV lines for air; flood surgical field with saline; consider placing surgical site below heart; consider left lateral decubitus position. Attempt removal of air: aspirate air from central line if present. Supportive: airway, breathing, circulation. Consider hyperbaric oxygen treatment.'],
+    ['Cement or Fat Embolism','Petechial rash; confusion or irritability if awake. Supportive: airway, breathing, circulation.'],
+    ['Amniotic Fluid Embolism','Peripartum patient with maternal or fetal compromise: altered mental status, hypotension, hypoxemia, seizures, coagulopathy. Supportive: airway, breathing, circulation; monitor fetus and consider urgent Cesarean section; monitor for and treat seizures and DIC.']
+  ]},
+  {type:'ruleout', title:'Rule Out (other causes)', grid:[
+    'Anaphylaxis','Bone cement implantation syndrome','Bronchospasm','Cardiac tamponade','Cardiogenic shock',
+    'Distributive shock','Hypovolemia','Myocardial ischemia','Pneumothorax','Pulmonary edema'
+  ]}
+]},
+/* 13 */ {n:13, cat:'crit', title:'Fire — Airway', sections:[
+  {type:'signs', title:'Suspect Fire If', bullets:['Sudden pop, spark, flame, smoke, heat, or odor.']},
+  {type:'note', cls:'warn', title:'Fire Risk Triad', html:'Fire Risk = Fuel Source + Oxidizer + Ignition Source. For non-airway fire → Fire — Non-Airway.'},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for help.']},
+  {type:'treatment', title:'Anesthesia Professional Immediate Response', steps:[
+    'Disconnect breathing circuit from the anesthesia machine to prevent torch formation.',
+    'Stop fresh gas flow.'
+  ]},
+  {type:'treatment', title:'Surgeon Immediate Response', steps:[
+    'If clamp immediately available: clamp ET tube. If clamp not available: fold (kink) ET tube (prevents torch formation if circuit not yet disconnected).',
+    'Immediately remove ET tube and any airway foreign bodies.',
+    'Pour saline into airway and suction debris.'
+  ]},
+  {type:'treatment', title:'After Fire Extinguished', steps:[
+    'If fire spreads beyond airway (e.g. to drapes, patient) → Fire — Non-Airway.',
+    'Re-establish oxygenation when fire is extinguished.',
+    'Minimize FiO₂ as much as possible. Consider air ventilation.',
+    'Consider prompt reintubation with ET tube ≥7.0 mm ID prior to swelling.',
+    'Ensure adequate anesthesia: e.g. propofol infusion.',
+    'Perform bronchoscopic examination of entire airway to assess injury and remove residual debris.',
+    'Inspect ET tube pieces to verify none left in airway.',
+    'Save all materials for later investigation.',
+    'Consider steroid: e.g. dexamethasone 8 mg IV.',
+    'ICU care for prolonged mechanical ventilation and airway observation.'
+  ]},
+  {type:'prevention', title:'Prevention', bullets:[
+    '<span class="em">For All High Risk Procedures:</span> Discuss fire prevention and response during time out; avoid FiO₂ &gt;0.3 and avoid N₂O; Anesthesia provider: communicate FiO₂ changes; Surgeon: communicate use of laser or electrocautery.',
+    '<span class="em">For Laser Surgery of Vocal Cord or Larynx:</span> Use laser resistant ET tube (single or double cuff); ensure ET tube cuff is sufficiently below vocal cords; consider filling proximal ET tube cuff with methylene blue-tinted saline; surgeon keeps laser in standby when not in use; surgeon protects ET tube cuff with wet gauze; surgeon checks FiO₂ &lt;0.3 and N₂O not in use before lasering or electrocauterizing.',
+    '<span class="em">For Non-laser Surgery in Oropharynx:</span> Regular PVC ET tube may be used; surgeon protects ET tube with wet gauze; consider continuous suctioning inside oropharynx; surgeon confirms FiO₂ &lt;0.3 and no N₂O prior to electrocautery use.'
+  ]}
+]},
+/* 14 */ {n:14, cat:'crit', title:'Fire — Non-Airway', sections:[
+  {type:'signs', title:'Suspect Fire If', bullets:['Sudden pop, spark, flame, smoke, heat, or odor.']},
+  {type:'note', cls:'warn', title:'Fire Risk Triad', html:'Fire Risk = Fuel Source + Oxidizer + Ignition Source. If fire spreads to airway → Fire — Airway.'},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Call for help.','Activate fire alarm.','Call code red.','Get CO₂ fire extinguisher.']},
+  {type:'treatment', title:'Prevent Airway Fire', steps:[
+    'Stop fresh gas flow.',
+    'Disconnect breathing circuit from the anesthesia machine to stop all airway gas flow.',
+    'Ventilate with portable self-inflating bag (Ambu) on room air.'
+  ]},
+  {type:'treatment', title:'Prevent Patient Harm & Extinguish (PASS)', steps:[
+    'Remove all burning and flammable materials (e.g. drapes, fabrics) from patient and onto floor; extinguish any flames.',
+    'If non-electrical fire: use CO₂ fire extinguisher (safe for wound) and saline or water (e.g. from basin, bottles, IV bags).',
+    'If electrical fire: use only CO₂ fire extinguisher.',
+    'PULL: Pull the pin. AIM: Aim for the base of the fire. SQUEEZE: Squeeze the trigger in five second bursts. SWEEP: Sweep from side-to-side to put out fire.'
+  ]},
+  {type:'treatment', title:'Care, Evacuation & Containment', steps:[
+    'Assess for injuries; monitor vital signs.',
+    'Ensure adequate anesthesia e.g. propofol infusion.',
+    'If continued smoke or fire: evacuate patient and staff. If no smoke or fire: stay and shelter in place.',
+    'Close operating room doors.',
+    'Turn off external gas supply valves for O₂ and N₂O.',
+    'If fire spreads to airway → Fire — Airway.',
+    'Discuss with surgeon and OR leadership the implications of fire for this patient and OR schedule.'
+  ]},
+  {type:'prevention', title:'Prevention', bullets:[
+    '<span class="em">For All High Risk Procedures:</span> Discuss fire prevention and management during time out; avoid FiO₂ &gt;0.3 and avoid N₂O; communicate FiO₂ changes and electrocautery or laser use throughout case.',
+    '<span class="em">For Highest Risk — MAC Head and Neck Procedures:</span> Use minimum O₂ concentration for adequate SpO₂; use nasal cannula instead of face mask if able; if high O₂ concentration required: use LMA or ET tube; configure drapes to avoid O₂ build up, consider active scavenging if required; allow complete drying of alcohol skin prep solutions.'
+  ]}
+]},
+/* 15 */ {n:15, cat:'crit', title:'Hemorrhage — Massive Transfusion', sections:[
+  {type:'signs', bullets:[
+    'Increased suction volume · Increased surgical sponge use · Tachycardia · Hypotension.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for Anesthesiology, Surgery, and Nursing help.','Activate Massive Transfusion Protocol (MTP).']},
+  {type:'treatment', title:'Early Response', steps:[
+    'Give IV fluid bolus (e.g. crystalloid, colloid). If significant hemorrhage: prioritize transfusion of blood products.',
+    'Establish large bore IV access: consider IO or central venous access.',
+    'Temporize severe hypotension with vasopressor bolus.',
+    'Consider head down position or leg elevation.',
+    '100% O₂ 10–15 L/min. Consider intubation prior to airway swelling.'
+  ]},
+  {type:'treatment', title:'Critical Response', steps:[
+    'If severe hemodynamic instability at any point: Inform surgeon and suggest surgical temporizing measures (e.g. packing, major vessel compression or crossclamp, hemostatic agents: thrombin or fibrin glue).',
+    'Get additional surgical help (e.g. Trauma, Vascular, Cardiac, Gyn-Onc, or General Surgery).',
+    'Delegate setup of: Rapid infusion system; Cell saver (if surgical site is not contaminated or cancerous).'
+  ]},
+  {type:'treatment', title:'Transfuse', steps:[
+    'If significant bleeding: transfuse, do not wait for lab results. Check all blood.',
+    'Based on clinical picture: transfuse with ratio of <span class="hl">1-2 PRBC : 1 FFP : 1 Platelet pack.</span>',
+    'Adjust empiric transfusion for any clinical or laboratory signs of coagulopathy.'
+  ]},
+  {type:'treatment', title:'Normothermia, Arterial Line, Urine Output & Labs', steps:[
+    'Warm room, use warm fluid, forced air, and blankets.',
+    'Consider arterial line placement for monitoring and serial lab draws.',
+    'Place foley. Urine output goal ≥0.5 mL/kg/hr.',
+    'Monitor resuscitation adequacy with clinical stability and serial labs: Hgb, platelets, coagulation, acid base status, base deficit, electrolytes, lactate, TEG, Rotem.',
+    'Actively maintain normal calcium level.'
+  ]},
+  {type:'details', title:'Blood Products and Therapeutic Adjuncts', items:[
+    ['PRBC','Give if Hgb &lt;7–10 g/dL depending on hemodynamic stability, coronary disease, and rate of blood loss. Each unit should raise Hgb ~1 g/dL or HCT ~3%.'],
+    ['FFP','Give if INR or PTT &gt;1.5× normal. Give FFP 10–15 mL/kg then recheck labs and continue with 1:1 PRBC : FFP ratio.'],
+    ['Platelets','Give if platelets &lt;50–100 K/µL and ongoing bleeding. Each apheresis unit should raise platelet count ~50 K/µL.'],
+    ['Cryoprecipitate','Give if fibrinogen &lt;80–100 mg/dL (&lt;300 mg/dL peripartum). Each 10 units of cryoprecipitate should raise fibrinogen level ~50 mg/dL.'],
+    ['Fibrinogen Concentrate','If cryoprecipitate unavailable: consider fibrinogen concentrate 0.5–1 g IV. May repeat to fibrinogen goal. Each gram should raise fibrinogen level ~50 mg/dL.'],
+    ['Tranexamic Acid (TXA)','Consider TXA in all major bleeding cases. Give 1 g IV over 10 min then 1 g IV over 8 hours.'],
+    ['Prothrombin Complex Concentrate (PCC)','Consider PCC in patients with warfarin induced bleeding or persistent deranged INR (PT). Give 25–50 units/kg IV.'],
+    ['Factor VIIa Concentrate','Consider Factor VIIa if life-threatening, refractory coagulopathy. Seek hematology or pharmacy advice for dosing.']
+  ]}
+]},
+/* 16 */ {n:16, cat:'crit', title:'High Airway Pressure', sections:[
+  {type:'signs', bullets:[
+    'Increased peak airway pressures &gt;5 cm H₂O above baseline or &gt;35 cm H₂O. May be accompanied by: Wheezing and upsloping CO₂ waveform (if bronchospasm) · Increased EtCO₂ · Decreased tidal volumes · Hypotension (if air-trapping).'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for help.']},
+  {type:'treatment', title:'Airway', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Confirm presence of CO₂.',
+    'Evaluate capnography waveform: Upward slope suggests obstruction; Curare cleft near end of expiratory phase suggests insufficient neuromuscular blockade.',
+    'Starting at patient: inspect breathing circuit including valves, connections, and sample line.'
+  ]},
+  {type:'treatment', title:'Rule Out Air Trapping & Localize Problem', steps:[
+    'Disconnect breathing circuit from ET tube or SGA/LMA to rule out air-trapping (i.e. auto-PEEP).',
+    'During disconnect, squeeze reservoir bag. If pressure is High (machine or circuit is obstructed): Switch to self-inflating bag (Ambu) connected to O₂ source and gas sampling line.',
+    'If pressure is Low or zero (problem is with the ET tube or lungs): Reconnect anesthesia machine circuit.'
+  ]},
+  {type:'treatment', title:'Optimize Compliance', steps:[
+    'Consider increasing anesthetic: e.g. propofol 20 mg IV.',
+    'Consider additional neuromuscular blockade.',
+    'If abdominal insufflation: decrease or release pressure.',
+    'Evaluate patient position. If head down: consider level or head-up positioning. If prone: consider turning supine.',
+    'If surgical retraction contributing: notify surgeon.',
+    'Check for shift in patient position (e.g. slipping off prone position supports).'
+  ]},
+  {type:'treatment', title:'Manually Ventilate & Check ET Tube', steps:[
+    'Manually ventilate using anesthesia machine to assess compliance.',
+    'Check and adjust adjustable pressure-limiting valve (APL).',
+    'Pass soft suction catheter to rule out kinked ET tube or thick secretions (i.e. mucous plug).',
+    'Consider bronchoscopy to evaluate ET tube and airway.',
+    'If unable to clear ET tube obstruction: replace ET tube.'
+  ]},
+  {type:'treatment', title:'Auscultate Breath Sounds', steps:[
+    'If asymmetric: Rule out endobronchial intubation; Rule out pneumothorax → Pneumothorax.',
+    'If symmetric but abnormal: If wheezing or decreased breath sounds: consider bronchospasm treatment → Bronchospasm. If crackles: consider pulmonary edema treatment.'
+  ]},
+  {type:'details', title:'Rule Out — Potential Causes', items:[
+    ['ET tube or lungs','Abdominal compartment syndrome · Abdominal insufflation · Abnormal anatomy (e.g. kyphoscoliosis) · Airway foreign body · Airway tumor · Anaphylaxis · Aspiration · Bronchospasm · Chest wall rigidity · Kinked ET tube or circuit · Laryngospasm · Light anesthesia · Mucous plug · Muscle tone · Patient positioning · Pleural effusion · Pneumothorax/hemothorax · Pulmonary edema · Thoracic insufflation.'],
+    ['Machine or breathing circuit','Circuit obstruction · Scavenger closed · Ventilator valve malfunction.']
+  ]}
+]},
+/* 17 */ {n:17, cat:'crit', title:'Local Anesthetic Toxicity (LAST)', sections:[
+  {type:'signs', bullets:[
+    'Neurologic: Seizures · Altered mental status · Tinnitus · Metallic taste · Perioral numbness.',
+    'Cardiac: Cardiovascular collapse · Hypotension · Arrhythmia (e.g. ectopy, asystole, bradycardia, VFIB, VTACH).'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Call for help.','Call for lipid emulsion 20% (Intralipid™) STAT.','If unstable: consider early call for ECMO or bypass.']},
+  {type:'treatment', title:'Stop Triggers & CPR', steps:[
+    'Stop any local anesthetic injection or infusion.',
+    'If pulseless: start CPR. May require prolonged CPR +/- ECMO.',
+    '100% O₂ 10–15 L/min.',
+    'Start lipid emulsion, then intubate if indicated.'
+  ]},
+  {type:'treatment', title:'Lipid Emulsion', steps:[
+    '<span class="hl">Bolus lipid emulsion 20% 100 mL IV over 2–3 min</span> (If &lt;70 kg: give 1.5 mL/kg IV bolus).',
+    '<span class="hl">Infuse lipid emulsion 20% 250 mL IV over 15–20 min</span> (If &lt;70 kg: infuse 0.25 mL/kg/min for 20 min).',
+    'If unstable: repeat bolus and double the infusion until stable. Maximum lipid emulsion 20% dose: 12 mL/kg.',
+    'Once stable, continue infusion for at least 15 minutes.'
+  ]},
+  {type:'treatment', title:'If Seizure', steps:[
+    'Recovery Position: Place patient lateral and head down to prevent aspiration; prevent falls and head injury.',
+    'Give benzodiazepine to break seizure: midazolam 2–4 mg IV. If refractory, give neuromuscular blockade: rocuronium. If benzodiazepines not available and BP stable: give propofol 20 mg IV. May repeat until seizure stops.',
+    'Support breathing; intubate if appropriate.'
+  ]},
+  {type:'treatment', title:'If Arrhythmia or Hypotension', steps:[
+    'If persistent arrhythmia: give amiodarone 150 mg IV slowly over 10–15 min. Avoid calcium channel blockers, beta blockers, local anesthetics, and any negative inotrope.',
+    'Treat hypotension with low dose epinephrine: start with 0.2–1 mcg/kg IV; avoid vasopressin.'
+  ]},
+  {type:'treatment', title:'If Cardiac Arrest', steps:[
+    'CPR: Rate 100–120 compressions/min; depth ≥5 cm; allow chest recoil; consider backboard; keep EtCO₂ &gt;10 mmHg and diastolic BP &gt;20 mmHg; rotate compressors with rhythm check every 2 min; check pulse ONLY if signs of ROSC; place defib pads.',
+    'Airway: If mask ventilation: ratio 30 compressions to 2 breaths; if airway secured: 10 breaths/min, tidal volume 6–7 mL/kg.',
+    'Defib: If VFIB or unstable VTACH: immediately defibrillate 120–200 J biphasic or 360 J monophasic. Resume CPR immediately. Reasonable to increase energy of repeat shock every 2 min.',
+    'Meds: Give LOW DOSE epinephrine: start at 0.2–1 mcg/kg IV. If VFIB/VTACH unresponsive to defibrillation: amiodarone 300 mg IV push. May redose amiodarone 150 mg IV push. Avoid lidocaine.',
+    'If prolonged need for CPR: consider ECMO or bypass.'
+  ]},
+  {type:'postevent', title:'Post-event Care', steps:[
+    'Continue PACU/ICU-level monitoring for at least: 2 hours after seizure; 6 hours after hemodynamic instability; 24–48 hours after cardiac arrest.',
+    'For latest recommendations: http://www.asra.com.'
+  ]},
+  {type:'note', cls:'warn', title:'GGH Institutional — Lipid Rescue Kit', html:
+    'Location: <span class="em">"Lipid Emulsion Rescue"</span> in the Pyxis in the GGH OR, and at the Ambulatory Surgery Center nurse\'s station. Pyxis search: "Lipid rescue" (brand) or "Fat emulsion rescue" (generic). Kit contains: 4 × 250 mL lipid emulsion 20%, IV tubing, 2 × 60 mL syringes, 5 needles, and the protocol. <span class="goto">GGH Pharmacy policy MM.034.2601 (rev. 10/2025) · adapted from ASRA 2020.</span>'},
+  {type:'details', title:'GGH Lipid Dosing by Weight (20% emulsion)', items:[
+    ['Patient &lt; 70 kg','<span class="hl">Bolus ~1.5 mL/kg (lean body weight) IV over 2–3 min</span>, then infusion ~0.25 mL/kg/min. If still unstable: repeat bolus and double infusion to 0.5 mL/kg/min. Continue ≥15 min after circulatory stability.'],
+    ['Patient &gt; 70 kg','<span class="hl">Bolus ~100 mL IV over 2–3 min</span>, then infuse ~250 mL over 15–20 min. If still unstable: repeat bolus and double the infusion. Continue ≥15 min after circulatory stability.'],
+    ['Maximum','12 mL/kg total lipid dose. Continue CPR throughout lipid therapy.']
+  ]}
+]},
+/* 18 */ {n:18, cat:'crit', title:'Malignant Hyperthermia', sections:[
+  {type:'details', title:'Signs', items:[
+    ['May be early signs','Mixed (metabolic and respiratory) acidosis · Increased EtCO₂, heart rate, respiratory rate · Hyperthermia · Masseter spasm/trismus · Muscle rigidity without shivering, tremor, or clonus.'],
+    ['May be late signs','Myoglobinuria · Arrhythmias including hyperkalemic cardiac arrest.']
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Get MH cart with dantrolene.','Call for help.','Consider pausing procedure.']},
+  {type:'ddx', title:'Rule Out', grid:[
+    'CO₂ insufflation','Hypoventilation','Hypoxemia','Iatrogenic warming','Illicit stimulants',
+    'Light anesthesia','Neuroleptic malignant syndrome','Pheochromocytoma','Serotonin syndrome','Thyroid storm'
+  ]},
+  {type:'treatment', title:'Stop MH Triggers & Airway', steps:[
+    'Stop volatile anesthetic and succinylcholine.',
+    'Do NOT change machine or circuit.',
+    '100% O₂ 10–15 L/min.',
+    'If easily available, add charcoal filters to breathing circuit.',
+    'Maximize minute ventilation. Mechanical ventilation is preferred. Avoid air-trapping.'
+  ]},
+  {type:'treatment', title:'Give Antidote Rapidly', steps:[
+    '<span class="hl">Initial dantrolene dose is 2.5 mg/kg IV.</span>',
+    'Concentrated formulation — Ryanodex: Dilute one 250 mg vial in 5 mL preservative-free sterile water. 70 kg patient dose: 175 mg = 3.5 mL.',
+    'Non-concentrated formulation — Dantrium or Revonto: Assign several people to prepare. Dilute each 20 mg vial in 60 mL preservative-free sterile water. 70 kg patient dose: 175 mg = 9 VIALS.',
+    '<span class="hl">Repeat dantrolene 2.5 mg/kg every 5 min</span> until hypercarbia and rigidity are resolved and temperature is not increasing. May need &gt;10 mg/kg.',
+    'If appropriate, stop procedure. Give non-triggering maintenance anesthetic or sedation (e.g. propofol, benzodiazepine, opioid).'
+  ]},
+  {type:'treatment', title:'Treat Hyperkalemia', steps:[
+    'Calcium chloride 10 mg/kg IV, max 2 g.',
+    'Regular insulin 5–10 units IV with dextrose/D50 1 amp IV (25 g); monitor glucose.',
+    'Albuterol 8–12 puffs MDI or 2.5 mg nebulized.',
+    'Sodium bicarbonate: 0.5 amp (25 mL) at a time; maintain minute ventilation to exhale additional CO₂ produced.',
+    'If severe: consider emergent dialysis.'
+  ]},
+  {type:'treatment', title:'Treat Rhythm', steps:[
+    'Treat arrhythmias with amiodarone 150 mg IV over 10–15 min, esmolol 10–20 mg IV bolus followed by infusion, or magnesium sulfate 1 g IV; avoid calcium channel blockers and sodium channel blockers (e.g. verapamil, diltiazem, lidocaine, procainamide).',
+    'If unstable, call for code cart and also see ACLS event: Asystole/PEA / Bradycardia / SVT / VF/VT.'
+  ]},
+  {type:'treatment', title:'Active Cooling', steps:[
+    'If core temperature &gt;38° C: actively cool with cold IV fluid (20–30 mL/kg normal saline or plasmalyte).',
+    'Additional cooling: Stop active warming; set forced air on ambient; cool room; put ice packs on head, axilla, and groin; wet skin; cool lavage if open abdomen or peritoneal catheter (avoid bladder lavage to preserve urine output measurement).'
+  ]},
+  {type:'treatment', title:'Access, Labs, Urine & ICU Care', steps:[
+    'Consider additional IV access and arterial line placement.',
+    'Send ABG, K+, CK, urine myoglobin, coagulation panel, lactate.',
+    'Place Foley catheter and monitor urine output: goal 1–2 mL/kg/hr; consider IV fluids and diuretics.',
+    'Transport with experienced personnel after stabilization.',
+    'Mechanical ventilation commonly required because 20% of MH events relapse within 16 hours. Extubate once metabolically and hemodynamically stable.',
+    'Continue dantrolene: 1 mg/kg bolus every 4–6 hours or 0.25 mg/kg/hr infusion for up to 24 hours.',
+    'Monitor for rhabdo, DIC, hyperK+, compartment syndrome.'
+  ]},
+  {type:'postevent', title:'MH Hotline & Post Event', steps:[
+    'Call 24/7 for expert consultation: 1-800-MH-HYPER (1-800-644-9737) http://www.mhaus.org.',
+    'Complete AMRA (Adverse Metabolic Reaction to Anesthesia): https://anest.ufl.edu/namhr/.',
+    'Test genes: https://www.mhaus.org/testing/genetic-testing/.'
+  ]},
+  {type:'note', cls:'warn', title:'GGH Institutional — MH Carts', html:
+    'Cart locations: GGH — OR holding area (restricted; Clinical Lead/Security via FOB). FLSC — surgical core (restricted, no FOB). SSMH — Emergency Department (non-restricted). MHAUS hotline: 1-800-644-9737.'},
+  {type:'details', title:'GGH Dantrolene by Weight (initial 2.5 mg/kg; vials for 4 doses)', items:[
+    ['10 kg (22 lb)','25 mg — 1.25 vials — 300 mL sterile water'],
+    ['30 kg (66 lb)','75 mg — 3.75 vials — 900 mL'],
+    ['50 kg (110 lb)','125 mg — 6.25 vials — 1500 mL'],
+    ['70 kg (154 lb)','175 mg — 8.75 vials — 2100 mL'],
+    ['90 kg (198 lb)','225 mg — 11.25 vials — 2700 mL'],
+    ['100 kg (220 lb)','250 mg — 12.5 vials — 3000 mL'],
+    ['Dilution','Dantrolene: dilute each 20 mg vial in 60 mL preservative-free sterile water. Ryanodex: 250 mg in 5 mL.']
+  ]},
+  {type:'treatment', title:'GGH Workflow', steps:[
+    'Call a Rapid Response (OR may have enough staff during business hours).',
+    'Circulating RN / Clinical Lead retrieves the MH cart from Surgical Services holding area.',
+    'If machine not MH-prepped, use activated charcoal filters (MH cart drawer 5) after a 90-second high-flow O₂ flush.',
+    'Notify pharmacy; contact Anesthesia on-call.',
+    'Cooled IV fluids in OR center-core refrigerator; insulin in PACU refrigerator.',
+    'Avoid calcium channel blockers with dantrolene.',
+    'Observe in ICU ≥24 h (≈25% relapse).'
+  ]}
+]},
+/* 19 */ {n:19, cat:'crit', title:'Myocardial Ischemia', sections:[
+  {type:'signs', bullets:[
+    'ST segment depression or elevation · T-wave inversion · Arrhythmias: conduction abnormality (e.g. new LBBB), irregular rhythm, tachycardia, bradycardia, or hypotension · Regional wall motion abnormality · New or worsened mitral regurgitation · Chest pain, dyspnea, nausea, or diaphoresis.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Get code cart.','Call for Cardiac Anesthesiology or Cardiology help.']},
+  {type:'treatment', title:'Airway & Monitor', steps:[
+    'Set supplemental O₂ to maintain SpO₂ ≥95%.',
+    'Get 12-lead ECG; verify ECG leads in correct position.',
+    'Expand ECG monitor view to leads II, V5, and others.',
+    'Prepare for arrhythmia: apply defibrillator pads and leads.',
+    'Pause or stop procedure if possible. Discuss bleeding and risk of anticoagulation.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Treat any tachycardia, bradycardia, hypotension or hypertension.',
+    'Discuss with surgeon the explicit contraindications and benefits of dual antiplatelet therapy and anticoagulation:',
+    'Aspirin 160–325 mg PO, nasogastric, or rectal.',
+    'P2Y12 ADP receptor inhibitor: e.g. clopidogrel 300 mg PO, prasugrel 60 mg PO, or ticagrelor 180 mg PO.',
+    'Heparin infusion.',
+    'Treat pain with narcotics: fentanyl or morphine.',
+    'Consider nitroglycerin paste or infusion. Avoid if hypotensive.',
+    'Consider beta blocker to slow heart rate and allow coronary perfusion. Esmolol preferred because it can be stopped if it precipitates CHF. Avoid if bradycardia, 1st or 2nd degree heart block, or hypotensive.',
+    'If acute pulmonary edema, consider diuresis: furosemide 10–40 mg IV. Monitor urine output.'
+  ]},
+  {type:'treatment', title:'Cardiology Consult, Access, Labs & Echo', steps:[
+    'If STEMI: consult Cardiology for possible emergent coronary revascularization or fibrinolysis. Consider emergent transfer to Cath Lab or PCI Center.',
+    'Consider additional IV access; place arterial line for monitoring and labs; consider central line placement.',
+    'Send ABG, electrolytes, Hgb, troponin, coagulation panel.',
+    'Consider TEE / TTE to assess volume status, wall motion, ventricular function, and valvular disease. Use contractility to guide vasoactive infusion choice.',
+    'Consider ECMO, cardiopulmonary bypass, or intra-aortic balloon pump.',
+    'May require ICU care.'
+  ]}
+]},
+/* 20 */ {n:20, cat:'crit', title:'Oxygen Failure', sections:[
+  {type:'signs', bullets:[
+    'Audible or visible O₂ failure alarm · Inappropriately low FiO₂ value on gas analyzer · Flow meter reads abnormally low.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Consider pausing procedure.','Call for help.','Get code cart with O₂ cylinder.']},
+  {type:'treatment', title:'Non-Machine Ventilation', steps:[
+    'Disconnect patient from machine and ventilate with self-inflating bag (Ambu) on room air.',
+    'Do NOT connect self-inflating bag (Ambu) to machine auxiliary oxygen because it has the same faulty O₂ source.',
+    'Consider assigning capable person to manual ventilation.',
+    'If no pulse: start CPR and → Asystole/PEA.'
+  ]},
+  {type:'treatment', title:'Non-Machine O₂ Source & Gas Sampling', steps:[
+    'Attach self-inflating bag (Ambu) to: Nozzle on transport O₂ e-cylinder OR Nothing (continue ventilating on room air).',
+    'Connect gas sampling line with elbow connector between patient and self-inflating bag (Ambu).',
+    'Verify correct airway placement with CO₂.',
+    'Verify patient is receiving expected O₂ concentration on gas analyzer: 100% if on e-cylinder, 21% if on room air.',
+    'If low pressure: confirm orogastric/nasogastric tube not in trachea.'
+  ]},
+  {type:'secondary', title:'Anesthetic, Conserve & Report', steps:[
+    'Maintain anesthesia with IV medications; turn off volatile anesthetic.',
+    'Use lowest possible fresh gas flow and FiO₂.',
+    'Inform Charge Nurse, Anesthesia Lead, and all ORs.',
+    'Contact bio-engineering to: Report problem; ask for help with diagnostics and repair while you focus on patient care; Find out if issue is system wide.',
+    'Discuss plan for this patient and OR schedule.'
+  ]}
+]},
+/* 21 */ {n:21, cat:'crit', title:'Pneumothorax', sections:[
+  {type:'signs', bullets:[
+    'Increased peak inspiratory pressures (PIPs) · Tachycardia · Hypotension or hypoxemia · Decreased or asymmetric breath sounds · Hyperresonance to chest percussion · Tracheal deviation (late sign) · Increased JVD/CVP · Decompensation upon initiation of mechanical ventilation or central line placement.',
+    'Higher incidence in trauma, COPD, cardiothoracic, and upper abdominal surgery patients.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for help.','Get code cart.','Call Trauma, General, or Cardiothoracic Surgery STAT.']},
+  {type:'treatment', title:'Airway & Fast Checks', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Exclude endobronchial intubation: listen to breath sounds and check ET tube depth.',
+    'Exclude ET tube obstruction: pass soft suction catheter.',
+    'Exclude auto-PEEP: briefly disconnect breathing circuit.'
+  ]},
+  {type:'treatment', title:'Decompress Emergently', steps:[
+    'If unstable and chest tube is not immediately available:',
+    'Place <span class="hl">14 (or 16) gauge IV catheter in 4th or 5th intercostal space between anterior and mid-AXILLARY line per ATLS 2018</span> (may hear a whoosh of air if under tension).',
+    'Leave IV catheter in place while awaiting chest tube.',
+    'Have appropriate personnel place chest tube.'
+  ]},
+  {type:'treatment', title:'Advanced Checks & Disposition', steps:[
+    'Fiberoptic bronchoscopy to evaluate for endobronchial intubation, ET tube obstruction.',
+    'Lung ultrasound: Lung sliding (normal) vs. lung point (pneumothorax); seashore sign (normal) vs. barcode (pneumothorax).',
+    'Consider STAT portable chest x-ray; do not delay treatment.',
+    'Consider ICU care for respiratory monitoring and chest tube management.'
+  ]}
+]},
+/* 22 */ {n:22, cat:'crit', title:'Power Failure', sections:[
+  {type:'signs', bullets:['Sudden darkness · Loss of electrically powered equipment.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Call for help.']},
+  {type:'treatment', title:'Obtain Light & Confirm Ventilator', steps:[
+    'Use any available light sources: laryngoscope, cell phone, flashlight, ambient light from opening door or shades.',
+    'Ventilator may have temporary (~30 minute) battery. Consider utilizing transport ventilator.',
+    'If ventilator is not working: Consider converting to spontaneous ventilation; Ventilate with self-inflating bag (Ambu); Convert to TIVA with battery operated pump or dial-a-flow / manual flow regulator.'
+  ]},
+  {type:'treatment', title:'Confirm Monitor & Backup Power', steps:[
+    'If monitors fail: Assign person for continuous pulse check; Perform manual blood pressure measurement; Use transport monitor or defibrillator monitor.',
+    'If power failure affects oxygen supply or alarms → Oxygen Failure.',
+    'Ensure generator-supplied emergency power outlets are functional.',
+    'Connect all life-sustaining equipment to emergency outlets.',
+    'Disconnect non-life-sustaining equipment from emergency outlets.'
+  ]},
+  {type:'secondary', title:'Report & Team Recap', steps:[
+    'Inform Charge Nurse, Anesthesia Lead, and all ORs.',
+    'Call bio-engineering to: Report problem; ask for help with diagnostics and repair while you focus on patient care: if only in your OR, suggest checking if circuit breaker was tripped; Find out if issue is system wide.',
+    'Discuss with surgeon and team the implications of power failure for this patient and OR schedule.'
+  ]}
+]},
+/* 23 */ {n:23, cat:'crit', title:'Right Heart Failure', sections:[
+  {type:'signs', bullets:[
+    'Dyspnea, dizziness, edema, right upper abdominal discomfort · Hypotension · ECG with RV strain · TEE / TTE with dilated RV, reduced RV function · Flattening of interventricular septum · Decompensation after hypoxemia, hypercarbia, or acidosis · Decompensation upon initiation of mechanical ventilation.'
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Call for a pulmonary vasodilator such as nitric oxide (e.g. INOmax) or epoprostenol (e.g. Flolan, Veletri).','Call for code cart and TEE / TTE.','Call for Cardiac Anesthesiology, Cardiology, or ICU help.']},
+  {type:'ruleout', title:'Rule Out — Life-Threatening Causes of RV Failure', grid:[
+    'Cardiac tamponade — emergent pericardiocentesis','Protamine — stop administration','Embolism (air, clot, fat)','RV infarction','Tension pneumothorax'
+  ]},
+  {type:'treatment', title:'Airway & Echo', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Decrease tidal volume and increase respiratory rate to lower intrathoracic pressure and avoid hypercarbia. Avoid breath stacking.',
+    'Minimize PEEP if tolerated; avoid hypoxemia.',
+    'Assess key TEE / TTE findings: Decreased RV function — TAPSE severely reduced &lt;6 mm; normal 16–20 mm. RV volume/pressure overload — flattened interventricular septum makes left ventricle appear D-shaped. RV dilation and/or hypertrophy. Underfilled LV despite adequate preload.'
+  ]},
+  {type:'treatment', title:'Decrease RV Afterload', steps:[
+    'If significant instability: consider ECMO or cardiopulmonary bypass.',
+    'Offload RV by decreasing pulmonary vascular resistance (PVR): Give inhaled prostacyclin derivatives, inhaled nitric oxide, or intravenous pulmonary vasodilators.',
+    'Avoid hypoxemia, hypercarbia, acidosis, or excessive intrathoracic pressure.'
+  ]},
+  {type:'treatment', title:'Maintain RV Contractility', steps:[
+    'Avoid hypotension to maintain myocardial perfusion.',
+    'If decreased RV contractility: consider epinephrine.',
+    'If normal RV contractility: consider vasopressin or norepinephrine.',
+    'If refractory hypotension: consider intra-aortic balloon pump (IABP) to maintain coronary perfusion.'
+  ]},
+  {type:'treatment', title:'Maintain Volume Status & Sinus Rhythm', steps:[
+    'RV overload is more dangerous than mild hypovolemia. RV overload suggested by CVP &gt;20 mmHg and/or SvO₂ &lt;65%.',
+    'If RV overload: consider diuresis and seek expert advice. If RV under-filled: careful volume replacement with blood or crystalloid per HCT.',
+    'Avoid bradycardia or extreme tachycardia to maintain cardiac output.',
+    'Identify and treat electrolyte abnormalities. Maintain atrial kick to augment cardiac output.',
+    'If irregular rhythm → SVT.'
+  ]}
+]},
+/* 24 */ {n:24, cat:'crit', title:'High Spinal', sections:[
+  {type:'signs', title:'After Neuraxial Anesthesia or Analgesia', bullets:[
+    'Sensory or motor blockade higher or faster than expected · Upper extremity numbness or weakness (hand grip) · Dyspnea or apnea · Nausea or vomiting · Difficulty swallowing · Cardiovascular collapse: bradycardia and/or hypotension · Loss of consciousness.'
+  ]},
+  {type:'note', cls:'crit2', title:'Callout', html:'If local anesthetic toxicity is possible: give lipid emulsion 20% rapidly and → Local Anesthetic Toxicity.'},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call a code.','Get code cart.']},
+  {type:'treatment', title:'Pulse Check & Airway', steps:[
+    'If no pulse: start CPR and → Asystole/PEA or VF/VT.',
+    '100% O₂ 10–15 L/min.',
+    'Support oxygenation and ventilation; intubate if necessary as respiratory compromise may last several hours. Patient may be conscious and need reassurance and an amnestic agent, such as midazolam, to prevent awareness.'
+  ]},
+  {type:'treatment', title:'Circulation & Rapid Preload', steps:[
+    'If severe bradycardia or hypotension: epinephrine 10–100 mcg IV, increase as needed.',
+    'If mild bradycardia: consider atropine 0.5–1 mg or glycopyrrolate 0.2–0.4 mg, but progress quickly to epinephrine if needed. Phenylephrine unlikely to be effective.',
+    'Give rapid IV bolus with pressure bag. May require several liters.',
+    'Raise both legs to increase preload.',
+    'Maintain neutral position. Head down position increases venous return but increases already high spinal level.'
+  ]},
+  {type:'treatment', title:'Pregnancy Specific Care', steps:[
+    'Ensure left uterine displacement.',
+    'Call OB and Neonatology teams.',
+    'Prepare for emergent or perimortem Cesarean.',
+    'Monitor fetal heart tones.'
+  ]}
+]},
+/* 25 */ {n:25, cat:'crit', title:'Transfusion Reaction', sections:[
+  {type:'details', title:'Signs', items:[
+    ['Hemolytic Reaction','Fever · Back/flank pain · Tachycardia · Tachypnea · Hypotension · Dark urine · Oozing or DIC.'],
+    ['Febrile Reaction','Fever · Chills · Rigors · Headache · Vomiting.'],
+    ['Anaphylactic Reaction','Hypotension · Urticaria · Other rash · Wheezing · Tachycardia.']
+  ]},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Stop transfusion(s). Retain blood product bag(s).','Inform team.','Identify leader.','Call for help.','Call for code cart.','Consider pausing procedure.']},
+  {type:'treatment', title:'Airway & Circulation', steps:[
+    '100% O₂ 10–15 L/min.',
+    'If no ET tube in place: consider intubation.',
+    'Consider IV fluid bolus.',
+    'If hypotensive: Turn anesthetic down or off; Treat with vasopressor bolus (e.g. phenylephrine, ephedrine); If severe: give epinephrine 10–100 mcg IV and/or vasopressin 0.5–1 units IV.',
+    'Send appropriate labs and return units per local protocol.'
+  ]},
+  {type:'treatment', title:'Specific Reaction Treatments', steps:[
+    'Hemolytic Reaction: monitor for signs of DIC; maintain urine output with IV fluids, diuretics.',
+    'Febrile Reaction: treat with antipyretic acetaminophen 1000 mg IV; rule out hemolysis; rule out bacterial contamination.',
+    'Anaphylactic Reaction: give epinephrine bolus and then infusion. Consider steroid: dexamethasone 4–8 mg IV or hydrocortisone 100 mg and antihistamine: diphenhydramine 25–50 mg IV and famotidine 20 mg IV → Anaphylaxis.',
+    'May require ICU care.'
+  ]}
+]},
+/* 26 */ {n:26, cat:'crit', title:'Trauma', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['Blunt force or penetrating injury to major organs.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Call trauma code.','Activate trauma operating room.','Activate massive transfusion protocol (MTP).']},
+  {type:'treatment', title:'On Arrival to Trauma Bay', steps:[
+    'All team members state name and role. Use clear, closed-loop communication; record events.',
+    'Check pulse. If no pulse: start ACLS while transfusing and performing primary survey to find and treat cause.',
+    'Place standard monitors and obtain large-bore IV access.',
+    'Maintain c-spine precautions with all movement.'
+  ]},
+  {type:'treatment', title:'Primary Survey (ABCDE)', steps:[
+    'Airway and Breathing: Evaluate airway, ensure oxygenation and ventilation; Intubate if indicated. Recommend RSI with video laryngoscopy, in-line stabilization, and capnography. If hypotensive: modify or eliminate induction medication. If indicated, surgical airway. Treat pneumo or hemothorax with emergent chest tubes.',
+    'Circulation: Control external hemorrhage. Transfusion preferred over crystalloid bolus. Do FAST: Focused Assessment with Sonography for Trauma.',
+    'Disability: Assess level of consciousness, pupils, glucose, and Glasgow Coma Scale (GCS).',
+    'Exposure: Fully expose to assess injury then cover to prevent hypothermia.'
+  ]},
+  {type:'treatment', title:'Secondary Survey', steps:[
+    'AMPLE History: Allergies, Meds, Past medical history, Last meal, Events leading to injury.',
+    'AT MIST: Age, Time of injury, Mechanism of injury, Injuries sustained, Systemic review, Treatments.',
+    'Head-to-toe physical exam and radiologic evaluation.'
+  ]},
+  {type:'details', title:'Glasgow Coma Scale', items:[
+    ['Eye opening','4 – Spontaneous · 3 – To speech · 2 – To pain · 1 – None.'],
+    ['Verbal response','5 – Oriented · 4 – Confused · 3 – Inappropriate words · 2 – Sounds · 1 – None.'],
+    ['Motor response','6 – Obeys · 5 – Localizes to pain · 4 – Flexion to pain · 3 – Abnormal flexion · 2 – Abnormal extension · 1 – None.']
+  ]},
+  {type:'treatment', title:'Trauma OR Setup (prep in advance)', steps:[
+    'Warm OR to &gt;25° C (77° F) to maintain normothermia.',
+    'Setup: machine, suction, monitors, airway (video laryngoscope and surgical airway), IV and IO kits, rapid infusion device, ultrasound machine, code cart, invasive monitoring equipment (e.g. arterial line, CVP), cell saver.',
+    'Meds: e.g. midazolam, ketamine, propofol, etomidate, scopolamine, succinylcholine, rocuronium, epinephrine, vasopressin, ephedrine, phenylephrine, calcium, antibiotics.',
+    'Check: crystalloid, colloid, and blood products (MTP).'
+  ]},
+  {type:'treatment', title:'Induction, Temporize & Transfuse', steps:[
+    'Place standard ASA monitors and preoxygenate. If patient conscious: briefly reassure them.',
+    'Discuss among team timing and order of priorities including IV and arterial access, inducing anesthesia, securing airway, hemorrhage resuscitation, and incision.',
+    'Perform RSI with c-spine precautions. Place additional IVs and arterial line.',
+    'If stable: anesthetic maintenance with volatile anesthetic. If unstable, maintenance with benzodiazepine or ketamine.',
+    'If severe instability: inform surgeon; discuss temporizing measures (e.g. packing, aortic compression, aortic crossclamp, thrombin, fibrin glue, REBOA).',
+    'Based on clinical picture: transfuse with ratio of 1-2 PRBC : 1 FFP : 1 Platelet pack. Coagulopathy may require cryo, fibrinogen, calcium, TXA.'
+  ]},
+  {type:'treatment', title:'TBI, Labs & Meds', steps:[
+    'Traumatic Brain Injury — Maintain CPP while decreasing ICP: MAP ≥80, SBP ≥100 mmHg, SpO₂ ≥90%, EtCO₂ 35–40 mmHg, mannitol or hypertonic saline, head up position, and burst suppression.',
+    'Crossmatch, serial ABG, lytes, lactate, coags.',
+    'If &lt;3 hours since injury give tranexamic acid (TXA): 1 g IV over 10 min, then 1 g every 8 hrs.',
+    'Give calcium for coagulation and blood pressure.',
+    'Treat hyperkalemia: calcium chloride 1 g IV; sodium bicarbonate 1 amp IV (50 mEq); regular insulin 5–10 units IV with dextrose/D50 1 amp IV (25 g).',
+    'ICU care for continued resuscitation.'
+  ]}
+]},
+/* 27 */ {n:27, cat:'crit', title:'Venous Air Embolus', sections:[
+  {type:'note', cls:'warn', title:'Retained from V3.1', html:'Retained from V3.1 — folded into Embolism in Stanford V4 (see Pulmonary Embolism, Air or CO₂ Embolism).'},
+  {type:'signs', title:'Observe Sudden', bullets:[
+    'Air on TEE or change in Doppler tone (if monitoring).','Decrease in ETCO₂.','Decrease in BP.','Decrease in SpO₂.',
+    'Rise in CVP.','Onset of dyspnea and respiratory distress or cough in awake patient.'
+  ]},
+  CALLHELPQ,
+  {type:'treatment', title:'Treatment', steps:[
+    'Increase to 100% O₂, high flow.',
+    'Flood surgical field with saline.',
+    'Place surgical site below heart (if able).',
+    'Aspirate air from central line if present.',
+    'Give rapid fluid bolus to increase CVP.',
+    'Turn down or off volatile anesthetic.',
+    'Give epinephrine (start 10–100 µg) to maintain cardiac output.',
+    'Start CPR if BP catastrophically low.',
+    'Consider TTE/TEE to assess air &amp; RV function.',
+    'Consider left lateral decubitus.',
+    'If severe, terminate procedure if able.'
+  ]}
+]},
+/* 28 */ {n:28, cat:'ddx', title:'Hypertension', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['High systolic or diastolic blood pressure refractory to initial intervention.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Identify leader.','Call for help.','Consider pausing procedure.']},
+  {type:'treatment', title:'Airway, BP Accuracy & Reversible Causes', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Check arterial line transducer position; consider zeroing. Check NIBP cuff position; cuff or cable compression.',
+    'If acute self-limited cause (e.g. epinephrine): consider waiting.',
+    'Treat reversible causes before giving antihypertensive.',
+    'If treatable cause (e.g. tourniquet, full bladder): treat cause.',
+    'Depending on clinical context and heart rate: Increase anesthetic depth; Consider head up position.'
+  ]},
+  {type:'treatment', title:'Meds', steps:[
+    'Ensure functional IV; directly treat blood pressure:',
+    'Labetalol 5–10 mg IV, wait 5 min for next dose.',
+    'Hydralazine 2–5 mg IV, wait 15 min for next dose.',
+    'Nitroglycerin 20–50 mcg IV, wait 3 min for next dose.',
+    'Nitroprusside 20–50 mcg IV, wait 3 min for next dose.',
+    'Infusion with carrier to maintain blood pressure control: e.g. clevidipine infusion starting at 1–5 mg/hr.'
+  ]},
+  {type:'treatment', title:'Arterial Access, Labs & Disposition', steps:[
+    'If severe or sustained hypertension: consider placing arterial line for monitoring and labs.',
+    'Send samples for ABG, Hgb, electrolytes, lactate, troponin.',
+    'Follow ECG for signs of myocardial ischemia (e.g. ST changes, T-wave inversions, or new arrhythmias) → Myocardial Ischemia.',
+    'Discuss patient condition with surgeon and team; discuss adjustments of surgical plan.',
+    'Arrange ICU care if vasoactive infusions or prolonged arterial line blood pressure monitoring indicated.'
+  ]},
+  {type:'ddx', title:'Rule Out — Rare Causes', grid:[
+    'Autonomic hyperreflexia','Ischemia','Malignant hyperthermia','Neuroleptic malignant syndrome',
+    'Pheochromocytoma','Preeclampsia','Raised ICP','Serotonin syndrome','Stroke','Thyroid storm'
+  ]},
+  {type:'details', title:'Perioperative Causes', items:[
+    ['Common periop causes','Surgical stimulus (inspect surgical field) · Recent epinephrine (e.g. local anesthesia, pledgets) or another vasopressor (e.g. vasopressin) given in surgical field · Carotid or aortic clamping · Full bladder / kinked urine catheter · Hypercarbia · Inadequate anesthesia or analgesia, including empty vaporizer or failure to deliver IV anesthetic · Inappropriate arterial line transducer height · Medication error · Pneumoperitoneum · Prolonged tourniquet time · Rebound hypertension in known hypertensive patient.']
+  ]}
+]},
+/* 29 */ {n:29, cat:'ddx', title:'Hypotension', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['Low blood pressure refractory to intervention or unclear cause.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Consider pausing procedure.','Call for help.','Consider calling for code cart.']},
+  {type:'treatment', title:'Pulse, Monitor & Surgical Field', steps:[
+    'Check for vital sign and EtCO₂ abnormalities.',
+    'If no pulse or abnormal rate or rhythm, consider: Asystole/PEA / Bradycardia / SVT / VF/VT.',
+    'Check arterial line, transducer position, and cycle NIBP.',
+    'Check for visible or concealed hemorrhage; consider FAST → Hemorrhage.',
+    'Check surgical field for pressure on heart or great vessels.'
+  ]},
+  {type:'treatment', title:'Early Actions & Meds', steps:[
+    'Ensure functional IV or IO access; start rapid crystalloid or colloid bolus. Consider head down position or leg elevation.',
+    'Turn anesthetic down or off.',
+    'If ephedrine 5–20 mg IV or phenylephrine 100–300 mcg IV is not effective: consider epinephrine 10–50 mcg IV and/or vasopressin 0.5–1 units IV. May repeat or start infusion.',
+    'Consider slow bolus of calcium chloride 1 g or calcium gluconate 1–3 g.',
+    'Consider treating adrenal insufficiency: hydrocortisone 100 mg IV or methylprednisolone 125 mg IV.',
+    'Consider treating vasoplegia: methylene blue 1.5–2 mg/kg over 20 min – 1 hour.',
+    '100% O₂ 10–15 L/min.'
+  ]},
+  {type:'treatment', title:'Cardiac Workup, Access, Labs & Output', steps:[
+    'Consider TEE / TTE to differentiate causes. If persistent hypotension: consider ECMO or bypass.',
+    'Consider additional large bore IV access; consider arterial line placement.',
+    'Check ABG, Hgb, Plt, glucose, calcium, potassium, lactate.',
+    'Place foley catheter and monitor urine output.'
+  ]},
+  {type:'note', cls:'help', title:'Physiologic Differential', html:
+    'Blood Pressure = Systemic Vascular Resistance (SVR) × Cardiac Output (CO). CO = Heart Rate (HR) × Stroke Volume (SV). SV components: Preload, Inotropy, Afterload.'},
+  {type:'details', title:'Differential Diagnosis by Category', items:[
+    ['Low SVR','Anaphylaxis · Neuraxial block · Shock (septic/spinal/neurogenic) · Transfusion reaction · Vasodilators.'],
+    ['Low HR','Bradycardia/heart block · Vagal stimulus · High spinal.'],
+    ['Low Preload','Auto-PEEP · Embolism (air, clot, fat) · Hypovolemia · IVC compression · Pericardial tamponade · Pneumothorax · Right heart failure · Vasodilators.'],
+    ['Low Inotropy','Acidosis · Arrhythmias · Cardiomyopathy · Hypoxemia · Local anesthetic toxicity · Myocardial depressants · Myocardial ischemia.'],
+    ['High Afterload','Stenotic valvular disease · LVOT obstruction.'],
+    ['Low Forward Flow','Regurgitant valvular disease.']
+  ]},
+  {type:'ruleout', title:'Rule Out Rapidly Lethal Causes', grid:[
+    'Anaphylaxis','Auto-PEEP (disconnect circuit)','Cardiovascular (TEE/TTE)','Hemorrhage / concealed hemorrhage',
+    'IVC compression','Local anesthetic toxicity','Pneumoperitoneum / pneumopericardium','Pneumothorax / cardiac tamponade','Vasodilators'
+  ]}
+]},
+/* 30 */ {n:30, cat:'ddx', title:'Hypoxemia', sections:[
+  {type:'signs', title:'Trigger / Definition', bullets:['Low SpO₂ and/or PaO₂ refractory to intervention or unclear cause.']},
+  {type:'banner', cls:'help', title:'Crisis Resources', bullets:['Inform team.','Consider pausing procedure.','Call for help.','Consider calling for code cart.']},
+  {type:'treatment', title:'Oxygenate, Monitors & Vitals', steps:[
+    '100% O₂ 10–15 L/min.',
+    'Check gas analyzer to rule out low FiO₂ or high N₂O → Oxygen Failure.',
+    'Check SpO₂ waveform, probe positioning, limb perfusion.',
+    'Check vitals: ECG, cycle NIBP, check pulse, airway pressure.',
+    'Check CO₂ waveform, look for circuit disconnection.'
+  ]},
+  {type:'treatment', title:'Initial ETT Check & Recruit', steps:[
+    'Manually ventilate to check compliance.',
+    'Consider using self-inflating (Ambu) bag with non-machine O₂ source (e.g. e-cylinder) or nothing (room air) to rule out machine or oxygen supply issue. Connect sample line and consider IV anesthetic.',
+    'Check ET tube position and auscultate breath sounds → Bronchospasm.',
+    'Soft suction ET tube to assess secretions and patency.',
+    'Perform recruitment breaths. Consider PEEP. If hypotensive: use caution.',
+    'Increase FRC: head up position, desufflate abdomen.'
+  ]},
+  {type:'treatment', title:'Meds & Advanced Evaluation', steps:[
+    'If BP stable: deepen anesthetic with propofol or volatile.',
+    'If wheezing: albuterol 4–8 puffs MDI or 2.5 mg nebulized. If severe: epinephrine 5–10 mcg IV, or ketamine 10–20 mg IV.',
+    'Consider additional neuromuscular blockade or reversal.',
+    'Fiberoptic bronchoscopy: confirm tracheal rings, check for endobronchial intubation or obstruction.',
+    'Lung ultrasound: check for pneumothorax, effusion, consolidation, interstitial edema.',
+    'Consider arterial line placement and ABG. Consider STAT portable chest x-ray.',
+    'If persistent: consider ECMO or bypass.'
+  ]},
+  {type:'details', title:'Differential Diagnosis', items:[
+    ['Low FiO₂','If gas analyzer reads low FiO₂ despite "100% O₂," then likely O₂ pipeline failure or crossover → Oxygen Failure.'],
+    ['Hypoventilation','Spontaneously breathing: Bronchospasm · Excess anesthetic · High spinal · Laryngospasm · Obstructed airway · Opioid · Pain · Pulmonary edema · Residual neuromuscular blockade. Mechanically ventilated — High pressure alarm: Asynchronous breathing · Bronchospasm · High peak airway pressure · Insufficient neuromuscular blockade · Obstructed or kinked ET tube · Ventilator on manual, APL closed. Low pressure alarm: ET tube dislodged or cuff tear · Circuit leak · Low TV or RR setting · Ventilator on manual and APL open.'],
+    ['Diffusion abnormality','Usually chronic lung disease.'],
+    ['Hemoglobinopathy','Carboxyhemoglobin: SpO₂ often normal · Methemoglobin: SpO₂ ~85% · If suspected, send lab co-oximetry.'],
+    ['V/Q Mismatch','Shunt = perfused, but not ventilated (less responsive to O₂); Dead space = ventilated, but not perfused (more responsive to O₂). Common: Aspiration · Atelectasis · Bronchospasm · Endobronchial intubation · Mucus plug · One lung ventilation · Pleural effusion · Pulmonary edema. Rare but critical: Anaphylaxis · Embolism (air, clot, fat) · Pneumothorax · Right heart failure · Severe hypotension.'],
+    ['Increased O₂ Demand','Iatrogenic hyperthermia · Malignant hyperthermia · Neuroleptic Malignant Syndrome · Sepsis · Thyrotoxicosis.'],
+    ['SpO₂ Artifact','Confirm with ABG. Poor SpO₂ waveform: Cautery interference · Cold or poorly perfused digit · Light interference · Probe malposition. Dyes: Blue nail polish · Indigo carmine · Methylene blue.']
+  ]}
+]},
+/* 31 */ {n:31, cat:'add', title:'Laryngospasm', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'Inspiratory stridor or no air movement; ↓SpO₂; paradoxical (rocking) chest/abdomen; absent ETCO₂ trace; ↑ inspiratory effort.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Call for help; 100% O₂.',
+    'Remove stimulus; suction secretions/blood from airway.',
+    'Jaw thrust + firm continuous positive pressure via tight-sealing mask; apply firm bilateral pressure at the "laryngospasm notch" behind earlobes (Larson\'s maneuver; widely used, evidence limited).',
+    'Deepen anesthesia — propofol 0.5–1 mg/kg IV.',
+    'If persistent or desaturating — succinylcholine 0.5–2 mg/kg IV (or 4 mg/kg IM, max 200 mg, if no IV); add atropine 0.02 mg/kg in children.',
+    'Ventilate; reintubate if needed.',
+    'Watch for negative-pressure pulmonary edema after relief.'
+  ]}
+]},
+/* 32 */ {n:32, cat:'add', title:'Aspiration', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'Gastric contents in oropharynx/airway; hypoxemia; wheezes/crackles; ↑ peak airway pressure; ↓ compliance; possible bronchospasm.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Head-down and/or lateral position.',
+    'Suction the airway BEFORE positive-pressure ventilation if witnessed.',
+    '100% O₂.',
+    'Secure airway / intubate; suction via ETT before ventilating if feasible.',
+    'Avoid routine large-volume lavage.',
+    'Treat bronchospasm with bronchodilators.',
+    'No routine steroids; no empiric antibiotics (treat established infection only).',
+    'PEEP / recruitment as needed; CXR; consider bronchoscopy.',
+    'Plan postop monitoring / possible ICU and continued ventilation.'
+  ]}
+]},
+/* 33 */ {n:33, cat:'add', title:'Hyperkalemic Cardiac Arrest', sections:[
+  ADDED_NOTE,
+  {type:'signs', title:'Suspect', bullets:[
+    'Peaked T waves, widened QRS, sine wave, bradycardia/PEA; risk — renal failure, succinylcholine (burns/crush/denervation), massive transfusion, tumor lysis, acidosis.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Calcium chloride 1 g (10 mL of 10%) IV over 2–5 min (membrane stabilization); repeat as needed.',
+    'Shift K⁺ intracellularly: regular insulin 10 units IV + D50 25 g IV; sodium bicarbonate 1 mEq/kg IV; albuterol high-dose nebulized.',
+    'Remove K⁺: furosemide; urgent hemodialysis.',
+    'High-quality CPR / ACLS; prolonged resuscitation may be warranted.',
+    'Stop any K⁺-containing fluids; do NOT give further succinylcholine.',
+    'Treat underlying cause.'
+  ]}
+]},
+/* 34 */ {n:34, cat:'add', title:'Cardiac Tamponade', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'Hypotension; tachycardia; ↑CVP / distended neck veins; muffled heart tones; pulsus paradoxus; low-voltage / electrical alternans on ECG; effusion with RA/RV diastolic collapse on echo.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Call for help and echo.',
+    'Maintain preload (IV fluids), keep heart rate up, preserve contractility and afterload — "full, fast, tight."',
+    'Avoid decreases in preload/SVR and high PEEP; avoid bradycardia.',
+    'Epinephrine to support output.',
+    'Definitive: echo-guided pericardiocentesis or surgical drainage; for trauma → emergent surgery.'
+  ]}
+]},
+/* 35 */ {n:35, cat:'add', title:'Cement Implantation Syndrome', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'During cementing / prosthesis insertion / reduction — hypotension, hypoxemia, ↓ETCO₂, arrhythmias, possible cardiac arrest (marrow/cement/air embolization).'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Alert surgeon immediately.',
+    '100% O₂.',
+    'Aggressive IV fluids and vasopressors (phenylephrine, epinephrine).',
+    'Ensure euvolemia BEFORE cementing.',
+    'CPR if arrest; supportive care.'
+  ]},
+  {type:'prevention', title:'Prevention', bullets:[
+    'Team communication, lavage and dry the canal, use a vent hole / reduced-pressure technique in high-risk patients.'
+  ]}
+]},
+/* 36 */ {n:36, cat:'add', title:'CO₂ Embolism (Laparoscopic)', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'Sudden ↓ETCO₂, hypotension, hypoxemia, "mill-wheel" murmur, arrhythmia, ↑CVP — typically at/after insufflation or venous injury.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Stop insufflation and desufflate the abdomen.',
+    '100% O₂; stop N₂O.',
+    'Durant maneuver — steep left-lateral decubitus, head down.',
+    'Aspirate air from central line if present.',
+    'IV fluids and vasopressors.',
+    'CPR if arrest; consider conversion to open.',
+    'Hyperventilate to clear CO₂.'
+  ]}
+]},
+/* 37 */ {n:37, cat:'add', title:'Vasopressor Extravasation', sections:[
+  ADDED_NOTE,
+  {type:'signs', bullets:[
+    'Infiltration of a vasopressor/vesicant — blanching/pallor, swelling, pain at the IV site; risk of skin/tissue necrosis.'
+  ]},
+  {type:'treatment', title:'Treatment', steps:[
+    'Stop the infusion immediately; leave the catheter in and aspirate residual drug.',
+    'Elevate the limb.',
+    'Antidote — phentolamine 5–10 mg diluted in 10–15 mL normal saline, infiltrated subcutaneously across the affected area (alpha blockade; for norepinephrine/epinephrine/phenylephrine/dopamine).',
+    'Alternative — topical nitroglycerin paste; terbutaline infiltration.',
+    'Do not use that limb for further vasopressors; consult plastics if necrosis risk.'
+  ]}
+]},
+/* 38 */ {n:38, cat:'add', title:'Pacemaker / ICD (CIED) Management', sections:[
+  ADDED_NOTE,
+  {type:'details', title:'Preop', items:[
+    ['Identify device','PM vs ICD vs CRT and manufacturer/model (ID card, CXR, interrogation).'],
+    ['Confirm interrogation','Recent interrogation (ICD ≤6 mo, PM ≤12 mo).'],
+    ['Assess','Determine pacing-dependence, indication, and magnet response. Consult cardiology/CIED team.']
+  ]},
+  {type:'treatment', title:'Intraop — EMI / Electrocautery', steps:[
+    'EMI most likely with monopolar cautery above the umbilicus. Prefer bipolar; if monopolar, short irregular bursts at lowest energy.',
+    'Place return pad so current path avoids the generator/leads.',
+    'Monitor continuous ECG plus a true perfused pulse (pulse-ox or arterial line).'
+  ]},
+  {type:'note', cls:'crit2', title:'Magnet Behavior (KEY)', html:
+    'Pacemaker + magnet → asynchronous (fixed-rate) pacing. ICD + magnet → suspends anti-tachy/shock therapy only; does NOT change pacing mode. A magnet will NEVER make an ICD pace asynchronously.'},
+  {type:'treatment', title:'Pacing-Dependent Patient & ICD', steps:[
+    'Pacing-dependent: Reprogram to asynchronous, or magnet over a PM. A magnet will NEVER make an ICD pace asynchronously.',
+    'ICD: Suspend tachytherapy (reprogram preferred, or magnet) when EMI likely.',
+    'Place external defib/pacing pads (anterior-posterior, not over the device); defibrillator ready. Reactivate postop.'
+  ]},
+  {type:'treatment', title:'Emergencies', steps:[
+    'Inappropriate ICD shocks → apply magnet to suspend, stop EMI.',
+    'Pacing inhibition/asystole in a pacing-dependent pt → stop cautery, place magnet over the PM for asynchronous pacing.',
+    'Before an external shock with a magnet on an ICD → remove the magnet first, or defibrillate via pads.'
+  ]},
+  {type:'treatment', title:'Postop', steps:[
+    'Reactivate ICD therapies / restore PM settings before leaving a monitored setting; keep ECG + pads until reactivated.',
+    'Interrogate postop if emergency surgery without preop check, strong EMI, or shocks delivered.'
+  ]},
+  {type:'note', cls:'warn', title:'Note', html:'Device-specific magnet responses vary by manufacturer — confirm with the CIED team.'}
+]},
+/* 39 */ {n:39, cat:'ob', title:'Maternal Cardiac Arrest', sections:[
+  ADDED_NOTE,
+  {type:'treatment', title:'Treatment', steps:[
+    'Call for help — OB, neonatology, code team, and the difficult-airway cart.',
+    'High-quality CPR; standard hand position on the lower half of the sternum (the older "move hands higher" advice was removed in the AHA 2015 maternal-arrest update).',
+    'Continuous manual LEFT uterine displacement.',
+    'Standard ACLS — do NOT withhold or modify drug doses or defibrillation energy; remove fetal/uterine monitors before shocking.',
+    'Secure the airway early (anticipate difficulty).',
+    'If no ROSC by ~4 min and uterus at/above the umbilicus (≥20 wk) → perform perimortem cesarean delivery, aiming for delivery by ~5 min.',
+    'Treat causes: hemorrhage, amniotic fluid embolism, eclampsia, LAST, embolism, high spinal, anesthetic causes.'
+  ]}
+]},
+/* 40 */ {n:40, cat:'ob', title:'Obstetric Hemorrhage / Uterine Atony', sections:[
+  ADDED_NOTE,
+  {type:'treatment', title:'Treatment', steps:[
+    'Call for help; large-bore IV access; activate massive transfusion protocol.',
+    'Uterotonics: oxytocin IV infusion; methylergonovine (Methergine) 0.2 mg IM (avoid in hypertension); carboprost (Hemabate) 250 µg IM (avoid in asthma); misoprostol 800–1000 µg.',
+    'Uterine massage (bimanual).',
+    'Tranexamic acid 1 g IV.',
+    'Transfuse 1:1:1 (PRBC:FFP:platelets); maintain normothermia and ionized calcium.',
+    'Surgical/procedural: intrauterine balloon tamponade, B-Lynch suture, uterine artery embolization, hysterectomy.'
+  ]}
+]},
+/* 41 */ {n:41, cat:'ob', title:'Eclampsia', sections:[
+  ADDED_NOTE,
+  {type:'treatment', title:'Treatment', steps:[
+    'ABCs; protect airway; 100% O₂; continuous left uterine displacement.',
+    'Magnesium sulfate 4–6 g IV over 15–20 min, then 1–2 g/hr infusion.',
+    'Recurrent seizure: additional magnesium 2 g IV or a benzodiazepine.',
+    'Control severe hypertension: labetalol 20 mg IV (escalate), hydralazine 5–10 mg IV, or nicardipine infusion.',
+    'Monitor for magnesium toxicity (loss of reflexes, respiratory depression) — antidote calcium gluconate 1 g IV.',
+    'Stabilize mother first, then deliver; continuous fetal monitoring.'
+  ]}
+]},
+/* 42 */ {n:42, cat:'crm', title:'Crisis Resource Management (CRM)', sections:[
+  {type:'note', cls:'help', title:'Key Principles', html:
+    'These cognitive and teamwork principles support effective management of any critical event. Use cognitive aids (like this manual) as part of CRM.'},
+  {type:'treatment', title:'Core CRM Behaviors', steps:[
+    'Call for help early.',
+    'Designate leadership — establish a clear leader and announce roles.',
+    'Establish role clarity — assign specific tasks to specific people.',
+    'Communicate effectively — use closed-loop, directed communication (name the person, give the task, confirm completion).',
+    'Distribute the workload and mobilize all available resources.',
+    'Allocate attention wisely — avoid fixation; step back to reassess the big picture.',
+    'Use cognitive aids and call for the emergency manual.',
+    'Anticipate and plan — think ahead to likely next steps.',
+    'Know your environment and equipment.',
+    'Re-evaluate repeatedly as the situation evolves.'
+  ]},
+  {type:'note', cls:'warn', title:'Note', html:
+    'The CRM and phone-list pages of the source manual are graphic/diagram pages. The principles above reflect the standard published Stanford Emergency Manual CRM content — verify against your institution\'s current manual and add your local phone list.'}
+]},
+/* 43 */ {n:43, cat:'acls', title:'Torsades de Pointes / Polymorphic VT', sections:[
+  {type:'signs', bullets:[
+    'Rapid, irregular wide-complex tachycardia with QRS that "twists" around the baseline.',
+    'Often associated with a prolonged QT interval.',
+    'May be pulseless, or with a pulse but unstable.',
+    'Triggers: QT-prolonging drugs, hypokalemia, hypomagnesemia, hypocalcemia, bradycardia/pauses.'
+  ]},
+  {type:'banner', cls:'help', title:'Call for Help', bullets:['CALL FOR HELP.','CALL FOR CODE CART.','Apply defibrillator pads.']},
+  {type:'treatment', title:'If Pulseless or Unstable', steps:[
+    'Treat as a shockable rhythm: <span class="hl">DEFIBRILLATE (unsynchronized) 120–200 J biphasic.</span> Resume CPR immediately. → VF / Pulseless VT.',
+    '<span class="hl">Magnesium sulfate 2 g IV</span> (push in arrest); may repeat.'
+  ]},
+  {type:'treatment', title:'If Stable / Recurrent', steps:[
+    '<span class="hl">Magnesium sulfate 2 g IV over 10–15 min</span>; may repeat.',
+    'Stop ALL QT-prolonging drugs (e.g. some antiarrhythmics, antiemetics, antipsychotics, methadone).',
+    'Correct electrolytes: keep K⁺ high-normal (4.5–5), replace Mg²⁺ and Ca²⁺.',
+    'If pause-dependent / bradycardic: increase rate — overdrive pacing (transvenous/transcutaneous) or isoproterenol infusion (target ~90–110/min).',
+    'Avoid additional QT-prolonging antiarrhythmics (amiodarone, procainamide) in congenital long QT.'
+  ]},
+  {type:'note', cls:'crit2', title:'Polymorphic VT with NORMAL QT', html:
+    'Usually ischemic — treat the ischemia; a beta blocker and/or amiodarone may be appropriate. → Myocardial Ischemia.'}
+]},
+/* 44 */ {n:44, cat:'acls', title:'Post-Cardiac-Arrest (ROSC) Care', sections:[
+  {type:'note', cls:'help', title:'After Return of Spontaneous Circulation', html:'Optimize oxygenation, ventilation, and hemodynamics; find and treat the cause. Avoid a second arrest.'},
+  {type:'treatment', title:'Oxygenation & Ventilation', steps:[
+    'Titrate FiO₂ to the lowest level for <span class="hl">SpO₂ 92–98%</span> — avoid hyperoxia.',
+    'Target <span class="hl">normocapnia (PaCO₂ ~35–45 mmHg)</span>; avoid routine hyperventilation.',
+    'Confirm airway / ETT; obtain an ABG.'
+  ]},
+  {type:'treatment', title:'Hemodynamics', steps:[
+    'Target <span class="hl">MAP ≥65 mmHg</span> (SBP ≥90).',
+    'IV fluid bolus; start vasopressors/inotropes as needed (norepinephrine, epinephrine).',
+    'Treat reversible causes (H\'s &amp; T\'s).'
+  ]},
+  {type:'treatment', title:'Diagnostics', steps:[
+    'Obtain a <span class="hl">12-lead EKG.</span>',
+    'If STEMI or suspected cardiac cause → emergent coronary angiography / cath lab.',
+    'Labs: ABG, lactate, K⁺, glucose, troponin; consider echocardiography.'
+  ]},
+  {type:'treatment', title:'Neuro & Disposition', steps:[
+    'If comatose: targeted temperature management (maintain 32–36°C; avoid fever).',
+    'Treat seizures; obtain EEG if available.',
+    'Maintain glucose control; avoid hyperthermia.',
+    'Transfer to ICU; delay neuro-prognostication ≥72 h.'
+  ]}
+]},
+/* 45 */ {n:45, cat:'acls', title:'Stable VT — Wide-Complex Tachycardia (with pulse)', sections:[
+  {type:'signs', bullets:[
+    'Wide QRS (≥0.12 s), usually regular and monomorphic, WITH a pulse and stable hemodynamics.',
+    'If UNSTABLE (hypotension, ischemia, shock, altered mentation) → synchronized cardioversion. → SVT – Unstable.',
+    'If irregular / "twisting" (polymorphic) → Torsades / Polymorphic VT.'
+  ]},
+  {type:'banner', cls:'help', title:'Call for Help', bullets:['CALL FOR HELP?','Apply defibrillator pads.','Prepare for cardioversion if it deteriorates.']},
+  {type:'treatment', title:'Treatment', steps:[
+    'Increase to 100% O₂; ensure IV access; obtain a 12-lead EKG.',
+    'If regular &amp; monomorphic: <span class="hl">Amiodarone 150 mg IV over 10 min</span>; may repeat; then infusion 1 mg/min for 6 h. Alternatives: procainamide or sotalol.',
+    'Adenosine 6 mg IV (then 12 mg) is reasonable ONLY if regular and monomorphic (may convert SVT with aberrancy); avoid if irregular or WPW.',
+    'Avoid AV-nodal blockers (calcium channel blockers) if pre-excited / irregular.',
+    'Expert / cardiology consultation.',
+    'If the patient becomes unstable at any point → synchronized cardioversion. → SVT – Unstable.'
+  ]}
+]},
+/* 46 */ {n:46, cat:'crm', title:'ACLS Drugs & Energy — Quick Reference', sections:[
+  {type:'details', title:'Cardiac Arrest Drugs (Adult)', items:[
+    ['Epinephrine','1 mg IV/IO q3–5 min.'],
+    ['Amiodarone','300 mg IV/IO push (1st), then 150 mg (2nd) for refractory VF/pVT.'],
+    ['Lidocaine','1–1.5 mg/kg IV/IO (1st), then 0.5–0.75 mg/kg — alternative to amiodarone.'],
+    ['Magnesium','1–2 g IV — torsades / known hypomagnesemia (not routine).'],
+    ['Calcium chloride','1 g IV — hyperkalemia, hypocalcemia, CCB toxicity.'],
+    ['Sodium bicarbonate','1 mEq/kg — hyperkalemia or known severe acidosis.'],
+    ['Vasopressin','No longer in the routine arrest algorithm (removed 2015/2020); not given in addition to epinephrine.']
+  ]},
+  {type:'details', title:'Energy (biphasic)', items:[
+    ['Defibrillation (VF/pVT)','120–200 J per manufacturer; increase on subsequent shocks.'],
+    ['Cardioversion — narrow regular','50–100 J.'],
+    ['Cardioversion — narrow irregular (AF)','120–200 J.'],
+    ['Cardioversion — wide regular','100 J.'],
+    ['Wide &amp; irregular','Treat as VF — UNsynchronized defibrillation.']
+  ]},
+  {type:'details', title:'Bradycardia (Adult)', items:[
+    ['Atropine','1 mg IV q3–5 min (max 3 mg).'],
+    ['Transcutaneous pacing','Rate ≥80; increase current to capture; confirm pulse.'],
+    ['Dopamine','5–20 µg/kg/min infusion.'],
+    ['Epinephrine','2–10 µg/min infusion.'],
+    ['Isoproterenol','2–10 µg/min — refractory bradycardia or pause-dependent torsades.']
+  ]},
+  {type:'details', title:'Stable Tachycardia (Adult)', items:[
+    ['Adenosine','6 mg rapid IV push, then 12 mg (narrow, regular).'],
+    ['Amiodarone','150 mg IV over 10 min, then 1 mg/min infusion.'],
+    ['Diltiazem','5–10 mg IV over 2 min (rate control); or verapamil 2.5–5 mg IV.'],
+    ['Beta blocker','Esmolol or metoprolol (rate control).'],
+    ['Procainamide','20–50 mg/min until controlled (max 17 mg/kg) — stable wide-complex VT.'],
+    ['Sotalol','100 mg (1.5 mg/kg) IV over 5 min — wide-complex VT (avoid if prolonged QT).'],
+    ['Ibutilide','1 mg IV over 10 min — conversion of AF / atrial flutter.']
+  ]},
+  {type:'details', title:'Infusions (Post-ROSC / Shock)', items:[
+    ['Norepinephrine','0.05–0.5 µg/kg/min (≈2–20 µg/min) — first-line post-ROSC pressor.'],
+    ['Epinephrine','0.05–0.5 µg/kg/min (≈2–10 µg/min).'],
+    ['Dopamine','5–20 µg/kg/min.'],
+    ['Dobutamine','2–20 µg/kg/min — inotrope for low cardiac output.']
+  ]},
+  {type:'details', title:'Special Situations (H\'s & T\'s)', items:[
+    ['Hyperkalemia','Calcium chloride 1 g + regular insulin 10 U with dextrose 25 g (D50, 1 amp) + sodium bicarbonate 1 mEq/kg; nebulized albuterol.'],
+    ['Hypoglycemia','Dextrose 25 g IV (D50, 1 amp).'],
+    ['Opioid overdose','Naloxone 0.4–2 mg IV/IM/IN, repeat as needed.']
+  ]},
+  {type:'note', cls:'warn', title:'Note', html:'Quick reference only — verify against current AHA ACLS guidelines and your institutional protocol.'}
+]},
+/* 47 */ {n:47, cat:'crm', title:'Pediatric Calculator — Doses, Airway & Fluids (enter age & weight)', sections:[
+  {type:'note', cls:'crit2', title:'⚠ Estimates — Verify Before Use', html:'Enter age and/or weight to estimate <span class="em">PALS</span> emergency drug doses (epinephrine, atropine, amiodarone, adenosine, defibrillation, RSI drugs), ETT size &amp; depth, LMA and laryngoscope-blade size, suction catheter, maintenance fluids, urine-output target, and blood volume. Estimates only — always confirm with a length-based tape (Broselow), current PALS guidance, and your pharmacy/protocol. Drug doses are capped at adult maximums; ETT formulas apply ≥1–2 yr (neonates/infants use fixed sizing). If weight is left blank it is estimated from age.'},
+  {type:'pedall'}
+]},
+/* 48 */ {n:48, cat:'acls', title:'Atrial Fibrillation / Flutter (New-Onset / Perioperative)', sections:[
+  {type:'note', cls:'warn', title:'Added — Verify Locally', html:'Added beyond the Stanford Emergency Manual. Verify doses and choices against current AHA/ACC/HRS guidance and your institutional protocol.'},
+  {type:'signs', bullets:[
+    'AF: irregularly irregular rhythm, no distinct P waves, narrow QRS (unless aberrancy or pre-excitation).',
+    'Atrial flutter: regular, often ~150/min, sawtooth flutter waves.',
+    'New perioperative AF is usually SECONDARY — search for a trigger: pain / light anesthesia, hypovolemia, hypoxia or hypercarbia, electrolyte derangement, anemia, sepsis, PE, ischemia, catecholamines, surgical or vagal stimulation.'
+  ]},
+  {type:'banner', cls:'help', title:'Assess Stability', bullets:['If UNSTABLE → synchronized cardioversion (below).','Apply defibrillator pads.','Call for help if unstable.']},
+  {type:'treatment', title:'If Unstable (hypotension, ischemia, shock, acute heart failure from the rhythm)', steps:[
+    '<span class="hl">Synchronized cardioversion</span>: AF 120–200 J biphasic; atrial flutter 50–100 J. Sedate if conscious and time allows.',
+    'If refractory: amiodarone 150 mg IV over 10 min, then re-attempt cardioversion.'
+  ]},
+  {type:'treatment', title:'If Stable — Treat the Cause First', steps:[
+    'Correct reversible triggers: pain / light anesthesia, hypovolemia, hypoxia or hypercarbia, anemia, sepsis, ischemia, PE.',
+    'Replace electrolytes: <span class="hl">magnesium sulfate 2 g IV</span>; correct K⁺ (goal high-normal).',
+    'New perioperative AF often converts once the trigger is treated.'
+  ]},
+  {type:'treatment', title:'Rate Control (rapid ventricular response, stable)', steps:[
+    'Beta blocker: esmolol 0.5 mg/kg IV over 1 min then 50 µg/kg/min infusion; OR metoprolol 2.5–5 mg IV q5 min.',
+    'OR calcium channel blocker: diltiazem 0.25 mg/kg (~10–20 mg) IV over 2 min, may repeat 0.35 mg/kg, then 5–15 mg/hr infusion.',
+    'Do NOT combine a beta blocker and a calcium channel blocker. Avoid both in decompensated heart failure or hypotension.',
+    'If hypotensive or in heart failure: amiodarone 150 mg IV over 10 min then 1 mg/min; or digoxin (slower onset).'
+  ]},
+  {type:'treatment', title:'Rhythm Control', steps:[
+    'Amiodarone 150 mg IV over 10 min, then infusion 1 mg/min — aids both rate control and conversion.',
+    'Electrical cardioversion — preferred if onset is clearly &lt;48 h, or if rate control fails.',
+    'Alternatives: procainamide or ibutilide.'
+  ]},
+  {type:'note', cls:'crit2', title:'Pre-Excitation (WPW)', html:'If wide, irregular, and very rapid (suggesting AF with pre-excitation): AVOID AV-nodal blockers (adenosine, beta blockers, calcium channel blockers, digoxin). Use procainamide or amiodarone, or cardiovert.'},
+  {type:'note', cls:'warn', title:'Anticoagulation / Stroke Risk', html:'If AF duration is &gt;48 h or unknown, elective cardioversion carries stroke risk — anticoagulate or exclude left-atrial thrombus by TEE first (unless the patient is unstable). Assess CHA₂DS₂-VASc and weigh anticoagulation against surgical bleeding risk with the team.'}
+]},
+/* 49 */ {n:49, cat:'ddx', title:'Reversible Causes — H\'s & T\'s', sections:[
+  {type:'note', cls:'help', title:'Reversible Causes Checklist', html:'Run this list for cardiac arrest, PEA, or any undifferentiated intraoperative deterioration — find and treat the cause. (The same list appears within the Asystole, PEA, and VF/VT cards.)'},
+  HT_DETAILS,
+  PERIOP_DDX_PLACEHOLDER()
+]}
+];
+
+/* Shared perioperative differential helper (factory to keep object instances distinct) */
+function PERIOP_DDX_PLACEHOLDER(){
+  return {type:'ddx', title:'Consider Common Perioperative Ddx', grid:[
+    'Hemorrhage','Anesthetic overdose','Septic / other shock','Auto-PEEP','Anaphylaxis',
+    'Medication error','High spinal','Pneumothorax','Local anesthetic toxicity','Vagal stimulus','Pulmonary embolus'
+  ]};
+}
+
+/* ============================================================
+   PEDIATRIC WEIGHT-BASED DOSE CALCULATOR (PALS estimates)
+   ============================================================ */
+const PED_DRUGS = [
+  {n:'Epinephrine — arrest (IV/IO)', lo:0.01, hi:0.01, u:'mg', max:1, mlConc:0.1, mlLabel:'of 0.1 mg/mL (1:10,000)'},
+  {n:'Epinephrine — anaphylaxis (IM)', lo:0.01, hi:0.01, u:'mg', max:0.5, mlConc:1, mlLabel:'of 1 mg/mL'},
+  {n:'Atropine', lo:0.02, hi:0.02, u:'mg', max:0.5, min:0.1},
+  {n:'Amiodarone — arrest', lo:5, hi:5, u:'mg', max:300},
+  {n:'Lidocaine', lo:1, hi:1, u:'mg', max:100},
+  {n:'Adenosine — 1st dose', lo:0.1, hi:0.1, u:'mg', max:6},
+  {n:'Adenosine — 2nd dose', lo:0.2, hi:0.2, u:'mg', max:12},
+  {n:'Magnesium — torsades', lo:25, hi:50, u:'mg', max:2000},
+  {n:'Sodium bicarbonate', lo:1, hi:1, u:'mEq', max:50},
+  {n:'Calcium chloride 10%', lo:20, hi:20, u:'mg', max:1000, mlConc:100, mlLabel:'of 100 mg/mL'},
+  {n:'Dextrose (D25)', lo:0.5, hi:1, u:'g', max:25},
+  {n:'Naloxone', lo:0.1, hi:0.1, u:'mg', max:2},
+  {n:'Succinylcholine (IV)', lo:1, hi:2, u:'mg', max:150},
+  {n:'Rocuronium (RSI)', lo:1, hi:1.2, u:'mg', max:100},
+  {n:'Propofol (induction)', lo:2, hi:3, u:'mg', max:200},
+  {n:'Ketamine (IV)', lo:1, hi:2, u:'mg', max:200},
+  {n:'Fentanyl', lo:1, hi:2, u:'µg', max:100},
+  {n:'Midazolam', lo:0.05, hi:0.1, u:'mg', max:2},
+  {n:'Dantrolene (MH)', lo:2.5, hi:2.5, u:'mg', max:null},
+  {n:'Crystalloid bolus', lo:20, hi:20, u:'mL', max:null, note:'10 mL/kg in trauma / neonate / cardiac'}
+];
+const PED_ENERGY = [
+  {n:'Defibrillation — 1st', perKg:2, u:'J', max:200},
+  {n:'Defibrillation — subsequent', perKg:4, u:'J', max:360, note:'up to 10 J/kg or adult dose'},
+  {n:'Cardioversion — 1st', perKg:0.5, u:'J', max:200},
+  {n:'Cardioversion — subsequent', perKg:2, u:'J', max:200}
+];
+function pedFmt(v){ return Math.round(v*1000)/1000; }
+function pedDose(d,kg){
+  let lo=d.lo*kg, hi=d.hi*kg;
+  if(d.min){ lo=Math.max(lo,d.min); hi=Math.max(hi,d.min); }
+  let capped=false;
+  if(d.max!=null){ if(lo>d.max){lo=d.max;capped=true;} if(hi>d.max){hi=d.max;capped=true;} }
+  const dose=(Math.abs(hi-lo)<1e-9)?(pedFmt(lo)+' '+d.u):(pedFmt(lo)+'–'+pedFmt(hi)+' '+d.u);
+  const perkg=(Math.abs(d.hi-d.lo)<1e-9)?(d.lo+' '+d.u+'/kg'):(d.lo+'–'+d.hi+' '+d.u+'/kg');
+  let ml='';
+  if(d.mlConc){ const mlo=lo/d.mlConc, mhi=hi/d.mlConc; ml=' ≈ '+((Math.abs(mhi-mlo)<1e-9)?pedFmt(mlo):pedFmt(mlo)+'–'+pedFmt(mhi))+' mL '+d.mlLabel; }
+  return {dose:dose+ml+(capped?' (max)':''), perkg:perkg+(d.note?' · '+d.note:'')};
+}
+function pedRows(kg){
+  const rows=PED_DRUGS.map(d=>{ const r=pedDose(d,kg); return '<li><span class="em">'+d.n+':</span> <span class="hl">'+r.dose+'</span> <span class="pedref">('+r.perkg+')</span></li>'; }).join('');
+  const erows=PED_ENERGY.map(d=>{ let j=d.perKg*kg, capped=d.max!=null&&j>d.max; if(capped)j=d.max; return '<li><span class="em">'+d.n+':</span> <span class="hl">'+pedFmt(j)+' '+d.u+(capped?' (max)':'')+'</span> <span class="pedref">('+d.perKg+' J/kg'+(d.note?' · '+d.note:'')+')</span></li>'; }).join('');
+  return '<div class="blk"><h3>Medications</h3><ul class="bul">'+rows+'</ul></div><div class="blk"><h3>Defibrillation / Cardioversion</h3><ul class="bul">'+erows+'</ul></div>';
+}
+/* ---- Pediatric airway / fluids / equipment helpers (age + weight) ---- */
+function r5(v){ return Math.round(v*2)/2; }
+function pedBlade(age){ if(age<1) return 'Miller 0–1'; if(age<2) return 'Miller 1 / Mac 1'; if(age<6) return 'Miller 2 / Mac 2'; if(age<12) return 'Mac 2–3'; return 'Mac 3'; }
+function pedLMA(wt){ if(wt<5) return '1'; if(wt<10) return '1.5'; if(wt<20) return '2'; if(wt<30) return '2.5'; if(wt<50) return '3'; if(wt<70) return '4'; return '5'; }
+function pedEquipHtml(age, wt){
+  let air='<div class="blk"><h3>Airway & Equipment</h3><ul class="bul">';
+  if(!isNaN(age)){
+    if(age>=1){
+      const ett=r5(age/4+4);
+      air+='<li><span class="em">ETT (uncuffed) ID:</span> <span class="hl">'+ett+' mm</span> <span class="pedref">(age/4 + 4)</span></li>';
+      air+='<li><span class="em">ETT (cuffed) ID:</span> <span class="hl">'+r5(age/4+3.5)+' mm</span> <span class="pedref">(age/4 + 3.5)</span></li>';
+      air+='<li><span class="em">ETT depth (oral, at lip):</span> <span class="hl">'+(age/2+12).toFixed(1)+' cm</span> <span class="pedref">(age/2 + 12, or 3 × ID)</span></li>';
+      air+='<li><span class="em">ETT depth (nasal):</span> <span class="hl">'+(age/2+15).toFixed(1)+' cm</span> <span class="pedref">(age/2 + 15)</span></li>';
+      air+='<li><span class="em">Suction catheter:</span> <span class="hl">'+Math.round(ett*2)+' Fr</span> <span class="pedref">(≈ 2 × ETT ID)</span></li>';
+    } else {
+      air+='<li><span class="em">ETT (uncuffed) ID:</span> <span class="hl">neonate 3.0–3.5 · infant 3.5–4.0 mm</span> <span class="pedref">(formula applies ≥1 yr)</span></li>';
+      air+='<li><span class="em">ETT depth (oral):</span> <span class="hl">~ 6 + weight(kg) cm</span> <span class="pedref">(7-8-9 rule: 1/2/3 kg → 7/8/9 cm)</span></li>';
+    }
+    air+='<li><span class="em">Laryngoscope blade:</span> <span class="hl">'+pedBlade(age)+'</span></li>';
+  } else {
+    air+='<li><span class="pedref">Enter age for ETT and blade sizing.</span></li>';
+  }
+  if(!isNaN(wt)) air+='<li><span class="em">LMA size:</span> <span class="hl">'+pedLMA(wt)+'</span> <span class="pedref">(by weight)</span></li>';
+  air+='</ul></div>';
+  let flu='', blo='';
+  if(!isNaN(wt)){
+    const maint = wt<=10? wt*4 : (wt<=20? 40+(wt-10)*2 : 60+(wt-20)*1);
+    flu='<div class="blk"><h3>Fluids & Output</h3><ul class="bul">'+
+      '<li><span class="em">Maintenance (4-2-1):</span> <span class="hl">'+pedFmt(maint)+' mL/hr</span></li>'+
+      '<li><span class="em">Urine output target:</span> <span class="hl">'+pedFmt(wt)+'–'+pedFmt(wt*2)+' mL/hr</span> <span class="pedref">(1–2 mL/kg/hr)</span></li>'+
+      '<li><span class="em">Fluid bolus:</span> <span class="hl">'+pedFmt(wt*20)+' mL</span> <span class="pedref">(20 mL/kg; 10 mL/kg trauma/neonate)</span></li>'+
+      '</ul></div>';
+    const perkg = isNaN(age)?70:(age<0.1?85:(age<1?80:(age<=12?70:65)));
+    blo='<div class="blk"><h3>Blood</h3><ul class="bul">'+
+      '<li><span class="em">Estimated blood volume:</span> <span class="hl">'+pedFmt(perkg*wt)+' mL</span> <span class="pedref">('+perkg+' mL/kg)</span></li>'+
+      '</ul></div>';
+  }
+  return air+flu+blo;
+}
+function pedFtIn(inch){ return Math.floor(inch/12)+"' "+(inch%12)+'"'; }
+function pedHtOptions(){
+  var o='<option value="" selected>— ft in</option>';
+  for(var v=16; v<=80; v++){ o+='<option value="'+v+'">'+pedFtIn(v)+'</option>'; }
+  return o;
+}
+function pedHtSync(){
+  var sel=document.getElementById('pedHtIn'), disp=document.getElementById('pedHtDisp');
+  if(sel&&disp){ var empty=sel.value===''; disp.textContent=empty?'ft / in':pedFtIn(parseInt(sel.value,10)); disp.style.color=empty?'var(--muted)':'var(--text)'; }
+  pedAll();
+}
+function pedBmiHtml(wt,ht,age){
+  if(isNaN(wt)||isNaN(ht)||ht<=0) return '';
+  var m=ht/100, bmi=wt/(m*m);
+  if(!isFinite(bmi)||bmi<=0) return '';
+  var bmiR=Math.round(bmi*10)/10;
+  var note;
+  if(!isNaN(age)&&age<2){
+    note='Under 2 yr: BMI is not used — assess weight-for-length on the growth chart instead.';
+  } else {
+    note='Interpret by age- &amp; sex-specific percentile (CDC BMI-for-age): &lt;5th underweight · 5th–85th healthy · 85th–95th overweight · ≥95th obesity. For exact percentile use the BMI &amp; Height Calculator.';
+  }
+  return '<div class="pedbmi"><span class="pedbmilabel">BMI</span> <span class="pedbmival">'+bmiR+'</span> <span class="pedref">kg/m²</span>'+
+         '<div class="pedref" style="margin-top:5px; line-height:1.45">'+note+'</div></div>';
+}
+function pedAll(){
+  const aEl=document.getElementById('pedAge'), wEl=document.getElementById('pedWt'), htSel=document.getElementById('pedHtIn'), out=document.getElementById('pedout');
+  if(!out) return;
+  let age=aEl?parseFloat(aEl.value):NaN, wt=wEl?parseFloat(wEl.value):NaN;
+  const wtIn=(wEl&&wEl.value!=='')?parseFloat(wEl.value):NaN;
+  const htInch=(htSel&&htSel.value!=='')?parseInt(htSel.value,10):NaN;
+  const ht=isNaN(htInch)?NaN:htInch*2.54;
+  if(isNaN(age)&&isNaN(wt)&&isNaN(ht)){ out.innerHTML='<div class="pedhint">Enter age (years), weight (kg), and/or height (cm) to calculate pediatric BMI, doses, and equipment sizes.</div>'; return; }
+  const bmiHtml=pedBmiHtml(wtIn,ht,age);
+  let estWt=false;
+  if(isNaN(wt)&&!isNaN(age)){ if(age<1){ wt=(age<=0.1?3.5:Math.round((age*6+4)*10)/10); } else if(age<=5){ wt=2*age+8; } else { wt=3*age+7; } estWt=true; }
+  if(!isNaN(wt)&&wt>100){ out.innerHTML=bmiHtml+'<div class="banner warn" style="margin-top:8px"><div class="bt">Weight &gt; 100 kg</div><div>Use adult dosing and the adult ACLS reference.</div></div>'; return; }
+  const wnote = estWt? '<div class="pedhint">Weight not entered — estimated as '+pedFmt(wt)+' kg from age. Enter the actual weight for accuracy.</div>' : '';
+  const drugs = isNaN(wt)? '' : pedRows(wt);
+  out.innerHTML=bmiHtml+wnote+pedEquipHtml(age,wt)+drugs;
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const SECTIONS = [
+  {key:'acls',  label:'⚡ ACLS Protocols',                 cls:'acls',  nums:[1,2,3,4,5,48,6,45,43,44]},
+  {key:'crit',  label:'🔥 Specific Critical Events',       cls:'crit',  nums:[7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]},
+  {key:'ddx',   label:'🩺 Differential Diagnoses',         cls:'ddx',   nums:[28,29,30,49]},
+  {key:'add',   label:'🫁 Added — Airway & Cardiac (verify locally)', cls:'add', nums:[31,32,33,34,35,36,37,38]},
+  {key:'ob',    label:'🤰 Added — Obstetric (verify locally)',        cls:'ob',  nums:[39,40,41]},
+  {key:'crm',   label:'🧠 Resources & References',         cls:'crm',   nums:[46,47,42]}
+];
+
+function sectionOf(n){ return SECTIONS.find(s=>s.nums.includes(n)); }
+
+function buildCards(){
+  const root = document.getElementById('sections');
+  SECTIONS.forEach(g=>{
+    const lab = document.createElement('div');
+    lab.className='seclabel'; lab.textContent=g.label; lab.dataset.group=g.key;
+    root.appendChild(lab);
+    const grid = document.createElement('div');
+    grid.className='grid'; grid.dataset.group=g.key;
+    g.nums.forEach(n=>{
+      const e = EVENTS.find(ev=>ev.n===n);
+      if(!e) return;
+      const card=document.createElement('div');
+      card.className='card '+g.cls;
+      card.dataset.search=(e.title+' '+collectText(e)).toLowerCase();
+      card.innerHTML='<div class="ttl">'+e.title+'</div>';
+      card.addEventListener('click', ()=>openModal(e));
+      grid.appendChild(card);
+    });
+    root.appendChild(grid);
+  });
+}
+
+function collectText(e){
+  let t=[];
+  e.sections.forEach(s=>{
+    if(s.title) t.push(s.title);
+    (s.bullets||[]).forEach(b=>t.push(b));
+    (s.steps||[]).forEach(b=>t.push(b));
+    (s.grid||[]).forEach(b=>t.push(b));
+    (s.items||[]).forEach(it=>t.push(it[0]+' '+it[1]));
+    if(s.html) t.push(s.html);
+  });
+  return t.join(' ').replace(/<[^>]+>/g,' ');
+}
+
+function renderSection(s){
+  let h='';
+  if(s.type==='banner'){
+    h+='<div class="banner '+(s.cls||'help')+'"><div class="bt">'+s.title+'</div>';
+    if(s.bullets){ h+='<ul class="bul">'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>'; }
+    h+='</div>';
+    return h;
+  }
+  if(s.type==='note'){
+    h+='<div class="banner '+(s.cls||'warn')+'"><div class="bt">'+s.title+'</div><div>'+s.html+'</div></div>';
+    return h;
+  }
+  if(s.type==='pedall'){
+    h+='<div class="blk"><h3>Enter Age, Weight & Height</h3>'+
+       '<div class="pedinput">Age <input id="pedAge" type="number" min="0" max="16" step="0.5" inputmode="decimal" placeholder="yr"> yr &nbsp; '+
+       'Weight <input id="pedWt" type="number" min="0.5" max="100" step="0.5" inputmode="decimal" placeholder="kg"> kg &nbsp; '+
+       'Height <span class="pedwheel"><select id="pedHtIn" aria-label="Height feet and inches">'+pedHtOptions()+'</select><span class="pedwheeldisp" id="pedHtDisp" style="color:var(--muted)">ft / in</span></span></div>'+
+       '<div id="pedout"></div></div>';
+    return h;
+  }
+  // standard block with heading
+  const titles={signs:'Signs', immediate:s.title||'Immediate', treatment:s.title||'Treatment',
+    ddx:s.title||'Differential Diagnosis', details:s.title||'Details', secondary:s.title||'Secondary',
+    ruleout:s.title||'Rule Out', postevent:s.title||'Post-Event', prevention:s.title||'Prevention'};
+  const heading = s.title || titles[s.type] || '';
+  h+='<div class="blk"><h3>'+heading+'</h3>';
+  if(s.bullets){ h+='<ul class="bul">'+s.bullets.map(b=>'<li>'+b+'</li>').join('')+'</ul>'; }
+  if(s.steps){ h+='<ol class="steps">'+s.steps.map((b,i)=>'<li><span class="n">'+(i+1)+'</span><span>'+b+'</span></li>').join('')+'</ol>'; }
+  if(s.grid){ h+='<div class="ddxgrid">'+s.grid.map(function(g){var n=chipTarget(g); return n?'<div class="chip" data-ev="'+n+'" title="Go to '+g+'">'+g+'</div>':'<div class="chip">'+g+'</div>';}).join('')+'</div>'; }
+  if(s.items){ h+='<ul class="bul">'+s.items.map(it=>'<li><span class="em">'+it[0]+':</span> '+it[1]+'</li>').join('')+'</ul>'; }
+  h+='</div>';
+  return h;
+}
+
+/* ---- Cross-links: turn "→ EventName" references into clickable jumps ---- */
+const XREFS = [
+  ['Torsades / Polymorphic VT',43],['VF / Pulseless VT',6],['Amniotic Fluid Embolism',7],
+  ['Malignant Hyperthermia',18],['Local Anesthetic Toxicity',17],['Transfusion Reaction',25],
+  ['Myocardial Ischemia',19],['Pulmonary Embolism',12],['Right Heart Failure',23],
+  ['High Airway Pressure',16],['Venous Air Embolism',27],['Difficult Airway',11],
+  ['Fire — Non-Airway',14],['Fire — Airway',13],['SVT — Unstable',5],['SVT — Stable',4],
+  ['Oxygen Failure',20],['Power Failure',22],['High Spinal',24],['Pneumothorax',21],
+  ['Bronchospasm',9],['Anaphylaxis',8],['Hypertension',28],['Hypotension',29],['Hypoxemia',30],
+  ['Hemorrhage',15],['Bradycardia',3],['Asystole',1],['Trauma',26],['PEA',2]
+];
+function xrefEsc(s){ return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/[—–-]/g,'[—–-]').replace(/ +/g,'\\s+'); }
+const XREF_RE = new RegExp(XREFS.map(function(a){return '('+xrefEsc(a[0])+')';}).join('|'),'g');
+function linkify(html){
+  return html.replace(/→[^.<]*/g, function(clause){
+    return clause.replace(XREF_RE, function(){
+      for(var i=1;i<arguments.length-2;i++){ if(arguments[i]!=null){ return '<span class="xref" data-ev="'+XREFS[i-1][1]+'">'+arguments[i]+'</span>'; } }
+      return arguments[0];
+    });
+  });
+}
+
+/* Map a Ddx chip label to a matching event number (0 = no matching event) */
+var CHIP_SYN = [
+  [/hemorrhage/,15],[/anaphylaxis/,8],[/pneumothorax/,21],
+  [/local anesthetic/,17],[/pulmonary embol/,12],[/amniotic fluid/,7],
+  [/air embol/,27],[/malignant hyperthermia/,18],[/myocardial (ischemia|infarction)/,19],
+  [/transfusion reaction/,25],[/right heart/,23],[/high spinal/,24],[/total spinal/,24],
+  [/bronchospasm/,9],[/hypoxemia/,30],[/hypotension/,29],[/hypertension/,28],
+  [/difficult airway/,11],[/high airway pressure/,16],[/asystole/,1],
+  [/torsades|polymorphic/,43],[/pulseless electrical|^pea$/,2],[/bradycardia/,3],[/^trauma/,26]
+];
+function chipTarget(label){
+  var t=String(label).toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  for(var i=0;i<CHIP_SYN.length;i++){ if(CHIP_SYN[i][0].test(t)) return CHIP_SYN[i][1]; }
+  return 0;
+}
+
+/* ---- ACLS-style emphasis: bold every drug dose & energy value (tag-safe) ---- */
+var DOSE_RE = /\b\d[\d.,]*(?:\s*(?:to|[–-])\s*\d[\d.,]*)?\s*(?:mcg\/kg\/min|µg\/kg\/min|mg\/kg\/min|units\/kg|mL\/kg|mg\/kg|mcg|µg|mg|mEq|mmol|mL|units|unit|J|g|L\/min)\b/g;
+function emphasize(html){
+  return html.replace(/<[^>]+>|[^<]+/g, function(seg){
+    return seg.charAt(0)==='<' ? seg : seg.replace(DOSE_RE, '<b class="dose">$&</b>');
+  });
+}
+
+/* Advisory / credit / disclaimer banners — pushed to the bottom of the card so
+   the clinical content is seen first. Clinically actionable callouts stay in place. */
+function isFootNote(s){
+  if(s.type!=='note') return false;
+  const t=s.title||'', h=s.html||'';
+  return /verify|added|retained|estimate|disclaimer/i.test(t)
+      || /Added beyond the Stanford|verify against|Verify all|institutional protocol|Broselow/i.test(h);
+}
+function openModal(e){
+  const modal=document.getElementById('modal');
+  const sec=sectionOf(e.n); modal.className='modal '+((sec&&sec.cls)||'crit');
+  document.getElementById('mnum').textContent='';
+  document.getElementById('mttl').textContent=e.title;
+  const main=e.sections.filter(s=>!isFootNote(s));
+  const foot=e.sections.filter(isFootNote);
+  let _h=main.map(renderSection).join('');
+  if(foot.length){ _h+='<div class="cardfoot">'+foot.map(renderSection).join('')+'</div>'; }
+  document.getElementById('mbody').innerHTML=emphasize(linkify(_h));
+  const _pa=document.getElementById('pedAge'), _pw=document.getElementById('pedWt'), _ph=document.getElementById('pedHtIn');
+  if(_pa){ _pa.addEventListener('input',pedAll); if(_pw) _pw.addEventListener('input',pedAll); if(_ph){ _ph.addEventListener('change',pedHtSync); _ph.addEventListener('input',pedHtSync); } pedAll(); }
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('mbody').scrollTop=0;
+  document.getElementById('modal').scrollIntoView({block:'start'});
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  /* Always return to the top of the main OR Emergency Manual page */
+  window.scrollTo(0,0);
+}
+
+function doSearch(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  let anyVisible=false;
+  document.querySelectorAll('.grid').forEach(grid=>{
+    let groupVisible=false;
+    grid.querySelectorAll('.card').forEach(c=>{
+      const match = !q || c.dataset.search.includes(q);
+      c.classList.toggle('hidden', !match);
+      if(match){ groupVisible=true; anyVisible=true; }
+    });
+    grid.classList.toggle('hidden', !groupVisible);
+    const lab=document.querySelector('.seclabel[data-group="'+grid.dataset.group+'"]');
+    if(lab) lab.classList.toggle('hidden', !groupVisible);
+  });
+  document.getElementById('noresult').classList.toggle('hidden', anyVisible);
+}
+
+buildCards();
+document.getElementById('q').addEventListener('input', doSearch);
+document.getElementById('closeb').addEventListener('click', closeModal);
+document.getElementById('mbody').addEventListener('click', ev=>{
+  const x = ev.target.closest && ev.target.closest('[data-ev]');
+  if(x){ const n=parseInt(x.getAttribute('data-ev'),10); const e=EVENTS.find(z=>z.n===n); if(e) openModal(e); }
+});
+document.getElementById('overlay').addEventListener('click', ev=>{ if(ev.target.id==='overlay') closeModal(); });
+document.addEventListener('keydown', ev=>{ if(ev.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="FLH Anesthesia Department - Useful links and resources">
+<title>FLH Anesthesia - Useful Links</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --surface:#ffffff; --text:#1f2933; --muted:#6b7280;
+    --border:#e6e8ec; --border-hover:#cdd3da; --icon:#64748b;
+    --accent:#2f6fed; --accent-bg:#eef4ff; --accent-border:#cfe0fb;
+    --red:#c0392b; --red-bg:#fff5f5; --red-border:#f0c5c5;
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--text); margin:0; padding:24px 18px 40px;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  .wrap{max-width:640px; margin:0 auto}
+  header{text-align:center; margin-bottom:22px}
+  header h1{font-size:22px; font-weight:700; letter-spacing:.2px; margin:0}
+  .sub{font-size:13px; color:var(--muted); margin:4px 0 0}
+  .seclabel{
+    font-size:12px; font-weight:600; letter-spacing:1.1px; text-transform:uppercase;
+    color:var(--muted); margin:28px 2px 12px;
+  }
+  .seclabel:first-of-type{margin-top:4px}
+  .grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+  @media(max-width:520px){ .grid{grid-template-columns:1fr} }
+  .tile{
+    display:flex; align-items:center; gap:13px;
+    padding:14px 15px; background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); text-decoration:none; color:var(--text);
+    font-size:14.5px; font-weight:500; transition:.16s ease; outline:none;
+    box-shadow:0 1px 2px rgba(18,24,33,.04);
+  }
+  .tile:hover{transform:translateY(-1px); border-color:var(--border-hover); box-shadow:0 4px 14px rgba(18,24,33,.07)}
+  .tile:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .tile svg.ic{flex:none; width:20px; height:20px; color:var(--icon)}
+  .tile .txt{min-width:0; line-height:1.3}
+  .tile .txt small{display:block; font-size:11.5px; font-weight:500; color:var(--muted); margin-top:2px}
+  .tile .go{margin-left:auto; color:#c4cbd3; flex:none; display:flex}
+  .tile .go svg{width:15px; height:15px}
+  /* Emergency emphasis */
+  .tile.alert{background:var(--red-bg); border-color:var(--red-border)}
+  .tile.alert svg.ic{color:var(--red)}
+  .tile.alert .txt{color:var(--red); font-weight:600}
+  .tile.alert .txt small{color:#b06a63; font-weight:500}
+  .tile.alert .go{color:#e0a3a3}
+  footer{text-align:center; font-size:12px; color:var(--muted); margin-top:36px; padding-top:18px; border-top:1px solid var(--border)}
+  @media print{ body{background:#fff} .tile{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Useful Links</h1>
+    <p class="sub">FLH Anesthesia &middot; resources &amp; references</p>
+  </header>
+
+  <main role="main">
+
+    <div class="seclabel">Emergency &amp; Crisis</div>
+    <div class="grid">
+      <a class="tile alert" href="https://emergencymanual.stanford.edu/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span class="txt">Stanford Emergency Manual<small>Perioperative crisis cognitive aids</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile alert" href="https://www.mhaus.org/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+        <span class="txt">Malignant Hyperthermia (MHAUS)<small>Hotline: 1-800-644-9737</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+
+    <div class="seclabel">FLH Protocols &amp; Documents</div>
+    <div class="grid">
+      <a class="tile" href="https://docs.google.com/document/d/14Ey4mAenuIIUnJk2LA-u02Lz0K5ebDNJlEw4kde_wek/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">PAT Guidelines</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://drive.google.com/open?id=1uUR9tP_2bunSdDV_Jg3GflTLybxavfdi" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">Anesthesia Packet</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://www.apsf.org/article/managing-cardiovascular-implantable-electronic-devices-cieds-during-perioperative-care/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="txt">Pacer / AICD / CIED management<small>APSF perioperative guidance</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://docs.google.com/document/d/0B7Vz2o-8X8BZTTlyQ0MyS2xTcjg/edit?usp=sharing&ouid=101136283306524983991&resourcekey=0-hiZ3RqriWs7Cpr7mRIiPww&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">Difficult Airway Letter</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://docs.google.com/document/d/1JC-KN81UkhxN1AD-brzrNLSfMaV4e41HDX26Ph5CTsg/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">OSA Letter to PCP</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://docs.google.com/document/d/1crmzoI3db1xSIMddLvZ1YvbQITKGyIqmRDWYkIyRVMw/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">Nerve Block US note</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://docs.google.com/spreadsheets/d/1-dThTW__otgzxsFQw2lcNP2pntnHpDgjorRW5V9KKEI/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="txt">Neuromonitoring Case<small>Remifentanil</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="sab-notes.html">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="txt">SAB Notes</span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </a>
+    </div>
+
+    <div class="seclabel">National Guidelines &amp; Safety</div>
+    <div class="grid">
+      <a class="tile" href="https://www.asahq.org/standards-and-practice-parameters" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="txt">ASA Guidelines<small>Standards &amp; practice parameters</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://www.asahq.org/standards-and-practice-parameters/statement-on-asa-physical-status-classification-system" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        <span class="txt">ASA Physical Status<small>ASA-PS classification (2025)</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://asra.com/guidelines-articles/asra-apps" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        <span class="txt">ASRA Coags<small>Anticoagulation &amp; neuraxial timing</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://www.apsf.org/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        <span class="txt">APSF &middot; Patient Safety<small>Newsletters &amp; safety resources</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+
+    <div class="seclabel">Education &amp; Reference Tools</div>
+    <div class="grid">
+      <a class="tile" href="https://www.nysora.com/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span class="txt">NYSORA<small>Regional &amp; nerve blocks</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://www.openanesthesia.org/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span class="txt">OpenAnesthesia<small>Peer-reviewed topic reviews</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+      <a class="tile" href="https://www.mdcalc.com/" target="_blank" rel="noopener noreferrer">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="12" y1="15" x2="12.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/></svg>
+        <span class="txt">MDCalc<small>Calculators &amp; scores</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+        <a class="tile" href="bmi.html">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="12" y1="11" x2="12.01" y2="11"/><line x1="16" y1="11" x2="16.01" y2="11"/><line x1="8" y1="15" x2="8.01" y2="15"/><line x1="12" y1="15" x2="12.01" y2="15"/><line x1="16" y1="15" x2="16.01" y2="15"/></svg>
+        <span class="txt">BMI &amp; Height Calculator<small>Calculate BMI &amp; ideal body weight</small></span>
+        <span class="go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg></span>
+      </a>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>FLH Anesthesia &middot; Useful Links</p>
+  </footer>
+</div>
+</body>
+</html>
