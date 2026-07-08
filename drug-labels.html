@@ -330,6 +330,7 @@
             }
             const generatePDF = () => {
                 const doc = new jsPDF({ unit: "in", format: "letter" });
+                try { doc.viewerPreferences({ PrintScaling: "None" }); } catch (e) {}
                 const labelWidth = 1.75;
                 const labelHeight = 0.5;
                 const marginLeft = 0.33;
