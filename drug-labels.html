@@ -360,9 +360,8 @@
             const handlePrint = () => {
                 if (totalQuantity > 0) {
                     const doc = generatePDF();
-                    const pdfBlob = doc.output('blob');
-                    const pdfUrl = URL.createObjectURL(pdfBlob);
-                    window.open(pdfUrl, '_blank');
+                    doc.autoPrint();
+                    window.open(doc.output('bloburl'), '_blank');
                 }
             };
             const handleDownload = () => { if (totalQuantity > 0) generatePDF().save("syringe_labels.pdf"); };
