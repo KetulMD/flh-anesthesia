@@ -112,4 +112,19 @@
   document.body.appendChild(overlay);
   document.body.appendChild(panel);
   document.body.appendChild(btn);
+
+  // Hide the floating menu button while a page popup is open (both
+  // Anesthesia Reference and OR Emergencies mark their popup with `.modal.on`),
+  // so it never collides with the popup's own close (X) button.
+  function syncWithPopup() {
+    var popupOpen = !!document.querySelector('.modal.on');
+    btn.style.display = popupOpen ? 'none' : '';
+    if (popupOpen) toggle(false);
+  }
+  try {
+    new MutationObserver(syncWithPopup).observe(document.documentElement, {
+      attributes: true, subtree: true, attributeFilter: ['class']
+    });
+  } catch (e) {}
+  syncWithPopup();
 })();

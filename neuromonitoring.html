@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anesthesia for Neuromonitoring — Quick Reference</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f2933">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
+<style>
+  :root{
+    --blue-900:#0b2545; --blue-700:#13315c; --blue-500:#1d5fa8; --blue-100:#e8f1fb;
+    --accent:#0e9f8e; --warn:#b5541a; --danger:#b3261e; --gray-50:#f7f9fb; --gray-100:#eef1f4;
+    --gray-300:#cfd6dd; --gray-600:#5b6773; --gray-800:#2b333a; --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--gray-800);background:var(--gray-50);line-height:1.5;}
+  header{background:linear-gradient(135deg,var(--blue-900),var(--blue-500));color:#fff;padding:22px 20px 18px;}
+  header h1{margin:0 0 4px;font-size:1.5rem;}
+  header p{margin:0;opacity:.9;font-size:.92rem;}
+  nav{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--gray-300);display:flex;flex-wrap:wrap;gap:2px;padding:6px 10px;}
+  nav a{color:var(--blue-700);text-decoration:none;font-size:.85rem;font-weight:600;padding:8px 12px;border-radius:8px;}
+  nav a:hover{background:var(--blue-100);}
+  main{max-width:1000px;margin:0 auto;padding:18px 16px 60px;}
+  section{background:#fff;border:1px solid var(--gray-300);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;}
+  section h2{margin-top:0;font-size:1.15rem;color:var(--blue-900);border-bottom:2px solid var(--blue-100);padding-bottom:8px;}
+  section h3{font-size:1rem;color:var(--blue-700);margin-bottom:6px;}
+  .disclaimer{background:#fff6e5;border:1px solid #e7c789;color:#6b4a11;border-radius:var(--radius);padding:12px 16px;font-size:.85rem;margin-bottom:18px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:720px){.grid2{grid-template-columns:1fr;}}
+  .card{background:var(--gray-50);border:1px solid var(--gray-300);border-radius:10px;padding:12px 14px;}
+  table{border-collapse:collapse;width:100%;font-size:.85rem;}
+  th,td{border:1px solid var(--gray-300);padding:7px 9px;text-align:left;vertical-align:top;}
+  th{background:var(--blue-100);color:var(--blue-900);font-size:.8rem;}
+  tr:nth-child(even) td{background:#fafcfe;}
+  .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.72rem;font-weight:700;color:#fff;}
+  .tag.good{background:var(--accent);}
+  .tag.caution{background:var(--warn);}
+  .tag.avoid{background:var(--danger);}
+  label{display:block;font-size:.82rem;font-weight:600;color:var(--blue-900);margin-bottom:4px;}
+  input[type=number], select{width:100%;padding:8px 10px;border:1px solid var(--gray-300);border-radius:8px;font-size:.95rem;margin-bottom:12px;}
+  .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:600px){.calc-row{grid-template-columns:1fr;}}
+  .result-table th, .result-table td{text-align:center;}
+  .result-table td.rate{font-weight:700;color:var(--blue-900);}
+  .pill-list{list-style:none;padding:0;margin:0;}
+  .pill-list li{padding:8px 10px;border-left:3px solid var(--accent);background:var(--gray-50);margin-bottom:6px;border-radius:6px;font-size:.9rem;}
+  .pill-list li.warn-item{border-left-color:var(--warn);}
+  .refs{font-size:.8rem;color:var(--gray-600);}
+  .refs li{margin-bottom:6px;}
+  footer{text-align:center;color:var(--gray-600);font-size:.78rem;padding:20px;}
+  .badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+  code.formula{background:var(--gray-100);padding:2px 6px;border-radius:4px;font-size:.82rem;}
+</style>
+<style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      #claude-agent-glow-border-inner {
+        animation: claude-pulse 2s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #claude-agent-glow-border-inner {
+          animation: none;
+        }
+      }
+    </style></head>
+<body>
+<header>
+  <h1>Anesthesia for Neuromonitoring — Quick Reference</h1>
+  <p>TIVA dosing, drug‑prep, and evoked‑potential/EMG anesthetic considerations for cases with intraoperative neurophysiological monitoring (IONM)</p>
+</header>
+<nav>
+  <a href="#prep">Drug Prep</a>
+  <a href="#calc">Infusion Calculator</a>
+  <a href="#modality">Modality Effects</a>
+  <a href="#agents">Agent Guide</a>
+  <a href="#checklist">Checklist</a>
+  <a href="#refs">References</a>
+</nav>
+<main>
+  <div class="disclaimer">
+    <strong>For use by qualified anesthesia clinicians only.</strong> This tool summarizes general, published principles for anesthetic management during IONM. It is not a substitute for your institution's protocols, drug references, the surgeon's/neurophysiologist's requirements, or your own clinical judgment. Always confirm drug concentrations, pump settings, and targets against your institutional policy before use.
+  </div>
+
+  <section id="prep">
+    <h2>TIVA Drug Preparation (Propofol / Remifentanil, ≤0.5 MAC Sevo‑Des)</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Remifentanil syringe</h3>
+        <table>
+          <tbody><tr><td>Remifentanil</td><td><strong>2 mg</strong></td></tr>
+          <tr><td>Diluent volume</td><td><strong>50 mL</strong> (NS)</td></tr>
+          <tr><td>Final concentration</td><td><strong>40 mcg/mL</strong></td></tr>
+        </tbody></table>
+      </div>
+      <div class="card">
+        <h3>Maintenance targets</h3>
+        <ul class="pill-list">
+          <li>Propofol infusion @ <strong>50–200 mcg/kg/min</strong></li>
+          <li>Remifentanil infusion @ <strong>0.02–0.5 mcg/kg/min</strong></li>
+          <li>Sevoflurane/Desflurane @ or below <strong>0.5 MAC</strong> (if a volatile adjunct is used)</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--gray-600);margin-top:10px;">Source: institutional TIVA/Neuromonitoring reference sheet. Propofol concentration assumed 10 mg/mL (standard 1% formulation) in the calculator below — change it if your pharmacy supplies a different concentration.</p>
+  </section>
+
+  <section id="calc">
+    <h2>Weight‑Based Infusion Rate Calculator</h2>
+    <div class="calc-row">
+      <div>
+        <label for="weight">Patient weight (kg)</label>
+        <input type="number" id="weight" min="1" step="0.5" value="70">
+      </div>
+      <div>
+        <label for="propConc">Propofol concentration (mg/mL)</label>
+        <input type="number" id="propConc" min="1" step="1" value="10">
+      </div>
+      <div>
+        <label for="remiConc">Remifentanil concentration (mcg/mL)</label>
+        <input type="number" id="remiConc" min="1" step="1" value="40">
+      </div>
+    </div>
+
+    <h3 style="margin-top:14px;">Propofol (mL/hr)</h3>
+    <table class="result-table" id="propTable">
+      <thead><tr><th>50 mcg/kg/min</th><th>100 mcg/kg/min</th><th>150 mcg/kg/min</th><th>200 mcg/kg/min</th></tr></thead>
+      <tbody><tr id="propRow"><td class="rate">21.0 mL/hr</td><td class="rate">42.0 mL/hr</td><td class="rate">63.0 mL/hr</td><td class="rate">84.0 mL/hr</td></tr></tbody>
+    </table>
+
+    <h3 style="margin-top:14px;">Remifentanil (mL/hr)</h3>
+    <table class="result-table" id="remiTable">
+      <thead><tr><th>0.02 mcg/kg/min</th><th>0.05 mcg/kg/min</th><th>0.1 mcg/kg/min</th><th>0.25 mcg/kg/min</th><th>0.5 mcg/kg/min</th></tr></thead>
+      <tbody><tr id="remiRow"><td class="rate">2.10 mL/hr</td><td class="rate">5.25 mL/hr</td><td class="rate">10.50 mL/hr</td><td class="rate">26.25 mL/hr</td><td class="rate">52.50 mL/hr</td></tr></tbody>
+    </table>
+    <p style="font-size:.78rem;color:var(--gray-600);margin-top:8px;">Formula: <code class="formula">mL/hr = (rate [mcg/kg/min] × weight [kg] × 60) ÷ concentration [mcg/mL]</code>. Double‑check every pump rate independently before infusing — this calculator is a convenience aid only.</p>
+  </section>
+
+  <section id="modality">
+    <h2>Effect of Anesthetic Agents on Monitoring Modalities</h2>
+    <div class="badge-row">
+      <span class="tag good">Minimal effect</span>
+      <span class="tag caution">Dose‑dependent / use caution</span>
+      <span class="tag avoid">Significant suppression / avoid</span>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Modality</th><th>Volatile agents &gt;0.5 MAC</th><th>N₂O</th><th>Propofol (TIVA)</th><th>Remifentanil/opioids</th><th>Dexmedetomidine</th><th>Ketamine</th><th>Neuromuscular blockade</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Transcranial MEP</strong></td>
+          <td><span class="tag avoid">Avoid</span> dose‑dependent amplitude loss, latency ↑</td>
+          <td><span class="tag caution">Caution</span> synergistic suppression with volatiles</td>
+          <td><span class="tag good">Preferred</span> minimal suppression at steady rate</td>
+          <td><span class="tag good">Minimal</span> effect on amplitude</td>
+          <td><span class="tag caution">Caution</span> low‑dose infusion OK; avoid loading bolus/high dose</td>
+          <td><span class="tag good">Neutral–favorable</span> subanesthetic doses may improve amplitude; ≥1 mg/kg suppresses</td>
+          <td><span class="tag avoid">Blocks response</span> confounds CMAP; avoid maintenance dosing</td>
+        </tr>
+        <tr>
+          <td><strong>SSEP (cortical)</strong></td>
+          <td><span class="tag avoid">Suppressed</span> amplitude ↓, latency ↑</td>
+          <td><span class="tag caution">Additive suppression</span></td>
+          <td><span class="tag good">Preferred</span></td>
+          <td><span class="tag good">Minimal effect</span></td>
+          <td><span class="tag good">Minimal at low dose</span></td>
+          <td><span class="tag good">Minimal / may preserve</span></td>
+          <td><span class="tag good">No significant effect</span> (sensory cortical response)</td>
+        </tr>
+        <tr>
+          <td><strong>SSEP (subcortical)</strong></td>
+          <td><span class="tag caution">Less affected than cortical</span></td>
+          <td><span class="tag caution">Mild</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">No effect</span></td>
+        </tr>
+        <tr>
+          <td><strong>Free‑run / triggered EMG</strong></td>
+          <td><span class="tag caution">Usually tolerated</span> (spontaneous EMG less sensitive)</td>
+          <td><span class="tag caution">Usually tolerated</span></td>
+          <td><span class="tag good">Preferred</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag avoid">Abolishes signal</span> — must avoid maintenance NMB</td>
+        </tr>
+        <tr>
+          <td><strong>BAEP / ABR</strong></td>
+          <td><span class="tag good">Relatively resistant</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag good">No effect</span></td>
+        </tr>
+        <tr>
+          <td><strong>EEG</strong></td>
+          <td><span class="tag caution">Dose‑dependent burst suppression at high MAC</span></td>
+          <td><span class="tag caution">Mild</span></td>
+          <td><span class="tag caution">Dose‑dependent</span></td>
+          <td><span class="tag good">Minimal</span></td>
+          <td><span class="tag caution">Sedative pattern changes</span></td>
+          <td><span class="tag caution">Can increase fast activity</span></td>
+          <td><span class="tag good">No direct effect</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="agents">
+    <h2>Agent‑by‑Agent Notes</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>Propofol + Remifentanil (TIVA)</h3>
+        <p>Preferred baseline technique when MEPs and/or EMG are monitored. Steady‑state infusions (avoid boluses right before critical monitoring epochs) give the most stable, reproducible signals. Remifentanil provides analgesia/blunts sympathetic response with negligible effect on evoked potentials, allowing propofol to be titrated to the lowest effective dose.</p>
+      </div>
+      <div class="card">
+        <h3>Volatile agents (sevoflurane/desflurane) &amp; N₂O</h3>
+        <p>Suppress MEP and cortical SSEP amplitude and prolong latency in a dose‑dependent, reversible fashion; effect is most pronounced for MEPs. If a volatile is used as an adjunct, keep at or below ~0.5 MAC and avoid combining with N₂O, which is additive/synergistic with suppression. Desflurane is generally preferred over sevoflurane/isoflurane when a volatile is unavoidable due to faster titration.</p>
+      </div>
+      <div class="card">
+        <h3>Neuromuscular blocking agents</h3>
+        <p>Any maintenance NMB abolishes free‑run/triggered EMG and confounds the muscle (CMAP) component of transcranial MEP. Typical approach: use a short‑acting agent only to facilitate intubation, then allow full spontaneous recovery (train‑of‑four 4/4, no fade) before baseline signals are acquired; avoid re‑dosing for the remainder of a case that relies on EMG/MEP. Confirm the plan with the surgeon and neurophysiologist, since some centers tolerate a partial, monitored block for specific modalities.</p>
+      </div>
+      <div class="card">
+        <h3>Dexmedetomidine</h3>
+        <p>Useful adjunct for hemodynamic stability and opioid/propofol sparing. Low‑dose infusions without a loading bolus appear to have minimal impact on SSEP/MEP, but bolus dosing or higher infusion rates have been associated with reduced MEP amplitude — avoid bolus loading and titrate cautiously when signals are borderline.</p>
+      </div>
+      <div class="card">
+        <h3>Ketamine</h3>
+        <p>Subanesthetic bolus/infusion doses can preserve or even increase MEP amplitude and are used as an opioid‑sparing adjunct; higher doses (roughly ≥1 mg/kg) have been associated with MEP suppression. Consider low‑dose ketamine as an adjunct rather than a primary agent when monitoring is critical.</p>
+      </div>
+      <div class="card">
+        <h3>Physiologic factors</h3>
+        <p>Signal quality is also affected by non‑drug factors: hypotension/reduced spinal cord perfusion, hypothermia, hypocapnia, anemia, and hypoxia can all degrade SSEP/MEP independent of the anesthetic. Maintain normothermia, adequate MAP (per baseline/surgeon target), and stable ventilation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="checklist">
+    <h2>Practical Checklist</h2>
+    <ul class="pill-list">
+      <li>Default to TIVA (propofol/remifentanil) as the primary technique for cases monitoring MEP and/or EMG.</li>
+      <li>If a volatile agent is used at all, keep it ≤0.5 MAC and avoid nitrous oxide.</li>
+      <li class="warn-item">Use a short‑acting NMB only for intubation; confirm TOF 4/4 recovery before the neurophysiologist records baseline signals, and avoid maintenance dosing for EMG/MEP cases unless explicitly agreed with the surgical/neuromonitoring team.</li>
+      <li>Keep infusion rates steady through critical monitoring epochs; avoid large propofol/remifentanil boluses immediately before a check.</li>
+      <li>If adding dexmedetomidine or ketamine, avoid loading boluses and start at the low end of the dose range, especially early in the case before baselines are established.</li>
+      <li>Maintain MAP within the patient's baseline range (or the specific target set by the surgical team), and maintain normothermia, normocapnia, and adequate oxygenation/hemoglobin.</li>
+      <li>Communicate any planned anesthetic change (agent, bolus, major rate change) to the neurophysiologist before making it, and re‑check baseline signals after any change or repositioning.</li>
+      <li>Record baseline SSEP/MEP/EMG signals after induction and before surgical positioning or incision, and again promptly after any position change.</li>
+    </ul>
+  </section>
+
+  <section id="refs">
+    <h2>Selected References</h2>
+    <ul class="refs">
+      <li>Reysner M, et al. "The Influence of Anesthesia on Neuromonitoring During Scoliosis Surgery: A Systematic Review." <em>NeuroSci</em>. 2024;5(4):693–712.</li>
+      <li>Kawaguchi M, et al. "A Practical Guide for Anesthetic Management during Intraoperative Motor Evoked Potential Monitoring" (JSA MEP Monitoring Guideline Working Group). <em>J Anesth</em>. 2020;34:5–28.</li>
+      <li>Walker CT, et al. "Neuroanesthesia Guidelines for Optimizing Transcranial Motor Evoked Potential Neuromonitoring During Deformity and Complex Spinal Surgery: A Delphi Consensus Study." <em>Spine</em>. 2020;45:310–610.</li>
+      <li>Rao S, Kurfess J, Treggiari MM. "Basics of Neuromonitoring and Anesthetic Considerations." <em>Anesthesiol Clin</em>. 2021;39:195–209.</li>
+      <li>Ma K, Bebawy JF, Hemmer LB. "Multimodal Analgesia and Intraoperative Neuromonitoring." <em>J Neurosurg Anesthesiol</em>. 2023;35:172–176.</li>
+    </ul>
+    <p style="font-size:.78rem;color:var(--gray-600);">This page paraphrases general conclusions from the above peer‑reviewed sources; consult the original articles and your institutional guidelines for full detail and specific dosing decisions.</p>
+  </section>
+</main>
+<footer>Built as a personal quick‑reference aid — verify all doses and targets against institutional protocol. Not a substitute for clinical judgment.</footer>
+
+<script>
+function calc(){
+  var w = parseFloat(document.getElementById('weight').value) || 0;
+  var propConc = parseFloat(document.getElementById('propConc').value) || 10; // mg/mL
+  var remiConc = parseFloat(document.getElementById('remiConc').value) || 40; // mcg/mL
+  var propConcMcg = propConc * 1000; // mcg/mL
+
+  var propRates = [50,100,150,200];
+  var propCells = document.getElementById('propRow').children;
+  for(var i=0;i<propRates.length;i++){
+    var mlhr = (propRates[i]*w*60)/propConcMcg;
+    propCells[i].textContent = mlhr.toFixed(1) + ' mL/hr';
+  }
+
+  var remiRates = [0.02,0.05,0.1,0.25,0.5];
+  var remiCells = document.getElementById('remiRow').children;
+  for(var j=0;j<remiRates.length;j++){
+    var mlhr2 = (remiRates[j]*w*60)/remiConc;
+    remiCells[j].textContent = mlhr2.toFixed(2) + ' mL/hr';
+  }
+}
+document.getElementById('weight').addEventListener('input', calc);
+document.getElementById('propConc').addEventListener('input', calc);
+document.getElementById('remiConc').addEventListener('input', calc);
+calc();
+</script>
+
+<script src="nav.js" defer></script>
+</body></html>
