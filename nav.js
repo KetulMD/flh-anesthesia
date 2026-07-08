@@ -117,7 +117,8 @@
   // Anesthesia Reference and OR Emergencies mark their popup with `.modal.on`),
   // so it never collides with the popup's own close (X) button.
   function syncWithPopup() {
-    var popupOpen = !!document.querySelector('.modal.on');
+    // Anesthesia Reference marks its popup `.modal.on`; OR Emergencies uses `.overlay.open`.
+    var popupOpen = !!document.querySelector('.modal.on, .overlay.open');
     btn.style.display = popupOpen ? 'none' : '';
     if (popupOpen) toggle(false);
   }

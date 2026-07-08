@@ -79,16 +79,18 @@
   /* Modal */
   .overlay{
     position:fixed; inset:0; background:rgba(31,41,51,.45); backdrop-filter:blur(2px);
-    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:24px 14px; overflow:auto;
+    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:24px 14px; overflow:hidden;
   }
   .overlay.open{display:flex}
   .modal{
     background:var(--surface); width:100%; max-width:760px; border-radius:14px;
     border:1px solid var(--border); box-shadow:0 24px 60px rgba(18,24,33,.22); overflow:hidden;
     animation:pop .16s ease-out;
+    display:flex; flex-direction:column; max-height:calc(100dvh - 48px);
   }
   @keyframes pop{from{transform:scale(.98);opacity:.5}to{transform:scale(1);opacity:1}}
   .modal .mhead{
+    flex:none;
     background:var(--red); color:#fff;
     padding:15px 20px; display:flex; align-items:center; justify-content:space-between; gap:10px;
   }
@@ -107,7 +109,11 @@
     border-radius:50%; font-size:1.05rem; cursor:pointer; flex:none; line-height:1;
   }
   .closeb:hover{background:rgba(255,255,255,.38)}
-  .mbody{padding:18px 20px 24px; max-height:none}
+  .mbody{padding:18px 20px 24px; flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch}
+  @media(max-width:560px){
+    .overlay{padding:0}
+    .modal{max-width:none; height:100dvh; max-height:100dvh; border-radius:0; border:0}
+  }
   /* Section blocks within modal */
   .blk{margin-top:18px}
   .blk:first-child{margin-top:4px}
