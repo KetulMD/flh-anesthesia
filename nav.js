@@ -12,7 +12,7 @@
     { label: 'Print Drug Label', href: 'drug-labels.html', icon: '🏷' },
     { label: 'Block Schedule', href: 'block-schedule.html', icon: '🗓' },
     { label: 'OR Emergencies', href: 'or-emergencies.html', icon: '🚨', alert: true },
-    { label: 'Anesthesia Reference', href: 'https://ketulmd.github.io/anesthesia-reference/', icon: '📖', ext: true },
+    { label: 'Anesthesia Reference', href: 'reference.html', icon: '📖' },
     { group: 'Resources' },
     { label: 'Useful Links', href: 'useful-links.html', icon: '🔗' },
     { label: 'SAB Notes', href: 'sab-notes.html', icon: '📝' },
