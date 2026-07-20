@@ -5,7 +5,7 @@
    - CDN libraries (jsdelivr): cache-first after first use.
    Bump CACHE_VERSION whenever files change to push updates to installed apps. */
 
-const CACHE_VERSION = 'flh-v11';
+const CACHE_VERSION = 'flh-v12';
 const PRECACHE = [
   './',
   './index.html',
