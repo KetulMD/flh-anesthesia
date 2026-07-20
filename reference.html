@@ -168,6 +168,16 @@
     .modal-scroll{padding:2px 13px 28px}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  /* persistent AI-content caution watermark */
+  .ai-watermark{position:fixed; inset:0; z-index:99999; pointer-events:none; user-select:none;
+    display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .ai-watermark::after{content:"AI content \2014  verify before use";
+    transform:rotate(-27deg); white-space:nowrap; text-align:center;
+    font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;
+    font-size:clamp(30px, 4.6vw, 62px); font-weight:700; letter-spacing:.14em;
+    color:rgba(18,23,28,.055);}
+  @media (max-width:640px){.ai-watermark::after{white-space:normal; width:120vw; font-size:10vw; line-height:1.6}}
+  @media print{.ai-watermark{position:absolute; height:100%}}
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1f2933">
@@ -175,6 +185,7 @@
   <script src="nav.js" defer></script>
 </head>
 <body>
+<div class="ai-watermark" aria-hidden="true"></div>
 <header>
   <div class="bar">
     <div class="titlerow">
