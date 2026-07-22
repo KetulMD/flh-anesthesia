@@ -6,12 +6,22 @@
 <title>Spinal (SAB) Note Labels</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icons/favicon.png">
-<meta name="theme-color" content="#f2f2f7">
+<meta name="theme-color" id="themecolor" content="#f2f2f7">
+<script>(function(){try{var s=localStorage.getItem('flh-theme');var d=s==='dark'||(!s&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);if(d)document.documentElement.setAttribute('data-theme','dark');var m=document.getElementById('themecolor');if(m)m.content=d?'#000000':'#f2f2f7';}catch(e){}})();</script>
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
-<style>*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1f2937;background:#f3f4f6}.wrap{max-width:760px;margin:0 auto;padding:20px 16px 40px}h1{font-size:20px;margin:0 0 4px}.sub{color:#6b7280;font-size:12px;margin:0 0 16px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:16px}label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}textarea{width:100%;min-height:110px;font-size:14px;line-height:1.4;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;resize:vertical;font-family:inherit}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-top:14px}.field{display:flex;flex-direction:column}.field input{width:110px;padding:8px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px}.btns{display:flex;gap:10px;flex-wrap:wrap}button{cursor:pointer;border:none;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:700}.primary{background:#2563eb;color:#fff}.ghost{background:#eef2ff;color:#2563eb}.meta{font-size:12px;color:#6b7280;margin-top:8px}.meta .pill{display:inline-block;background:#f1f5f9;border-radius:999px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.previewArea{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}.labelPreview{width:504px;height:192px;border:1px dashed #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;padding:6px;background:#fff;overflow:hidden}.labelText{text-align:center;line-height:1.12;word-break:break-word;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif}.sheetNote{font-size:12px;color:#6b7280;max-width:300px}</style>
+<style>*{box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1f2937;background:#f3f4f6}.wrap{max-width:760px;margin:0 auto;padding:20px 16px 40px}h1{font-size:20px;margin:0 0 4px}.sub{color:#6b7280;font-size:12px;margin:0 0 16px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:16px}label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}textarea{width:100%;min-height:110px;font-size:14px;line-height:1.4;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;resize:vertical;font-family:inherit}.row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;margin-top:14px}.field{display:flex;flex-direction:column}.field input{width:110px;padding:8px 10px;border:1px solid #e5e7eb;border-radius:8px;font-size:14px}.btns{display:flex;gap:10px;flex-wrap:wrap}button{cursor:pointer;border:none;border-radius:8px;padding:11px 18px;font-size:14px;font-weight:700}.primary{background:#2563eb;color:#fff}.ghost{background:#eef2ff;color:#2563eb}.meta{font-size:12px;color:#6b7280;margin-top:8px}.meta .pill{display:inline-block;background:#f1f5f9;border-radius:999px;padding:3px 10px;font-size:12px;margin:2px 6px 2px 0}.previewArea{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}.labelPreview{width:504px;height:192px;border:1px dashed #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;padding:6px;background:#fff;overflow:hidden}.labelText{text-align:center;line-height:1.12;word-break:break-word;white-space:pre-wrap;font-family:Helvetica,Arial,sans-serif}.sheetNote{font-size:12px;color:#6b7280;max-width:300px}
+html[data-theme="dark"] body{color:#f2f2f7;background:#000}
+html[data-theme="dark"] .sub,html[data-theme="dark"] .meta,html[data-theme="dark"] .sheetNote{color:#8e8e93}
+html[data-theme="dark"] .card{background:#1c1c1e;border-color:#38383a}
+html[data-theme="dark"] textarea,html[data-theme="dark"] .field input{background:#000;border-color:#38383a;color:#f2f2f7}
+html[data-theme="dark"] .primary{background:#4a90e2}
+html[data-theme="dark"] .ghost{background:#12243a;color:#5b9be0}
+html[data-theme="dark"] .meta .pill{background:#2c2c2e;color:#c7c7cc}
+html[data-theme="dark"] .labelText{color:#1f2937}
+</style>
 <style>
 @view-transition{navigation:auto}
 ::view-transition-group(root){animation-duration:.3s;animation-timing-function:cubic-bezier(.22,.68,0,1)}
@@ -28,8 +38,21 @@
 <script>(function(){function bk(a){try{return a&&a.navigationType==='traverse'&&a.from&&a.entry&&a.entry.index<a.from.index;}catch(e){return false;}}
 window.addEventListener('pageswap',function(e){if(e.viewTransition){e.viewTransition.types.add(bk(e.activation)?'back':'forward');}});
 window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(window.navigation&&navigation.activation);e.viewTransition.types.add(bk(a)?'back':'forward');}});})();</script>
+<style>
+.themebtn{position:fixed;top:12px;right:62px;z-index:99989;width:42px;height:42px;border-radius:12px;padding:0;border:1px solid rgba(0,0,0,.12);background:rgba(255,255,255,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#6b7076;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(18,24,33,.10)}
+.themebtn svg{width:19px;height:19px}
+.themebtn .ic-moon{display:none}
+html[data-theme="dark"] .themebtn{background:rgba(28,28,30,.9);border-color:#3a3a3c;color:#f2f2f7}
+html[data-theme="dark"] .themebtn .ic-sun{display:none}
+html[data-theme="dark"] .themebtn .ic-moon{display:inline}
+html[data-theme="dark"] #flhnav-btn{background:rgba(28,28,30,.9)!important;border-color:#3a3a3c!important}
+html[data-theme="dark"] #flhnav-btn svg{stroke:#f2f2f7!important}
+.themebtn:active{transform:scale(.95)}
+@media(max-width:700px){.themebtn{width:44px;height:44px;right:64px;top:12px}}
+</style>
 </head>
 <body>
+<button id="themebtn" class="themebtn" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ic-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
 <div class="wrap"><h1>Spinal Anesthesia (SAB) Note Labels</h1><p class="sub">Avery 5160 &middot; Letter sheet &middot; 3 &times; 10 = 30 identical labels &middot; 2.625&Prime; &times; 1.0&Prime; each &middot; auto-fit text</p><div class="card"><label for="sab_txt">Label text (editable &mdash; this is the default)</label><textarea id="sab_txt"></textarea><div class="row"><div class="field"><label for="sab_count">Number of labels</label><input id="sab_count" type="number" min="1" max="30" value="30"></div><div class="btns"><button class="ghost" id="sab_update">Update preview</button><button class="primary" id="sab_pdf">Generate PDF (Print / Download)</button></div></div><div class="meta"><span class="pill">Page: Letter</span><span class="pill">Cell: 2.625 &times; 1.0 in</span><span class="pill">Margins: 0.1875 L / 0.5 T</span><span class="pill">Gutter: 0.125 X &middot; 0 Y</span><span class="pill">Helvetica 9pt max</span></div></div><div class="card"><div class="previewArea"><div><label>Single label preview (2&times; actual size)</label><div class="labelPreview"><div class="labelText" id="sab_prev"></div></div><p class="sheetNote" id="sab_fit"></p></div><div><label>Sheet</label><p class="sheetNote" id="sab_sheet"></p></div></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
@@ -55,5 +78,7 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
 }
 </script>
 <script src="nav.js" defer></script>
+<script>(function(){var b=document.getElementById('themebtn');if(!b)return;var mc=document.getElementById('themecolor');b.addEventListener('click',function(){var d=document.documentElement.getAttribute('data-theme')==='dark';if(d)document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme','dark');if(mc)mc.content=d?'#f2f2f7':'#000000';try{localStorage.setItem('flh-theme',d?'light':'dark');}catch(e){}});})();</script>
+
 </body>
 </html>
