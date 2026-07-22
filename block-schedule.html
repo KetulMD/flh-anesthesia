@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FLH Anesthesia - Block Schedule</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="icons/favicon.png">
-<meta name="theme-color" content="#1f2933">
+<meta name="theme-color" content="#f2f2f7">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -15,6 +15,22 @@
   html, body { margin: 0; padding: 0; height: 100%; }
   iframe { display: block; width: 100%; height: 100vh; border: none; }
 </style>
+<style>
+@view-transition{navigation:auto}
+::view-transition-group(root){animation-duration:.3s;animation-timing-function:cubic-bezier(.22,.68,0,1)}
+::view-transition-old(root){animation-name:vtOldF}
+::view-transition-new(root){animation-name:vtNewF}
+:root:active-view-transition-type(back)::view-transition-old(root){animation-name:vtOldB}
+:root:active-view-transition-type(back)::view-transition-new(root){animation-name:vtNewB}
+@keyframes vtNewF{from{transform:translateX(100%)}}
+@keyframes vtOldF{to{transform:translateX(-24%);opacity:.55}}
+@keyframes vtNewB{from{transform:translateX(-24%);opacity:.55}}
+@keyframes vtOldB{to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(root),::view-transition-old(root),::view-transition-new(root){animation:none!important}}
+</style>
+<script>(function(){function bk(a){try{return a&&a.navigationType==='traverse'&&a.from&&a.entry&&a.entry.index<a.from.index;}catch(e){return false;}}
+window.addEventListener('pageswap',function(e){if(e.viewTransition){e.viewTransition.types.add(bk(e.activation)?'back':'forward');}});
+window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(window.navigation&&navigation.activation);e.viewTransition.types.add(bk(a)?'back':'forward');}});})();</script>
 </head>
 <body>
 <iframe src="https://script.google.com/macros/s/AKfycbxUNxPV-vWXlL9RZkIO7YiAEr_NDH0E94OP-nj45rg3uRoXcK7-DvLbaoqLsR3mTdIS/exec" title="Block Schedule Viewer" allow="fullscreen"></iframe>

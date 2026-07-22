@@ -79,6 +79,22 @@
   html[data-theme="dark"] .themebtn .ic-moon{display:inline}
   .themebtn:active{transform:scale(.95)}
 </style>
+<style>
+@view-transition{navigation:auto}
+::view-transition-group(root){animation-duration:.3s;animation-timing-function:cubic-bezier(.22,.68,0,1)}
+::view-transition-old(root){animation-name:vtOldF}
+::view-transition-new(root){animation-name:vtNewF}
+:root:active-view-transition-type(back)::view-transition-old(root){animation-name:vtOldB}
+:root:active-view-transition-type(back)::view-transition-new(root){animation-name:vtNewB}
+@keyframes vtNewF{from{transform:translateX(100%)}}
+@keyframes vtOldF{to{transform:translateX(-24%);opacity:.55}}
+@keyframes vtNewB{from{transform:translateX(-24%);opacity:.55}}
+@keyframes vtOldB{to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){::view-transition-group(root),::view-transition-old(root),::view-transition-new(root){animation:none!important}}
+</style>
+<script>(function(){function bk(a){try{return a&&a.navigationType==='traverse'&&a.from&&a.entry&&a.entry.index<a.from.index;}catch(e){return false;}}
+window.addEventListener('pageswap',function(e){if(e.viewTransition){e.viewTransition.types.add(bk(e.activation)?'back':'forward');}});
+window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(window.navigation&&navigation.activation);e.viewTransition.types.add(bk(a)?'back':'forward');}});})();</script>
 </head>
 <body>
 <button id="themebtn" class="themebtn" aria-label="Toggle dark mode" title="Toggle dark mode">
