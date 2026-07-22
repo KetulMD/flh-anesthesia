@@ -6,23 +6,24 @@
 <title>Anesthesia Reference</title>
 <style>
   :root{
-    --ink:#12171c; --ink-2:#38434d; --ink-3:#6b7883;
-    --paper:#f6f4ef; --card:#fffefb; --line:#e4dfd4; --line-2:#eee9de;
+    --ink:#1c1c1e; --ink-2:#4a4a4f; --ink-3:#8e8e93;
+    --paper:#f2f2f7; --card:#ffffff; --line:#d9d9df; --line-2:#e6e6ec; --field:#e9e9ee;
     --accent:#0f6b6b;
-    --dis:#0f6b6b; --drug:#8a5a1a; --supp:#4a6b1f; --ref:#5b4b91; --cris:#b3261e; --dose:#1d5fa8; --blok:#a3186e;
+    --dis:#0f6b6b; --drug:#8a5a1a; --supp:#4a6b1f; --ref:#5b4b91; --cris:#c8322a; --dose:#1d5fa8; --blok:#a3186e;
     /* role palette */
-    --act:#0e6a6a; --act-bg:#0e6a6a0d; --act-bar:#12938f;
-    --alr:#b4560b; --alr-bg:#c26a0f12; --alr-bar:#d8811a;
-    --info:#5a6873;
-    --hit:#ffe08a; --shadow:0 1px 2px #1217170a, 0 8px 24px -12px #12171718;
-    --r:12px;
+    --act:#0e6a6a; --act-bg:#0e6a6a0f; --act-bar:#12938f;
+    --alr:#b4560b; --alr-bg:#c26a0f14; --alr-bar:#d8811a;
+    --info:#6b7076;
+    --hit:#ffe08a; --shadow:0 1px 2px #1c1c1e08, 0 6px 18px -10px #1c1c1e14;
+    --r:14px;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{
-    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--paper); color:var(--ink);
-    -webkit-text-size-adjust:100%; line-height:1.5;
+    font-family:-apple-system,BlinkMacSystemFont,ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--paper); color:var(--ink); font-size:17px;
+    -webkit-text-size-adjust:100%; line-height:1.47; letter-spacing:-.011em;
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     padding-bottom:env(safe-area-inset-bottom);
   }
 
@@ -35,7 +36,7 @@
   }
   .bar{max-width:840px; margin:0 auto}
   .titlerow{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap}
-  .wordmark{font-weight:680; letter-spacing:-.02em; font-size:19px}
+  .wordmark{font-weight:760; letter-spacing:-.022em; font-size:26px}
   .wordmark b{color:var(--accent)}
   .sub{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:600}
   .verify{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--alr); font-weight:700; border:1px solid #d8811a55; background:#d8811a12; padding:3px 8px; border-radius:999px; white-space:nowrap}
@@ -43,17 +44,17 @@
   .searchwrap>svg{position:absolute; left:14px; width:18px; height:18px; stroke:var(--ink-3); pointer-events:none}
   #q{
     width:100%; font-size:16px; color:var(--ink);
-    padding:13px 44px 13px 42px; border:1px solid var(--line);
-    border-radius:var(--r); background:var(--card); box-shadow:var(--shadow);
-    outline:none; transition:border-color .15s, box-shadow .15s;
+    padding:12px 40px 12px 40px; border:0;
+    border-radius:12px; background:var(--field); box-shadow:none;
+    outline:none; transition:background .15s, box-shadow .15s;
   }
-  #q:focus{border-color:var(--accent); box-shadow:0 0 0 3px #0f6b6b14}
+  #q:focus{background:var(--card); box-shadow:0 0 0 3px #0f6b6b26, var(--shadow)}
   #q::placeholder{color:var(--ink-3)}
   #clear{position:absolute; right:10px; display:none; border:0; background:transparent; color:var(--ink-3); font-size:20px; cursor:pointer; padding:4px 8px; line-height:1}
 
   .controls{display:flex; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap}
   .chips{display:flex; gap:6px; flex-wrap:wrap}
-  .chip{font-size:13px; font-weight:600; color:var(--ink-2); border:1px solid var(--line); background:var(--card); padding:6px 11px; border-radius:999px; cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:6px; transition:.12s}
+  .chip{font-size:14px; font-weight:590; color:var(--ink); border:0; background:var(--field); padding:7px 13px; border-radius:999px; cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:6px; transition:.15s}
   .chip .dot{width:7px; height:7px; border-radius:50%}
   .chip[data-cat="Disease"] .dot{background:var(--dis)}
   .chip[data-cat="Drug"] .dot{background:var(--drug)}
@@ -62,7 +63,7 @@
   .chip[data-cat="Crisis"] .dot{background:var(--cris)}
   .chip[data-cat="Dosing"] .dot{background:var(--dose)}
   .chip[data-cat="Blocks"] .dot{background:var(--blok)}
-  .chip.on{color:#fff; border-color:transparent; background:var(--ink)}
+  .chip.on{color:#fff; border-color:transparent; background:var(--accent)}
   .chip.on .dot{background:#fff}
   .count{margin-left:auto; font-size:12.5px; color:var(--ink-3)}
   .count b{color:var(--ink-2); font-weight:680}
@@ -71,9 +72,9 @@
   .lettergroup{margin-top:18px}
   .lh{position:sticky; top:0; font-size:12px; font-weight:700; letter-spacing:.1em; color:var(--ink-3); padding:6px 2px; margin-bottom:2px}
 
-  .entry{background:var(--card); border:1px solid var(--line-2); border-radius:var(--r); margin:8px 0; overflow:hidden; box-shadow:var(--shadow)}
+  .entry{background:var(--card); border:0; border-radius:var(--r); margin:8px 0; overflow:hidden; box-shadow:var(--shadow)}
   .etop{display:flex; align-items:center; gap:12px; width:100%; padding:14px 15px; border:0; background:transparent; cursor:pointer; text-align:left; color:inherit; font:inherit}
-  .tag{flex:none; width:4px; align-self:stretch; border-radius:3px; margin:-14px 0; margin-right:2px}
+  .tag{flex:none; width:9px; height:9px; align-self:center; border-radius:50%; margin:0}
   .entry[data-cat="Disease"] .tag{background:var(--dis)}
   .entry[data-cat="Drug"] .tag{background:var(--drug)}
   .entry[data-cat="Supplement"] .tag{background:var(--supp)}
@@ -81,7 +82,7 @@
   .entry[data-cat="Crisis"] .tag{background:var(--cris)}
   .entry[data-cat="Dosing"] .tag{background:var(--dose)}
   .entry[data-cat="Blocks"] .tag{background:var(--blok)}
-  .etitle{font-size:16px; font-weight:640; letter-spacing:-.01em; flex:1; min-width:0}
+  .etitle{font-size:16px; font-weight:590; letter-spacing:-.014em; flex:1; min-width:0}
   .ecat{font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; font-weight:700; padding:3px 8px; border-radius:999px; flex:none}
   .entry[data-cat="Disease"] .ecat{color:var(--dis); background:#0f6b6b12}
   .entry[data-cat="Drug"] .ecat{color:var(--drug); background:#8a5a1a12}
@@ -196,18 +197,18 @@
     .titlerow{gap:8px; margin-bottom:8px; align-items:center}
     .wordmark{font-size:16px}
     .sub{display:none}
-    .verify{font-size:9px; letter-spacing:.04em; font-weight:600; color:var(--ink-3); border:0; background:transparent; padding:0; margin-left:auto}
+    .verify{display:none}
     .controls{margin-top:8px}
     .count{width:100%; margin:2px 0 0; order:5}
     main{padding:6px 12px 80px}
     .etop{padding:13px 13px}
     .body{padding:4px 13px 14px}
     .chip{min-height:40px}
-    .themebtn{width:40px; height:40px}
+    .themebtn{width:44px; height:44px; right:64px}
     .modal-close,.modal-fav{width:40px; height:40px}
     .modal-card{position:absolute; left:0; right:0; bottom:0; margin:0; max-width:none;
       height:93dvh; max-height:93dvh; border-radius:20px 20px 0 0; border:0;
-      transform:translateY(100%); transition:transform .3s cubic-bezier(.22,.68,0,1)}
+      border-radius:14px 14px 0 0; transform:translateY(100%); transition:transform .3s cubic-bezier(.22,.68,0,1)}
     .modal.on .modal-card{transform:translateY(0)}
     .sheet-grab{display:block; width:40px; height:4px; border-radius:999px; background:var(--line); margin:9px auto 1px; flex:none}
     .modal-head{padding:6px 13px 12px}
@@ -226,8 +227,14 @@
   @media print{.ai-watermark{position:absolute; height:100%}}
 
   /* theme toggle button */
-  .themebtn{margin-left:auto; width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--card); color:var(--ink-2); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; flex:none; align-self:center}
-  .themebtn:hover{color:var(--accent); border-color:var(--accent)}
+  .themebtn{position:fixed; top:12px; right:62px; z-index:99989; width:42px; height:42px; border-radius:12px; margin:0; padding:0;
+    border:1px solid var(--line); background:rgba(255,255,255,.9); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--ink-2); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; flex:none;
+    box-shadow:0 2px 8px rgba(18,24,33,.10); transition:.12s}
+  .themebtn:hover{color:var(--accent)}
+  html[data-theme="dark"] .themebtn{background:rgba(28,28,30,.9); border-color:#3a3a3c; color:var(--ink)}
+  html[data-theme="dark"] #flhnav-btn{background:rgba(28,28,30,.9)!important; border-color:#3a3a3c!important}
+  html[data-theme="dark"] #flhnav-btn svg{stroke:#f2f2f7!important}
   .themebtn svg{width:17px; height:17px}
   .themebtn .ic-moon{display:none}
   html[data-theme="dark"] .themebtn .ic-sun{display:none}
@@ -270,11 +277,11 @@
 
   /* dark mode */
   html[data-theme="dark"]{
-    --ink:#e8ecef; --ink-2:#b6c0c7; --ink-3:#7f8b93;
-    --paper:#0f1418; --card:#181f24; --line:#2b343c; --line-2:#232b31;
-    --accent:#48b7ad; --dis:#48b7ad; --drug:#c69a5a; --supp:#8fb45f; --ref:#a595d6; --dose:#5b9be0; --blok:#d46fa8;
-    --act:#48b7ad; --act-bg:#48b7ad14; --act-bar:#48b7ad; --alr:#e0902f; --alr-bg:#e0902f16; --alr-bar:#e0902f; --info:#9aa7b0;
-    --shadow:0 1px 2px #0006, 0 10px 26px -12px #000a;
+    --ink:#f2f2f7; --ink-2:#a1a1a6; --ink-3:#8e8e93;
+    --paper:#000000; --card:#1c1c1e; --line:#38383a; --line-2:#2c2c2e; --field:#1c1c1e;
+    --accent:#45c2b7; --dis:#45c2b7; --drug:#d0a15f; --supp:#9ac26a; --ref:#b0a0e0; --cris:#ff6961; --dose:#64a8ec; --blok:#e07ab4;
+    --act:#45c2b7; --act-bg:#45c2b71c; --act-bar:#45c2b7; --alr:#e8993a; --alr-bg:#e8993a1e; --alr-bar:#e8993a; --info:#9aa0a6;
+    --shadow:0 1px 2px #0007, 0 8px 24px -12px #000b;
   }
   html[data-theme="dark"] body{background:var(--paper)}
   html[data-theme="dark"] .ai-watermark::after{color:rgba(255,255,255,.06)}
@@ -282,10 +289,14 @@
   html[data-theme="dark"] .relchip{background:#48b7ad14; border-color:#48b7ad3a}
 </style>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" id="themecolor" content="#f6f4ef">
+  <meta name="theme-color" id="themecolor" content="#f2f2f7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Anesthesia">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <script src="nav.js" defer></script>
-  <script>(function(){try{var s=localStorage.getItem('flh-theme');var dark=s==='dark'||(!s&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');var mc=document.getElementById('themecolor');if(mc)mc.content=dark?'#0f1418':'#f6f4ef';}catch(e){}})();</script>
+  <script>(function(){try{var s=localStorage.getItem('flh-theme');var dark=s==='dark'||(!s&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');var mc=document.getElementById('themecolor');if(mc)mc.content=dark?'#000000':'#f2f2f7';}catch(e){}})();</script>
 </head>
 <body>
 <div class="ai-watermark" aria-hidden="true"></div>
@@ -591,6 +602,7 @@
     modalBody.scrollTop=0; syncFav();
     modal.classList.add('on'); modal.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden'; modalOpen=true;
+    var _tb=document.getElementById('themebtn'); if(_tb) _tb.style.visibility='hidden';
     if(first){ try{ history.pushState({m:1},''); }catch(e){} }
     modalClose.focus();
   }
@@ -598,6 +610,7 @@
     if(!modalOpen) return; modalOpen=false;
     modal.classList.remove('on'); modal.setAttribute('aria-hidden','true');
     document.body.style.overflow='';
+    var _tb=document.getElementById('themebtn'); if(_tb) _tb.style.visibility='';
     if(!fromPop){ try{ if(history.state&&history.state.m) history.back(); }catch(e){} }
   }
   window.addEventListener('popstate',function(){ if(modalOpen) closeModal(true); });
@@ -636,7 +649,7 @@
     c.classList.add('on'); state.cat=c.getAttribute('data-cat'); state.browseAll=false; run();
   });
   var themebtn=document.getElementById('themebtn'), themecolor=document.getElementById('themecolor');
-  function setThemeColor(dark){ if(themecolor) themecolor.content=dark?'#0f1418':'#f6f4ef'; }
+  function setThemeColor(dark){ if(themecolor) themecolor.content=dark?'#000000':'#f2f2f7'; }
   if(themebtn) themebtn.addEventListener('click',function(){
     var dark=document.documentElement.getAttribute('data-theme')==='dark';
     if(dark) document.documentElement.removeAttribute('data-theme');
@@ -644,12 +657,29 @@
     setThemeColor(!dark);
     try{localStorage.setItem('flh-theme',dark?'light':'dark');}catch(e){}
   });
-  // condense the header on scroll (reclaims screen while browsing)
-  var hdr=document.querySelector('header'), condensed=false;
+  // header: condense on scroll-down, reveal on scroll-up (iOS large-title feel)
+  var hdr=document.querySelector('header'), condensed=false, lastY=0;
   window.addEventListener('scroll',function(){ var y=window.pageYOffset||document.documentElement.scrollTop||0;
-    if(!condensed && y>72){ condensed=true; hdr.classList.add('condensed'); }
-    else if(condensed && y<24){ condensed=false; hdr.classList.remove('condensed'); }
+    if(y<=8){ if(condensed){condensed=false;hdr.classList.remove('condensed');} lastY=y; return; }
+    var dy=y-lastY;
+    if(dy>4 && y>84){ if(!condensed){condensed=true;hdr.classList.add('condensed');} }
+    else if(dy<-5){ if(condensed){condensed=false;hdr.classList.remove('condensed');} }
+    lastY=y;
   },{passive:true});
+  // swipe-down to dismiss the bottom sheet (mobile)
+  (function(){
+    var card=document.querySelector('.modal-card'); if(!card) return;
+    var sy=0, dragging=false, dy=0;
+    function mobile(){ return window.matchMedia('(max-width:520px)').matches; }
+    card.addEventListener('touchstart',function(e){ if(!modalOpen||!mobile()||modalBody.scrollTop>0){ dragging=false; return; } sy=e.touches[0].clientY; dragging=true; dy=0; card.style.transition='none'; },{passive:true});
+    card.addEventListener('touchmove',function(e){ if(!dragging) return; dy=e.touches[0].clientY-sy;
+      if(dy<=0){ dy=0; card.style.transform=''; return; }
+      if(modalBody.scrollTop>0){ dragging=false; card.style.transition=''; card.style.transform=''; return; }
+      e.preventDefault(); card.style.transform='translateY('+dy+'px)'; },{passive:false});
+    card.addEventListener('touchend',function(){ if(!dragging) return; dragging=false; card.style.transition='';
+      if(dy>110){ card.style.transform='translateY(100%)'; setTimeout(function(){ closeModal(false); card.style.transform=''; },280); }
+      else { card.style.transform=''; } });
+  })();
   document.addEventListener('keydown',function(ev){
     if(ev.key!=='Escape') return;
     if(modal.classList.contains('on')){ closeModal(); return; }
