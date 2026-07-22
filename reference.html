@@ -232,7 +232,6 @@
         <span class="chip" data-cat="Supplement"><i class="dot"></i>Supplements</span>
         <span class="chip" data-cat="Reference"><i class="dot"></i>Reference</span>
       </div>
-      <div class="count" id="count"></div>
     </div>
   </div>
 </header>
@@ -359,7 +358,7 @@
       if(term&&e._s.indexOf(term)===-1) return false;
       return true;
     });
-    count.innerHTML='<b>'+res.length+'</b> '+(res.length===1?'entry':'entries');
+    if(count){ count.innerHTML='<b>'+res.length+'</b> '+(res.length===1?'entry':'entries'); }
     list.innerHTML='';
     if(!res.length){ list.innerHTML='<div class="empty">No matches for <b>'+esc(state.term)+'</b>.<br>Try a shorter term or a symptom.</div>'; return; }
     var frag=document.createDocumentFragment();
