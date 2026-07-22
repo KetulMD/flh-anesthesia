@@ -29,8 +29,7 @@
 
   header{
     position:sticky; top:0; z-index:20;
-    background:color-mix(in srgb, var(--paper) 88%, transparent);
-    backdrop-filter:saturate(1.4) blur(10px);
+    background:var(--paper);
     border-bottom:1px solid var(--line);
     padding:14px 16px 10px; padding-top:calc(14px + env(safe-area-inset-top));
   }
@@ -657,15 +656,15 @@
     setThemeColor(!dark);
     try{localStorage.setItem('flh-theme',dark?'light':'dark');}catch(e){}
   });
-  // header: condense on scroll-down, reveal on scroll-up (iOS large-title feel)
-  var hdr=document.querySelector('header'), condensed=false, lastY=0;
-  window.addEventListener('scroll',function(){ var y=window.pageYOffset||document.documentElement.scrollTop||0;
-    if(y<=8){ if(condensed){condensed=false;hdr.classList.remove('condensed');} lastY=y; return; }
-    var dy=y-lastY;
-    if(dy>4 && y>84){ if(!condensed){condensed=true;hdr.classList.add('condensed');} }
-    else if(dy<-5){ if(condensed){condensed=false;hdr.classList.remove('condensed');} }
-    lastY=y;
-  },{passive:true});
+  // header: condense past a threshold, expand only near the top.
+  // Expanding mid-scroll reflows the sticky header and fights the scroll (jitter),
+  // so we use absolute position + hysteresis + rAF throttle instead of scroll-direction.
+  var hdr=document.querySelector('header'), condensed=false, ticking=false;
+  function onScroll(){ ticking=false; var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    if(!condensed && y>110){ condensed=true; hdr.classList.add('condensed'); }
+    else if(condensed && y<46){ condensed=false; hdr.classList.remove('condensed'); }
+  }
+  window.addEventListener('scroll',function(){ if(!ticking){ ticking=true; requestAnimationFrame(onScroll); } },{passive:true});
   // swipe-down to dismiss the bottom sheet (mobile)
   (function(){
     var card=document.querySelector('.modal-card'); if(!card) return;
