@@ -146,14 +146,16 @@
   .empty{text-align:center; color:var(--ink-3); padding:64px 20px; font-size:15px}
   .empty b{color:var(--ink-2)}
   /* topic modal popup */
-  .modal{position:fixed; inset:0; z-index:99995; display:none}
-  .modal.on{display:block}
+  .modal{position:fixed; inset:0; z-index:99995; visibility:hidden; opacity:0; transition:opacity .22s ease, visibility 0s linear .24s}
+  .modal.on{visibility:visible; opacity:1; transition:opacity .2s ease}
   .modal-backdrop{position:absolute; inset:0; background:#121717b3; backdrop-filter:blur(2px)}
   .modal-card{position:relative; z-index:1; display:flex; flex-direction:column;
     max-width:820px; margin:24px auto; max-height:calc(100dvh - 48px);
     background:var(--card); border:1px solid var(--line); border-radius:16px;
-    box-shadow:0 24px 70px -24px #12171799; overflow:hidden; animation:mpop .16s ease}
-  @keyframes mpop{from{opacity:0; transform:translateY(-8px)}to{opacity:1; transform:none}}
+    box-shadow:0 24px 70px -24px #12171799; overflow:hidden;
+    transform:translateY(10px) scale(.985); opacity:0; transition:transform .26s cubic-bezier(.22,.68,0,1), opacity .18s ease}
+  .modal.on .modal-card{transform:none; opacity:1}
+  .sheet-grab{display:none}
   .modal-head{flex:none; display:flex; align-items:center; gap:12px;
     padding:15px 16px 13px; border-bottom:1px solid var(--line-2); background:var(--card)}
   .modal-title{flex:1; min-width:0; font-size:17px; font-weight:680; letter-spacing:-.01em; line-height:1.3}
@@ -171,9 +173,23 @@
     display:flex; align-items:center; justify-content:center; transition:.12s}
   .modal-close:hover{background:var(--ink); color:#fff; border-color:transparent}
   .modal-close:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-  .modal-scroll{flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:2px 16px 20px}
+  .modal-scroll{flex:1; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding:2px 16px 20px}
   .modal-scroll .body{display:block; padding:0; border:0}
   .modal-scroll .sec{scroll-margin-top:12px}
+
+  /* condensing sticky header */
+  .titlerow{max-height:80px}
+  .controls{max-height:220px}
+  .titlerow,.controls{transition:max-height .28s ease, opacity .2s ease, margin .28s ease, padding .28s ease}
+  header{transition:box-shadow .2s ease}
+  header.condensed .titlerow,header.condensed .controls{max-height:0; opacity:0; margin-top:0; margin-bottom:0; overflow:hidden; pointer-events:none}
+  header.condensed{box-shadow:0 4px 18px -10px #12171733}
+
+  /* tap feedback + focus */
+  :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .chip:active,.tile:active,.qchip:active,.relchip:active,.lnk:active,.browseall:active,.jpill:active,.themebtn:active,.modal-close:active,.modal-fav:active,.qchip:active{transform:scale(.96)}
+  .etop:active{background:var(--line-2)}
+  .jump{-webkit-overflow-scrolling:touch}
 
   @media (max-width:520px){
     header{padding:8px 12px 8px; padding-top:calc(8px + env(safe-area-inset-top))}
@@ -184,15 +200,22 @@
     .controls{margin-top:8px}
     .count{width:100%; margin:2px 0 0; order:5}
     main{padding:6px 12px 80px}
-    .etop{padding:12px 13px}
+    .etop{padding:13px 13px}
     .body{padding:4px 13px 14px}
-    .modal-card{margin:0; max-width:none; height:100dvh; max-height:100dvh; border-radius:0; border:0}
-    .modal-head{padding:12px 13px}
+    .chip{min-height:40px}
+    .themebtn{width:40px; height:40px}
+    .modal-close,.modal-fav{width:40px; height:40px}
+    .modal-card{position:absolute; left:0; right:0; bottom:0; margin:0; max-width:none;
+      height:93dvh; max-height:93dvh; border-radius:20px 20px 0 0; border:0;
+      transform:translateY(100%); transition:transform .3s cubic-bezier(.22,.68,0,1)}
+    .modal.on .modal-card{transform:translateY(0)}
+    .sheet-grab{display:block; width:40px; height:4px; border-radius:999px; background:var(--line); margin:9px auto 1px; flex:none}
+    .modal-head{padding:6px 13px 12px}
     .modal-scroll{padding:2px 13px 28px}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
   /* persistent AI-content caution watermark */
-  .ai-watermark{position:fixed; inset:0; z-index:99999; pointer-events:none; user-select:none;
+  .ai-watermark{position:fixed; inset:0; z-index:5; pointer-events:none; user-select:none;
     display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .ai-watermark::after{content:"AI content \2014  verify before use";
     transform:rotate(-27deg); white-space:nowrap; text-align:center;
@@ -259,10 +282,10 @@
   html[data-theme="dark"] .relchip{background:#48b7ad14; border-color:#48b7ad3a}
 </style>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1f2933">
+  <meta name="theme-color" id="themecolor" content="#f6f4ef">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <script src="nav.js" defer></script>
-  <script>(function(){try{var s=localStorage.getItem('flh-theme');if(s==='dark'||(!s&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();</script>
+  <script>(function(){try{var s=localStorage.getItem('flh-theme');var dark=s==='dark'||(!s&&window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches);if(dark)document.documentElement.setAttribute('data-theme','dark');var mc=document.getElementById('themecolor');if(mc)mc.content=dark?'#0f1418':'#f6f4ef';}catch(e){}})();</script>
 </head>
 <body>
 <div class="ai-watermark" aria-hidden="true"></div>
@@ -307,6 +330,7 @@
 <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
   <div class="modal-backdrop" data-close></div>
   <div class="modal-card">
+    <div class="sheet-grab" aria-hidden="true"></div>
     <div class="modal-head">
       <span class="modal-title" id="modalTitle"></span>
       <button class="modal-fav" id="modalFav" aria-label="Save to favorites" title="Save to favorites">
@@ -556,23 +580,27 @@
     list.innerHTML=h;
   }
 
-  var modalFav=document.getElementById('modalFav'), curId=null;
+  var modalFav=document.getElementById('modalFav'), curId=null, modalOpen=false;
   function syncFav(){ if(!modalFav) return; var on=curId!=null&&isFav(curId); modalFav.classList.toggle('on',on);
     modalFav.setAttribute('aria-label',on?'Remove from favorites':'Save to favorites'); }
   function openModal(id){
     var e=DATA.find(function(x){return x.id===id;}); if(!e) return;
-    curId=id; pushRecent(id);
+    var first=!modalOpen; curId=id; pushRecent(id);
     modalTitle.innerHTML=esc(e.title)+'<span class="mcat mcat-'+e.cat+'">'+(CATAB[e.cat]||e.cat)+'</span>';
     modalBody.innerHTML=buildBody(e,state.term.trim());
     modalBody.scrollTop=0; syncFav();
     modal.classList.add('on'); modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
+    document.body.style.overflow='hidden'; modalOpen=true;
+    if(first){ try{ history.pushState({m:1},''); }catch(e){} }
     modalClose.focus();
   }
-  function closeModal(){
+  function closeModal(fromPop){
+    if(!modalOpen) return; modalOpen=false;
     modal.classList.remove('on'); modal.setAttribute('aria-hidden','true');
-    document.body.style.overflow=''; modalBody.innerHTML='';
+    document.body.style.overflow='';
+    if(!fromPop){ try{ if(history.state&&history.state.m) history.back(); }catch(e){} }
   }
+  window.addEventListener('popstate',function(){ if(modalOpen) closeModal(true); });
 
   list.addEventListener('click',function(ev){
     var qc=ev.target.closest('.qchip');
@@ -607,13 +635,21 @@
     [].forEach.call(chips.children,function(x){x.classList.remove('on');});
     c.classList.add('on'); state.cat=c.getAttribute('data-cat'); state.browseAll=false; run();
   });
-  var themebtn=document.getElementById('themebtn');
+  var themebtn=document.getElementById('themebtn'), themecolor=document.getElementById('themecolor');
+  function setThemeColor(dark){ if(themecolor) themecolor.content=dark?'#0f1418':'#f6f4ef'; }
   if(themebtn) themebtn.addEventListener('click',function(){
     var dark=document.documentElement.getAttribute('data-theme')==='dark';
     if(dark) document.documentElement.removeAttribute('data-theme');
     else document.documentElement.setAttribute('data-theme','dark');
+    setThemeColor(!dark);
     try{localStorage.setItem('flh-theme',dark?'light':'dark');}catch(e){}
   });
+  // condense the header on scroll (reclaims screen while browsing)
+  var hdr=document.querySelector('header'), condensed=false;
+  window.addEventListener('scroll',function(){ var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    if(!condensed && y>72){ condensed=true; hdr.classList.add('condensed'); }
+    else if(condensed && y<24){ condensed=false; hdr.classList.remove('condensed'); }
+  },{passive:true});
   document.addEventListener('keydown',function(ev){
     if(ev.key!=='Escape') return;
     if(modal.classList.contains('on')){ closeModal(); return; }
