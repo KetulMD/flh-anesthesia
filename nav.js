@@ -129,3 +129,12 @@
   } catch (e) {}
   syncWithPopup();
 })();
+
+/* Cloudflare Web Analytics - loaded here so every page using nav.js is tracked */
+(function () {
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token": "77a9f4ec215946878e0567bef9fad4a9"}');
+  document.head.appendChild(s);
+})();
