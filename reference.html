@@ -760,5 +760,10 @@ window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(win
   run();
 })();
 </script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
 </body>
 </html>
