@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Preoperative (PAT) clearance helper — guideline-based preop testing, cardiac pathway, clinic referral, and optimization triggers">
+<title>PAT Clearance Helper</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<meta name="theme-color" content="#f2f2f7">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
+<style>
+  :root{
+    --bg:#f5f3ee; --surface:#ffffff; --ink:#25313a; --muted:#7c8896; --muted2:#5c6773;
+    --line:#e7e3da; --line2:#efece5;
+    --accent:#0e6a6a; --accent-bg:#0e6a6a12;
+    --amber:#b4560b; --amber-bg:#c26a0f14; --amber-line:#e2c9a3;
+    --red:#b3261e; --red-bg:#fdeceb; --red-line:#f0c5c2;
+    --green:#1e7a44; --green-bg:#eef9f1; --green-line:#bfe3cc;
+    --blue:#2f6fed;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); margin:0; padding:20px 14px calc(60px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+  .wrap{max-width:640px; margin:0 auto}
+  header{margin:4px 2px 14px}
+  h1{font-size:22px; font-weight:700; margin:0 0 3px; letter-spacing:.2px}
+  .sub{color:var(--muted2); font-size:13px; margin:0}
+  .disc{background:var(--amber-bg); border:1px solid var(--amber-line); color:#7a4a12;
+    border-radius:12px; padding:11px 13px; font-size:12.5px; line-height:1.5; margin:12px 0 16px}
+  .disc b{color:#6a3f0f}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    padding:16px 16px 18px; margin-bottom:14px; box-shadow:0 3px 14px rgba(18,24,33,.04)}
+  .lbl{font-size:11px; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; color:var(--muted); margin:0 0 10px}
+  .hint{font-size:12px; color:var(--muted); margin:3px 0 0}
+  /* segmented control */
+  .seg{display:flex; gap:6px; flex-wrap:wrap}
+  .seg button{flex:1; min-width:92px; appearance:none; border:1px solid var(--line); background:#faf9f6;
+    color:var(--ink); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:600; cursor:pointer;
+    transition:.14s; line-height:1.2}
+  .seg button .ex{display:block; font-size:10.5px; font-weight:500; color:var(--muted); margin-top:3px}
+  .seg button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+  .seg button[aria-pressed="true"] .ex{color:#dCECEC}
+  /* checkbox grid */
+  .grp{margin-top:14px}
+  .grp:first-child{margin-top:0}
+  .grp-h{font-size:12px; font-weight:700; color:var(--muted2); margin:0 0 8px}
+  .chips{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  @media(max-width:460px){ .chips{grid-template-columns:1fr} }
+  .chip{display:flex; align-items:center; gap:9px; border:1px solid var(--line); background:#faf9f6;
+    border-radius:10px; padding:10px 11px; font-size:13.5px; cursor:pointer; transition:.14s; user-select:none}
+  .chip input{position:absolute; opacity:0; width:0; height:0}
+  .chip .bx{flex:none; width:20px; height:20px; border-radius:6px; border:1.5px solid var(--faint,#c7cdd6);
+    display:flex; align-items:center; justify-content:center; transition:.12s}
+  .chip .bx svg{width:12px; height:12px; opacity:0; transition:.12s}
+  .chip.on{border-color:var(--accent); background:var(--accent-bg)}
+  .chip.on .bx{background:var(--accent); border-color:var(--accent)}
+  .chip.on .bx svg{opacity:1}
+  /* age */
+  .agerow{display:flex; align-items:center; gap:12px}
+  .agerow input[type=number]{width:92px; font-size:16px; padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:#faf9f6}
+  /* results */
+  .res .lbl{margin-bottom:12px}
+  .rblock{border:1px solid var(--line); border-radius:12px; padding:13px 14px; margin-bottom:10px; background:#fbfaf7}
+  .rblock:last-child{margin-bottom:0}
+  .rblock h3{margin:0 0 7px; font-size:13.5px; font-weight:700; display:flex; align-items:center; gap:8px}
+  .pill{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px}
+  .p-green{background:var(--green-bg); color:var(--green); border:1px solid var(--green-line)}
+  .p-amber{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-line)}
+  .p-red{background:var(--red-bg); color:var(--red); border:1px solid var(--red-line)}
+  .p-blue{background:#eaf1fe; color:var(--blue); border:1px solid #c7dbfb}
+  .rblock ul{margin:6px 0 0; padding-left:18px}
+  .rblock li{font-size:13px; margin:3px 0; line-height:1.45}
+  .rblock .none{font-size:13px; color:var(--muted); font-style:italic}
+  .rblock p{margin:4px 0 0; font-size:13px; line-height:1.45}
+  .tag{display:inline-block; font-size:11px; color:var(--muted); background:#f0ede6; border-radius:6px; padding:1px 7px; margin-left:6px}
+  .foot{margin-top:8px; text-align:center}
+  .foot a{color:var(--accent); font-size:13px; text-decoration:none}
+  .cite{font-size:11px; color:var(--muted); text-align:center; margin-top:14px; line-height:1.5}
+  .wm{position:fixed; inset:0; pointer-events:none; z-index:0; display:flex; align-items:center; justify-content:center;
+    font-size:44px; font-weight:800; color:#25313a08; transform:rotate(-24deg); letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="wm" aria-hidden="true">AI · VERIFY BEFORE USE</div>
+<div class="wrap" style="position:relative; z-index:1">
+  <header>
+    <h1>PAT Clearance Helper</h1>
+    <p class="sub">General guideline version &mdash; preoperative testing, cardiac pathway &amp; referral</p>
+    <p class="sub" style="margin-top:4px"><a href="pat-clearance-flh.html">Switch to FLH policy version &rarr;</a></p>
+  </header>
+  <div class="disc"><b>AI-generated decision support — verify before use.</b> A guideline-based aid (ASA / 2024 ACC-AHA / Choosing Wisely), not a substitute for clinical judgment or your institution's policy. Tests and referrals must be individualized.</div>
+
+  <div class="card">
+    <p class="lbl">1 · Surgery risk</p>
+    <div class="seg" id="segSurg" role="group" aria-label="Surgery risk">
+      <button data-v="low" aria-pressed="false">Low<span class="ex">cataract, endoscopy, superficial, dental</span></button>
+      <button data-v="int" aria-pressed="true">Intermediate<span class="ex">most general, ortho, uro, head/neck</span></button>
+      <button data-v="high" aria-pressed="false">High<span class="ex">major vascular, intrathoracic, intraperitoneal</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="lbl">2 · Functional capacity</p>
+    <div class="seg" id="segFunc" role="group" aria-label="Functional capacity">
+      <button data-v="good" aria-pressed="true">&#8805;4 METs<span class="ex">climbs a flight of stairs / brisk walk</span></button>
+      <button data-v="poor" aria-pressed="false">&lt;4 METs / unknown<span class="ex">limited, or cannot assess</span></button>
+    </div>
+    <div class="agerow" style="margin-top:14px">
+      <span class="lbl" style="margin:0">Age</span>
+      <input type="number" id="age" min="0" max="120" placeholder="yrs" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="lbl">3 · Active / unstable conditions</p>
+    <div class="chips" id="grpActive"></div>
+    <p class="hint">Any of these generally means optimize &amp; involve the relevant service before <b>elective</b> surgery.</p>
+  </div>
+
+  <div class="card">
+    <p class="lbl">4 · Comorbidities</p>
+    <div id="grpCo"></div>
+  </div>
+
+  <div class="card res">
+    <p class="lbl">Assessment</p>
+    <div id="results"></div>
+  </div>
+
+  <p class="cite">Framework: RCRI + functional capacity + surgery risk, per the 2024 AHA/ACC Perioperative Guideline and ASA / Choosing Wisely testing principles. Routine testing in healthy patients before low-risk surgery is discouraged.</p>
+  <div class="foot"><a href="index.html">&larr; Back to portal</a></div>
+</div>
+
+<script>
+(function(){
+  var state={surg:'int', func:'good', age:null, active:{}, co:{}};
+
+  var ACTIVE=[
+    {k:'acs', t:'Unstable angina / recent MI (&lt;60 d)'},
+    {k:'dhf', t:'Decompensated heart failure'},
+    {k:'arr', t:'Significant / symptomatic arrhythmia'},
+    {k:'sev', t:'Severe or symptomatic valve disease'}
+  ];
+  var COGROUPS=[
+    {h:'Cardiac / vascular', items:[
+      {k:'ihd', t:'Ischemic heart disease / prior MI', rcri:'ihd'},
+      {k:'chf', t:'Heart failure (compensated)', rcri:'chf'},
+      {k:'valv', t:'Known valvular disease'},
+      {k:'cied', t:'Pacemaker / ICD (CIED)'},
+      {k:'htn', t:'Hypertension'},
+      {k:'cva', t:'Stroke / TIA', rcri:'cva'},
+      {k:'pad', t:'Peripheral arterial disease'}
+    ]},
+    {h:'Metabolic / renal', items:[
+      {k:'dm_ins', t:'Diabetes — insulin-treated', rcri:'dm'},
+      {k:'dm_ni', t:'Diabetes — non-insulin'},
+      {k:'ckd', t:'CKD / creatinine &gt;2 mg/dL', rcri:'cr'},
+      {k:'liver', t:'Liver disease'}
+    ]},
+    {h:'Respiratory', items:[
+      {k:'copd', t:'COPD / asthma'},
+      {k:'osa', t:'Obstructive sleep apnea'}
+    ]},
+    {h:'Hematologic / meds', items:[
+      {k:'anemia', t:'Anemia'},
+      {k:'anticoag', t:'On anticoagulant / antiplatelet'},
+      {k:'bleed', t:'Bleeding disorder / history'}
+    ]},
+    {k:'other', h:'Other', items:[
+      {k:'frail', t:'Frailty / age &#8805;65'},
+      {k:'smoke', t:'Active smoker'},
+      {k:'preg', t:'Possible pregnancy'},
+      {k:'airway', t:'Difficult-airway history'}
+    ]}
+  ];
+
+  var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  function chip(map,k,t){
+    var id='c_'+k;
+    var el=document.createElement('label'); el.className='chip'; el.setAttribute('for',id);
+    el.innerHTML='<span class="bx">'+CHECK+'</span><span>'+t+'</span>';
+    var inp=document.createElement('input'); inp.type='checkbox'; inp.id=id;
+    inp.addEventListener('change',function(){ map[k]=inp.checked; el.classList.toggle('on',inp.checked); render(); });
+    el.insertBefore(inp,el.firstChild);
+    return el;
+  }
+  // build active
+  var ga=document.getElementById('grpActive');
+  ACTIVE.forEach(function(a){ ga.appendChild(chip(state.active,a.k,a.t)); });
+  // build comorbidity groups
+  var gc=document.getElementById('grpCo');
+  COGROUPS.forEach(function(g){
+    var wrap=document.createElement('div'); wrap.className='grp';
+    var hh=document.createElement('p'); hh.className='grp-h'; hh.innerHTML=g.h; wrap.appendChild(hh);
+    var grid=document.createElement('div'); grid.className='chips';
+    g.items.forEach(function(it){ grid.appendChild(chip(state.co,it.k,it.t)); it._rcri=it.rcri; });
+    wrap.appendChild(grid); gc.appendChild(wrap);
+  });
+  // segmented handlers
+  function seg(id,key){
+    var box=document.getElementById(id);
+    box.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      [].forEach.call(box.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed', x===b?'true':'false');});
+      state[key]=b.getAttribute('data-v'); render();
+    });
+  }
+  seg('segSurg','surg'); seg('segFunc','func');
+  document.getElementById('age').addEventListener('input',function(e){ state.age=e.target.value?parseInt(e.target.value,10):null; render(); });
+
+  function any(map,keys){ return keys.some(function(k){return map[k];}); }
+
+  function compute(){
+    var co=state.co, act=state.active;
+    var highSurg=state.surg==='high', intSurg=state.surg==='int', lowSurg=state.surg==='low';
+    var poorFunc=state.func==='poor';
+    var age=state.age;
+    // ---- RCRI ----
+    var rcri=0, rf=[];
+    if(highSurg){ rcri++; rf.push('high-risk surgery'); }
+    if(co.ihd){ rcri++; rf.push('ischemic heart disease'); }
+    if(co.chf){ rcri++; rf.push('heart failure'); }
+    if(co.cva){ rcri++; rf.push('cerebrovascular disease'); }
+    if(co.dm_ins){ rcri++; rf.push('insulin-treated diabetes'); }
+    if(co.ckd){ rcri++; rf.push('creatinine >2 mg/dL'); }
+    var mace={0:'~3.9%',1:'~6.0%',2:'~10.1%'}[rcri] || '~15%+';
+    var elevated = rcri>=1 || highSurg;
+    var activeAny = any(act,['acs','dhf','arr','sev']);
+
+    // ---- Cardiac pathway ----
+    var card={};
+    if(activeAny){
+      card={pill:'p-red', label:'Optimize / cardiology first',
+        text:'An active/unstable cardiac condition is flagged. For elective surgery, optimize and involve cardiology before proceeding; for emergencies, proceed with risk mitigation and close monitoring.'};
+    } else if(lowSurg && rcri===0){
+      card={pill:'p-green', label:'Proceed — no further cardiac testing',
+        text:'Low-risk surgery with a low RCRI. No routine preoperative cardiac stress testing or echo indicated.'};
+    } else if(!elevated){
+      card={pill:'p-green', label:'Proceed',
+        text:'Low estimated risk. Proceed without additional cardiac testing; continue guideline-directed cardiac meds (beta-blocker/statin if already prescribed).'};
+    } else if(!poorFunc){
+      card={pill:'p-green', label:'Proceed (adequate functional capacity)',
+        text:'Elevated risk but functional capacity is ≥4 METs — proceed to surgery. Further cardiac testing is generally not needed when capacity is good.'};
+    } else {
+      card={pill:'p-amber', label:'Consider biomarkers ± further testing',
+        text:'Elevated risk with poor/unknown functional capacity. Consider a preoperative natriuretic peptide (BNP/NT-proBNP) ± troponin; pursue stress testing only if the result would change management. Involve cardiology for complex cases.'};
+    }
+    card.sub='RCRI '+rcri+' ('+(rf.length?rf.join(', '):'no factors')+') · est. MACE '+mace;
+
+    // ---- Preop tests ----
+    var tests=[];
+    // ECG
+    var ecgWhy=[];
+    if(co.ihd||co.chf||co.valv||co.arr||co.cied||co.pad||activeAny) ecgWhy.push('known cardiac disease');
+    if(age!=null && age>=65) ecgWhy.push('age ≥65');
+    if(age!=null && age>=45 && (co.htn||co.dm_ins||co.dm_ni||co.ckd||co.smoke||co.pad)) ecgWhy.push('age ≥45 with CV risk factors');
+    if((intSurg||highSurg) && (co.ihd||co.chf||co.cva||co.dm_ins||co.ckd)) ecgWhy.push('cardiac risk + non-low-risk surgery');
+    if(ecgWhy.length) tests.push({t:'ECG (12-lead)', why:ecgWhy});
+    // CBC / Hgb
+    var cbcWhy=[];
+    if(co.anemia) cbcWhy.push('known/suspected anemia');
+    if(highSurg) cbcWhy.push('anticipated significant blood loss');
+    if(co.ckd) cbcWhy.push('CKD');
+    if(co.chf||co.ihd) cbcWhy.push('cardiac disease');
+    if(cbcWhy.length) tests.push({t:'CBC / hemoglobin', why:cbcWhy});
+    // BMP
+    var bmpWhy=[];
+    if(co.ckd) bmpWhy.push('renal disease');
+    if(co.dm_ins||co.dm_ni) bmpWhy.push('diabetes');
+    if(co.htn) bmpWhy.push('hypertension / RAAS or diuretic therapy');
+    if(highSurg) bmpWhy.push('major surgery / fluid shifts');
+    if(co.liver) bmpWhy.push('liver disease');
+    if(bmpWhy.length) tests.push({t:'Electrolytes / renal (BMP)', why:bmpWhy});
+    // Coags
+    var coagWhy=[];
+    if(co.anticoag) coagWhy.push('anticoagulant / antiplatelet therapy');
+    if(co.liver) coagWhy.push('liver disease');
+    if(co.bleed) coagWhy.push('bleeding disorder/history');
+    if(coagWhy.length) tests.push({t:'Coagulation (PT/INR, aPTT)', why:coagWhy});
+    // Glucose/HbA1c
+    if(co.dm_ins||co.dm_ni) tests.push({t:'Glucose / HbA1c', why:['diabetes — optimize peri-op control']});
+    // Type & screen
+    if(highSurg) tests.push({t:'Type & screen', why:['procedure with significant blood-loss potential']});
+    // Pregnancy
+    if(co.preg) tests.push({t:'Pregnancy test (hCG)', why:['possible pregnancy — if result alters management']});
+    // Echo
+    var echoWhy=[];
+    if(act.sev||co.valv) echoWhy.push('known/suspected significant valve disease without a recent echo');
+    if(act.dhf) echoWhy.push('heart failure with change in status / dyspnea of unclear cause');
+    if(echoWhy.length) tests.push({t:'Echocardiography', why:echoWhy, tag:'if not recent'});
+    // CXR
+    var cxrWhy=[];
+    if((co.copd||act.dhf) && (highSurg||poorFunc)) cxrWhy.push('active/unstable cardiopulmonary disease');
+    if(cxrWhy.length) tests.push({t:'Chest X-ray', why:cxrWhy, tag:'not routine'});
+
+    // ---- Clinic referral ----
+    var burden=0; ['ihd','chf','valv','cied','cva','pad','dm_ins','ckd','copd','osa','liver','anticoag','bleed','frail','airway'].forEach(function(k){ if(co[k]) burden++; });
+    var ref={};
+    if(activeAny || co.airway || burden>=3 || (poorFunc && (intSurg||highSurg)) || highSurg){
+      ref={pill:'p-red', label:'In-person pre-anesthesia clinic visit',
+        text:'Significant comorbidity burden, poor functional capacity with major surgery, an active condition, or a difficult-airway history — see in the PAT clinic to optimize and plan before the day of surgery.'};
+    } else if(burden>=1 || intSurg || (age!=null && age>=65)){
+      ref={pill:'p-amber', label:'Nurse / telephone screen',
+        text:'Stable comorbidity for low/intermediate surgery — a structured phone or nurse screen is usually sufficient, with escalation to an in-person visit if new issues surface.'};
+    } else {
+      ref={pill:'p-green', label:'Proceed — day-of assessment',
+        text:'Healthy patient (ASA I–II) for low-risk surgery — routine day-of anesthesia assessment; no dedicated clinic visit needed.'};
+    }
+
+    // ---- Optimization triggers ----
+    var opt=[];
+    if(co.anemia) opt.push('<b>Anemia:</b> work up the cause and treat before elective surgery — IV iron / Patient Blood Management (needs weeks to work).');
+    if(co.dm_ins||co.dm_ni) opt.push('<b>Diabetes:</b> check HbA1c and optimize control. <b>GLP-1 agonists</b> — <i>flag for review:</i> FLH policy skips the last dose; 2024 multisociety guidance favors continuing with mitigation (clear-liquids day, treat as aspiration risk) — confirm per your protocol. <b>SGLT2 inhibitors</b> — <i>flag for review:</i> FLH policy skips the last dose; newer guidance holds 3–4 days (euglycemic DKA risk).');
+    if(co.osa) opt.push('<b>OSA:</b> screen (e.g., STOP-BANG), continue CPAP, and plan postoperative respiratory monitoring and opioid-sparing analgesia.');
+    if(co.anticoag) opt.push('<b>Anticoagulation:</b> plan interruption ± bridging by thrombotic vs bleeding risk (see the Anticoagulation Peri-Op entry); apply ASRA intervals if neuraxial is planned.');
+    if(co.frail || (age!=null && age>=65)) opt.push('<b>Frailty / older adult:</b> screen for frailty, consider prehabilitation, and use delirium-prevention measures.');
+    if(co.smoke) opt.push('<b>Smoking:</b> advise cessation — ideally ≥4 weeks before surgery.');
+    if(co.copd) opt.push('<b>COPD / asthma:</b> optimize control (inhalers, treat exacerbation) and consider chest optimization before elective surgery.');
+    if(co.htn) opt.push('<b>Hypertension:</b> continue most agents; individualize ACE-inhibitors/ARBs (often held the morning of surgery).');
+    if(co.cied) opt.push('<b>CIED (pacemaker/ICD):</b> obtain device details and a management plan (magnet vs reprogramming) with the cautery plan.');
+
+    return {rcri:rcri, mace:mace, card:card, tests:tests, ref:ref, opt:opt};
+  }
+
+  function block(title, pill, pillLabel, sub){
+    var h='<div class="rblock"><h3>'+title;
+    if(pill) h+=' <span class="pill '+pill+'">'+pillLabel+'</span>';
+    h+='</h3>';
+    if(sub) h+='<p style="color:var(--muted); font-size:12px; margin-top:2px">'+sub+'</p>';
+    return h;
+  }
+
+  function render(){
+    var r=compute();
+    var h='';
+    // cardiac
+    h+=block('Cardiac pathway', r.card.pill, r.card.label, r.card.sub);
+    h+='<p>'+r.card.text+'</p></div>';
+    // tests
+    h+='<div class="rblock"><h3>Suggested preoperative tests</h3>';
+    if(r.tests.length){
+      h+='<ul>';
+      r.tests.forEach(function(t){ h+='<li><b>'+t.t+'</b>'+(t.tag?' <span class="tag">'+t.tag+'</span>':'')+' — '+t.why.join('; ')+'</li>'; });
+      h+='</ul>';
+    } else {
+      h+='<p class="none">No routine tests indicated — healthy patient / low-risk surgery. Test only for a specific indication.</p>';
+    }
+    h+='</div>';
+    // referral
+    h+=block('Clinic referral', r.ref.pill, r.ref.label, null);
+    h+='<p>'+r.ref.text+'</p></div>';
+    // optimization
+    h+='<div class="rblock"><h3>Optimization triggers</h3>';
+    if(r.opt.length){ h+='<ul>'; r.opt.forEach(function(o){ h+='<li>'+o+'</li>'; }); h+='</ul>'; }
+    else { h+='<p class="none">None flagged.</p>'; }
+    h+='</div>';
+    document.getElementById('results').innerHTML=h;
+  }
+  render();
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+<script src="nav.js" defer></script>
+</body>
+</html>

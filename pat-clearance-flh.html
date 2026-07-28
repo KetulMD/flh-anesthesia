@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Preoperative (PAT) clearance helper — FLH institutional PreAdmission Testing policy (rev 04/17/24) — testing matrix, triage, meds">
+<title>PAT Clearance — FLH Policy</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<meta name="theme-color" content="#f2f2f7">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FLH Anesthesia">
+<style>
+  :root{
+    --bg:#f5f3ee; --surface:#ffffff; --ink:#25313a; --muted:#7c8896; --muted2:#5c6773;
+    --line:#e7e3da; --line2:#efece5;
+    --accent:#0e6a6a; --accent-bg:#0e6a6a12;
+    --amber:#b4560b; --amber-bg:#c26a0f14; --amber-line:#e2c9a3;
+    --red:#b3261e; --red-bg:#fdeceb; --red-line:#f0c5c2;
+    --green:#1e7a44; --green-bg:#eef9f1; --green-line:#bfe3cc;
+    --blue:#2f6fed;
+    --r:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); margin:0; padding:20px 14px calc(60px + env(safe-area-inset-bottom));
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+  }
+  .wrap{max-width:640px; margin:0 auto}
+  header{margin:4px 2px 14px}
+  h1{font-size:22px; font-weight:700; margin:0 0 3px; letter-spacing:.2px}
+  .sub{color:var(--muted2); font-size:13px; margin:0}
+  .disc{background:var(--amber-bg); border:1px solid var(--amber-line); color:#7a4a12;
+    border-radius:12px; padding:11px 13px; font-size:12.5px; line-height:1.5; margin:12px 0 16px}
+  .disc b{color:#6a3f0f}
+  .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+    padding:16px 16px 18px; margin-bottom:14px; box-shadow:0 3px 14px rgba(18,24,33,.04)}
+  .lbl{font-size:11px; font-weight:700; letter-spacing:1.1px; text-transform:uppercase; color:var(--muted); margin:0 0 10px}
+  .hint{font-size:12px; color:var(--muted); margin:3px 0 0}
+  /* segmented control */
+  .seg{display:flex; gap:6px; flex-wrap:wrap}
+  .seg button{flex:1; min-width:92px; appearance:none; border:1px solid var(--line); background:#faf9f6;
+    color:var(--ink); border-radius:10px; padding:11px 10px; font-size:14px; font-weight:600; cursor:pointer;
+    transition:.14s; line-height:1.2}
+  .seg button .ex{display:block; font-size:10.5px; font-weight:500; color:var(--muted); margin-top:3px}
+  .seg button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+  .seg button[aria-pressed="true"] .ex{color:#dCECEC}
+  /* checkbox grid */
+  .grp{margin-top:14px}
+  .grp:first-child{margin-top:0}
+  .grp-h{font-size:12px; font-weight:700; color:var(--muted2); margin:0 0 8px}
+  .chips{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  @media(max-width:460px){ .chips{grid-template-columns:1fr} }
+  .chip{display:flex; align-items:center; gap:9px; border:1px solid var(--line); background:#faf9f6;
+    border-radius:10px; padding:10px 11px; font-size:13.5px; cursor:pointer; transition:.14s; user-select:none}
+  .chip input{position:absolute; opacity:0; width:0; height:0}
+  .chip .bx{flex:none; width:20px; height:20px; border-radius:6px; border:1.5px solid var(--faint,#c7cdd6);
+    display:flex; align-items:center; justify-content:center; transition:.12s}
+  .chip .bx svg{width:12px; height:12px; opacity:0; transition:.12s}
+  .chip.on{border-color:var(--accent); background:var(--accent-bg)}
+  .chip.on .bx{background:var(--accent); border-color:var(--accent)}
+  .chip.on .bx svg{opacity:1}
+  /* age */
+  .agerow{display:flex; align-items:center; gap:12px}
+  .agerow input[type=number]{width:92px; font-size:16px; padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:#faf9f6}
+  /* results */
+  .res .lbl{margin-bottom:12px}
+  .rblock{border:1px solid var(--line); border-radius:12px; padding:13px 14px; margin-bottom:10px; background:#fbfaf7}
+  .rblock:last-child{margin-bottom:0}
+  .rblock h3{margin:0 0 7px; font-size:13.5px; font-weight:700; display:flex; align-items:center; gap:8px}
+  .pill{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px}
+  .p-green{background:var(--green-bg); color:var(--green); border:1px solid var(--green-line)}
+  .p-amber{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-line)}
+  .p-red{background:var(--red-bg); color:var(--red); border:1px solid var(--red-line)}
+  .p-blue{background:#eaf1fe; color:var(--blue); border:1px solid #c7dbfb}
+  .rblock ul{margin:6px 0 0; padding-left:18px}
+  .rblock li{font-size:13px; margin:3px 0; line-height:1.45}
+  .rblock .none{font-size:13px; color:var(--muted); font-style:italic}
+  .rblock p{margin:4px 0 0; font-size:13px; line-height:1.45}
+  .tag{display:inline-block; font-size:11px; color:var(--muted); background:#f0ede6; border-radius:6px; padding:1px 7px; margin-left:6px}
+  .foot{margin-top:8px; text-align:center}
+  .foot a{color:var(--accent); font-size:13px; text-decoration:none}
+  .cite{font-size:11px; color:var(--muted); text-align:center; margin-top:14px; line-height:1.5}
+  .wm{position:fixed; inset:0; pointer-events:none; z-index:0; display:flex; align-items:center; justify-content:center;
+    font-size:44px; font-weight:800; color:#25313a08; transform:rotate(-24deg); letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="wm" aria-hidden="true">AI · VERIFY BEFORE USE</div>
+<div class="wrap" style="position:relative; z-index:1">
+  <header>
+    <h1>PAT Clearance &mdash; FLH Policy</h1>
+    <p class="sub">Based on the FLH <i>PreAdmission Testing Guidelines</i> (rev 04/17/24)</p>
+    <p class="sub" style="margin-top:4px"><a href="pat-clearance.html">Switch to general guideline version &rarr;</a></p>
+  </header>
+  <div class="disc"><b>AI-generated decision support — verify before use.</b> Reflects the FLH institutional policy (rev 04/17/24). Minimum requirements only; additional testing may be ordered at surgeon / PMD / anesthesiologist discretion. Not a substitute for clinical judgment.</div>
+
+  <div class="card">
+    <p class="lbl">1 · ASA physical status</p>
+    <div class="seg" id="segAsa" role="group" aria-label="ASA class">
+      <button data-v="1" aria-pressed="false">ASA I<span class="ex">normal healthy</span></button>
+      <button data-v="2" aria-pressed="true">ASA II<span class="ex">mild systemic dz</span></button>
+      <button data-v="3" aria-pressed="false">ASA III<span class="ex">severe systemic dz</span></button>
+      <button data-v="4" aria-pressed="false">ASA IV<span class="ex">constant threat to life</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="lbl">2 · Procedure invasiveness</p>
+    <div class="seg" id="segInv" role="group" aria-label="Invasiveness">
+      <button data-v="min" aria-pressed="false">Minimally<span class="ex">endoscopy, cataract, superficial, CTR, breast</span></button>
+      <button data-v="mod" aria-pressed="true">Moderately<span class="ex">CEA, head/neck, ortho, intraperitoneal, prostate</span></button>
+      <button data-v="high" aria-pressed="false">Highly<span class="ex">vascular, intrathoracic, joint repl, bowel, emergency</span></button>
+    </div>
+    <div class="chips" id="grpProc" style="margin-top:12px"></div>
+    <div class="agerow" style="margin-top:14px">
+      <span class="lbl" style="margin:0">Age</span>
+      <input type="number" id="age" min="0" max="120" placeholder="yrs" inputmode="numeric">
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="lbl">3 · Medical history <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted)">(policy Table 5)</span></p>
+    <div id="grpHx"></div>
+  </div>
+
+  <div class="card res">
+    <p class="lbl">Assessment</p>
+    <div id="results"></div>
+  </div>
+
+  <p class="cite">Source: FLH <i>PreAdmission Testing Guidelines</i>, rev 04/17/24 (K. Patel, M.D., Chief of Anesthesia). Labs valid 90 days / EKG 12 months if normal &amp; unchanged. References: ASA Practice Advisory for Preanesthesia Evaluation; ASA fasting guidelines.</p>
+  <div class="foot"><a href="index.html">&larr; Back to portal</a></div>
+</div>
+
+<script>
+(function(){
+  var state={asa:'2', inv:'mod', age:null, proc:{}, hx:{}};
+
+  // procedure-specific carve-outs
+  var PROC=[
+    {k:'cataract', t:'Cataract surgery'},
+    {k:'gi', t:'GI / endoscopic (GI provider sets ASA)'}
+  ];
+
+  // policy Table 5 rows: condition -> required tests + misc
+  var HX=[
+    {k:'dm',    t:'Diabetes', tests:['BMP','EKG'], misc:['FBS on day of surgery']},
+    {k:'card',  t:'Cardiac / HTN / PVD', tests:['BMP','EKG']},
+    {k:'hep',   t:'Hepatic disease', tests:['CBC','BMP','PT/INR','LFT']},
+    {k:'renal', t:'Renal disease', tests:['CBC','BMP','EKG'], misc:['K⁺ within 24 h']},
+    {k:'giloss',t:'N/V or diarrhea (volume loss)', tests:['CBC','BMP']},
+    {k:'heme',  t:'Hematologic disorder', tests:['CBC','EKG','PT/INR','PTT']},
+    {k:'pulm',  t:'Symptomatic pulmonary disease', tests:['EKG','CXR']},
+    {k:'diur',  t:'Diuretic use', tests:['BMP']},
+    {k:'ster',  t:'Steroid use', tests:['BMP']},
+    {k:'hepar', t:'Heparin', tests:['PTT']},
+    {k:'coum',  t:'Coumadin / warfarin', tests:['PT/INR']},
+    {k:'drug',  t:'Digoxin / theophylline / lithium / anticonvulsant', tests:['BMP'], misc:['drug level']},
+    {k:'turp',  t:'Urologic (TURP)', tests:['BMP']},
+    {k:'adr',   t:'Adrenal disease', tests:['BMP']},
+    {k:'nmd',   t:'Neurologic / muscle disease', tests:['BMP']},
+    {k:'cied',  t:'Pacemaker / ICD (CIED)', tests:[]},
+    {k:'osa',   t:'Obstructive sleep apnea', tests:[]},
+    {k:'seiz',  t:'Seizure disorder', tests:[]},
+    {k:'anticoag', t:'On anticoagulant / antiplatelet', tests:[]}
+  ];
+  var HXMAP={}; HX.forEach(function(h){ HXMAP[h.k]=h; });
+
+  var CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  function chip(map,k,t){
+    var id='c_'+k;
+    var el=document.createElement('label'); el.className='chip'; el.setAttribute('for',id);
+    el.innerHTML='<span class="bx">'+CHECK+'</span><span>'+t+'</span>';
+    var inp=document.createElement('input'); inp.type='checkbox'; inp.id=id;
+    inp.addEventListener('change',function(){ map[k]=inp.checked; el.classList.toggle('on',inp.checked); render(); });
+    el.insertBefore(inp,el.firstChild);
+    return el;
+  }
+  var gp=document.getElementById('grpProc');
+  PROC.forEach(function(p){ gp.appendChild(chip(state.proc,p.k,p.t)); });
+  var gh=document.getElementById('grpHx');
+  var grid=document.createElement('div'); grid.className='chips';
+  HX.forEach(function(h){ grid.appendChild(chip(state.hx,h.k,h.t)); });
+  gh.appendChild(grid);
+
+  function seg(id,key){
+    var box=document.getElementById(id);
+    box.addEventListener('click',function(e){
+      var b=e.target.closest('button'); if(!b) return;
+      [].forEach.call(box.querySelectorAll('button'),function(x){x.setAttribute('aria-pressed', x===b?'true':'false');});
+      state[key]=b.getAttribute('data-v'); render();
+    });
+  }
+  seg('segAsa','asa'); seg('segInv','inv');
+  document.getElementById('age').addEventListener('input',function(e){ state.age=e.target.value?parseInt(e.target.value,10):null; render(); });
+
+  var TESTORDER=['CBC','BMP','EKG','CXR','PT/INR','PTT','LFT'];
+
+  function compute(){
+    var hx=state.hx, asa=parseInt(state.asa,10), inv=state.inv;
+    var minInv = inv==='min' || state.proc.cataract || state.proc.gi;
+
+    // ---- PAT triage ----
+    var tri={};
+    if(asa>=3){
+      tri={pill:'p-red', label:'PAT required (ASA III–IV)',
+        text:'ASA III–IV patients require a pre-anesthesia testing (PAT) assessment. For GI/endoscopy the GI provider determines the ASA class.'};
+    } else if(minInv){
+      tri={pill:'p-green', label:'No routine PAT triage',
+        text:'ASA I–II for a minimally invasive procedure (endoscopy / cataract / superficial) — no routine PAT triage or routine testing required. Test only for a specific indication.'};
+    } else {
+      tri={pill:'p-amber', label:'PAT per testing matrix',
+        text:'ASA I–II for a '+(inv==='high'?'highly':'moderately')+' invasive procedure — apply the minimum testing requirements below (policy Table 5).'};
+    }
+
+    // ---- Testing matrix ----
+    var byTest={}, misc=[], triggered=[];
+    HX.forEach(function(h){
+      if(!hx[h.k]) return;
+      triggered.push(h.k);
+      (h.tests||[]).forEach(function(t){ (byTest[t]=byTest[t]||[]).push(h.t.split(' (')[0]); });
+      (h.misc||[]).forEach(function(m){ misc.push(m); });
+    });
+    var testList=[];
+    TESTORDER.forEach(function(t){
+      if(byTest[t]){
+        // de-dup reasons
+        var seen={}, reasons=[]; byTest[t].forEach(function(r){ if(!seen[r]){seen[r]=1; reasons.push(r);} });
+        testList.push({t:t, why:reasons});
+      }
+    });
+    var testState;
+    if(minInv){
+      testState='min'; // suppressed
+    } else if(testList.length || misc.length){
+      testState='list';
+    } else {
+      testState='none';
+    }
+
+    // ---- Cardiac / CIED ----
+    var card=[];
+    card.push('Policy defers cardiac risk evaluation to Anesthesia. If the patient has a cardiologist, obtain recent cardiac testing automatically; Anesthesia may request a cardiac evaluation based on assessment.');
+    if(hx.card) card.push('<b>Cardiac / HTN / PVD:</b> BMP + EKG required (Table 5).');
+    if(hx.cied) card.push('<b>CIED (pacemaker/ICD):</b> obtain the device card &amp; document — manufacturer / type, date of last interrogation, cautery use (uni/bipolar), magnet plan, defibrillation pads/paddles, and re-programming after magnet use.');
+
+    // ---- Medications ----
+    var meds=[];
+    if(hx.dm){
+      meds.push('<b>Oral hypoglycemics</b> (metformin, sulfonylureas, etc.) — discontinue 24 h before surgery.');
+      meds.push('<b>Insulin</b> — avoid rapid-acting on DOS; adjust other forms to glucose; insulin pump per endocrinology.');
+      meds.push('<b>GLP-1 agonists</b> — <i>flag for review:</i> policy = skip the last weekly/daily dose; 2024 multisociety guidance favors continuing with mitigation (clear-liquids day, treat as aspiration risk). Confirm per protocol.');
+      meds.push('<b>SGLT2 inhibitors</b> — <i>flag for review:</i> policy = skip the last daily dose; newer guidance holds 3–4 days (euglycemic DKA risk).');
+    }
+    if(hx.diur) meds.push('<b>Diuretics</b> — hold on DOS (unless for CHF — follow cardiologist).');
+    if(hx.card) meds.push('<b>ACE / ARB</b> — held on DOS to prevent hypotension (continue if prescribed for CHF). <b>Beta-blockers, anti-arrhythmics (digoxin, CCB)</b> — take AM dose.');
+    if(hx.anticoag || hx.hepar || hx.coum) meds.push('<b>Anticoagulants / antiplatelets</b> — manage by thrombosis-vs-bleeding risk, per surgeon/cardiologist; hold per drug half-life. Aspirin — usually continue unless the surgeon directs otherwise.');
+    // essentials always
+    meds.push('<b>Always take AM (sip of water):</b> beta-blockers &amp; anti-arrhythmics, asthma inhalers/steroids, GERD meds, statins, aspirin (unless surgeon holds), ACE/ARB if for CHF, Parkinson’s meds, psychiatric meds. <b>Herbals</b> — stop 24 h before.');
+
+    // ---- Special notes ----
+    var notes=[];
+    if(hx.osa) notes.push('<b>OSA:</b> confirm at PAT interview; ask the patient to bring their home CPAP on DOS; notify the OR scheduler. Contact Bio-Med (inpatient) or RT if equipment is needed.');
+    if(hx.pulm) notes.push('<b>Pulmonary:</b> poorly-controlled asthma / severe COPD / O₂-dependent → anesthesia evaluation; PMD to optimize. Acute productive cough or worse-than-baseline symptoms → PMD optimize first. Recent pneumonia or CHF → CXR after treatment.');
+    if(hx.seiz) notes.push('<b>Seizure disorder:</b> if seizure-free ≥6 months, drug levels are not needed; otherwise follow the testing protocol (anticonvulsant level).');
+    if(state.proc.cataract) notes.push('<b>Cataract:</b> no routine testing — including O₂-dependent patients.');
+
+    return {tri:tri, testState:testState, testList:testList, misc:misc, card:card, meds:meds, notes:notes};
+  }
+
+  function block(title, pill, pillLabel){
+    var h='<div class="rblock"><h3>'+title;
+    if(pill) h+=' <span class="pill '+pill+'">'+pillLabel+'</span>';
+    h+='</h3>';
+    return h;
+  }
+
+  function render(){
+    var r=compute();
+    var h='';
+    // triage
+    h+=block('PAT triage', r.tri.pill, r.tri.label);
+    h+='<p>'+r.tri.text+'</p></div>';
+    // testing
+    h+='<div class="rblock"><h3>Required testing <span class="tag">min. per policy</span></h3>';
+    if(r.testState==='min'){
+      h+='<p class="none">No routine testing required for a minimally invasive procedure. Order only for a specific indication.</p>';
+    } else if(r.testState==='none'){
+      h+='<p class="none">No condition-specific tests triggered. Follow the Pre-Anesthesia Testing Protocol minimums for this procedure.</p>';
+    } else {
+      h+='<ul>';
+      r.testList.forEach(function(t){ h+='<li><b>'+t.t+'</b> — '+t.why.join(', ')+'</li>'; });
+      if(r.misc.length){ var sm={}, ml=[]; r.misc.forEach(function(m){ if(!sm[m]){sm[m]=1; ml.push(m);} }); h+='<li><b>Also:</b> '+ml.join('; ')+'</li>'; }
+      h+='</ul><p style="color:var(--muted);font-size:12px">Labs valid 90 days · EKG valid 12 months (if normal &amp; unchanged). Abnormal EKG → obtain prior for comparison.</p>';
+    }
+    h+='</div>';
+    // cardiac
+    h+='<div class="rblock"><h3>Cardiac / CIED</h3>';
+    h+='<ul>'; r.card.forEach(function(c){ h+='<li>'+c+'</li>'; }); h+='</ul></div>';
+    // meds
+    h+='<div class="rblock"><h3>Medication management</h3>';
+    h+='<ul>'; r.meds.forEach(function(m){ h+='<li>'+m+'</li>'; }); h+='</ul></div>';
+    // notes
+    if(r.notes.length){
+      h+='<div class="rblock"><h3>Special precautions</h3><ul>';
+      r.notes.forEach(function(n){ h+='<li>'+n+'</li>'; }); h+='</ul></div>';
+    }
+    document.getElementById('results').innerHTML=h;
+  }
+  render();
+})();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+<script src="nav.js" defer></script>
+</body>
+</html>
