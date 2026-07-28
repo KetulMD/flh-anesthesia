@@ -683,7 +683,7 @@ window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(win
   function renderLanding(){
     if(count) count.innerHTML='';
     var counts={}; DATA.forEach(function(e){counts[e.cat]=(counts[e.cat]||0)+1;});
-    var h=quickRow('fav','★ Favorites',FAV)+quickRow('rec','Recent',RECENT);
+    var h=quickRow('fav','★ Favorites',FAV);
     h+='<div class="tiles">';
     CATMETA.forEach(function(m){
       if(m.href){
