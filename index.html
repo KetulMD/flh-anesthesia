@@ -56,6 +56,24 @@
   .tile.green{background:#eef9f1; border-color:#bfe3cc; color:#1e7a44; font-weight:600}
   .tile.green svg{color:#1e7a44}
   .tile.green .chev{color:#9ed3b3}
+  /* Share & Install */
+  .installcard{display:flex; align-items:center; gap:18px; padding:18px;
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); flex-wrap:wrap}
+  .qrbox{display:flex; flex-direction:column; align-items:center; gap:7px; flex:none}
+  .qrbox svg{width:132px; height:132px; border:1px solid var(--border); border-radius:8px; background:#fff; display:block}
+  .qrcap{font-size:11px; font-weight:600; letter-spacing:.4px; text-transform:uppercase; color:var(--muted)}
+  .installtxt{flex:1; min-width:190px}
+  .installlead{font-size:15px; font-weight:600; margin:0 0 4px}
+  .installsub{font-size:13px; color:var(--muted); margin:0 0 13px; line-height:1.45}
+  .instbtn{appearance:none; -webkit-appearance:none; border:0; background:#2f6fed; color:#fff;
+    font-size:14px; font-weight:600; padding:11px 20px; border-radius:10px; cursor:pointer; transition:.16s ease}
+  .instbtn:hover{background:#215ad0}
+  .instbtn:focus-visible{outline:2px solid #2f6fed; outline-offset:2px}
+  .ioshint{font-size:13px; color:var(--text); line-height:1.55;
+    background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:11px 13px}
+  .shareico{display:inline-block; font-weight:700; color:#2f6fed}
+  .instok{font-size:13px; font-weight:600; color:#1e7a44; margin:0}
+  @media(max-width:520px){ .installcard{justify-content:center; text-align:center} .installtxt{text-align:center} }
 </style>
 <style>
 @view-transition{navigation:auto}
@@ -127,6 +145,20 @@ window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(win
         <span>Useful Links</span><span class="chev">&rsaquo;</span>
       </a>
     </div>
+    <div class="seclabel">Share &amp; Install</div>
+    <div class="installcard">
+      <div class="qrbox">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37 37" shape-rendering="crispEdges" width="148" height="148" role="img" aria-label="QR code linking to www.flhanesthesia.com"><rect width="37" height="37" fill="#ffffff"/><path d="M4 4h7v1h-7zM14 4h1v1h-1zM16 4h1v1h-1zM18 4h1v1h-1zM23 4h1v1h-1zM26 4h7v1h-7zM4 5h1v1h-1zM10 5h1v1h-1zM14 5h1v1h-1zM16 5h1v1h-1zM20 5h1v1h-1zM24 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM4 6h1v1h-1zM6 6h3v1h-3zM10 6h1v1h-1zM13 6h2v1h-2zM16 6h1v1h-1zM18 6h2v1h-2zM21 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h3v1h-3zM32 6h1v1h-1zM4 7h1v1h-1zM6 7h3v1h-3zM10 7h1v1h-1zM14 7h2v1h-2zM17 7h1v1h-1zM20 7h1v1h-1zM22 7h2v1h-2zM26 7h1v1h-1zM28 7h3v1h-3zM32 7h1v1h-1zM4 8h1v1h-1zM6 8h3v1h-3zM10 8h1v1h-1zM13 8h1v1h-1zM15 8h2v1h-2zM21 8h2v1h-2zM26 8h1v1h-1zM28 8h3v1h-3zM32 8h1v1h-1zM4 9h1v1h-1zM10 9h1v1h-1zM12 9h1v1h-1zM15 9h1v1h-1zM19 9h2v1h-2zM23 9h2v1h-2zM26 9h1v1h-1zM32 9h1v1h-1zM4 10h7v1h-7zM12 10h1v1h-1zM14 10h1v1h-1zM16 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM24 10h1v1h-1zM26 10h7v1h-7zM17 11h1v1h-1zM19 11h4v1h-4zM4 12h1v1h-1zM7 12h1v1h-1zM9 12h2v1h-2zM12 12h1v1h-1zM16 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM23 12h1v1h-1zM25 12h1v1h-1zM27 12h1v1h-1zM5 13h1v1h-1zM8 13h1v1h-1zM11 13h1v1h-1zM13 13h3v1h-3zM17 13h1v1h-1zM19 13h3v1h-3zM24 13h3v1h-3zM29 13h1v1h-1zM32 13h1v1h-1zM5 14h6v1h-6zM14 14h2v1h-2zM17 14h3v1h-3zM22 14h4v1h-4zM29 14h3v1h-3zM4 15h1v1h-1zM6 15h3v1h-3zM11 15h1v1h-1zM13 15h2v1h-2zM16 15h2v1h-2zM20 15h1v1h-1zM22 15h2v1h-2zM25 15h4v1h-4zM30 15h2v1h-2zM6 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM18 16h2v1h-2zM21 16h2v1h-2zM25 16h2v1h-2zM29 16h1v1h-1zM31 16h2v1h-2zM7 17h1v1h-1zM13 17h1v1h-1zM15 17h6v1h-6zM23 17h3v1h-3zM27 17h1v1h-1zM4 18h3v1h-3zM9 18h3v1h-3zM13 18h6v1h-6zM24 18h2v1h-2zM29 18h4v1h-4zM4 19h2v1h-2zM7 19h1v1h-1zM9 19h1v1h-1zM12 19h2v1h-2zM16 19h1v1h-1zM19 19h1v1h-1zM21 19h1v1h-1zM25 19h1v1h-1zM29 19h1v1h-1zM31 19h1v1h-1zM4 20h8v1h-8zM13 20h1v1h-1zM17 20h1v1h-1zM21 20h1v1h-1zM23 20h1v1h-1zM25 20h1v1h-1zM27 20h1v1h-1zM31 20h1v1h-1zM5 21h5v1h-5zM11 21h1v1h-1zM17 21h4v1h-4zM25 21h3v1h-3zM29 21h1v1h-1zM32 21h1v1h-1zM4 22h1v1h-1zM6 22h2v1h-2zM9 22h2v1h-2zM12 22h1v1h-1zM14 22h2v1h-2zM18 22h5v1h-5zM27 22h1v1h-1zM31 22h2v1h-2zM6 23h4v1h-4zM11 23h1v1h-1zM13 23h4v1h-4zM18 23h1v1h-1zM21 23h2v1h-2zM24 23h3v1h-3zM31 23h2v1h-2zM4 24h1v1h-1zM7 24h2v1h-2zM10 24h1v1h-1zM12 24h1v1h-1zM14 24h1v1h-1zM16 24h1v1h-1zM19 24h1v1h-1zM24 24h5v1h-5zM30 24h1v1h-1zM12 25h1v1h-1zM18 25h2v1h-2zM23 25h2v1h-2zM28 25h1v1h-1zM30 25h3v1h-3zM4 26h7v1h-7zM13 26h2v1h-2zM16 26h1v1h-1zM20 26h2v1h-2zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM31 26h1v1h-1zM4 27h1v1h-1zM10 27h1v1h-1zM12 27h1v1h-1zM14 27h2v1h-2zM18 27h2v1h-2zM22 27h1v1h-1zM24 27h1v1h-1zM28 27h3v1h-3zM4 28h1v1h-1zM6 28h3v1h-3zM10 28h1v1h-1zM15 28h2v1h-2zM20 28h2v1h-2zM24 28h5v1h-5zM31 28h1v1h-1zM4 29h1v1h-1zM6 29h3v1h-3zM10 29h1v1h-1zM12 29h5v1h-5zM19 29h1v1h-1zM24 29h1v1h-1zM26 29h1v1h-1zM28 29h3v1h-3zM32 29h1v1h-1zM4 30h1v1h-1zM6 30h3v1h-3zM10 30h1v1h-1zM13 30h3v1h-3zM17 30h1v1h-1zM19 30h3v1h-3zM23 30h2v1h-2zM28 30h3v1h-3zM32 30h1v1h-1zM4 31h1v1h-1zM10 31h1v1h-1zM20 31h6v1h-6zM28 31h1v1h-1zM31 31h1v1h-1zM4 32h7v1h-7zM12 32h1v1h-1zM18 32h2v1h-2zM22 32h1v1h-1zM24 32h2v1h-2zM27 32h2v1h-2zM31 32h1v1h-1z" fill="#1c1c1e"/></svg>
+        <span class="qrcap">Scan to open</span>
+      </div>
+      <div class="installtxt">
+        <p class="installlead">Add this app to your phone</p>
+        <p class="installsub">Scan the code to open the portal, or install it for one-tap, offline access on your home screen.</p>
+        <button id="installBtn" class="instbtn" type="button" hidden>Install app</button>
+        <div id="iosHint" class="ioshint" hidden>Tap the Share icon <span class="shareico" aria-hidden="true">&#x2191;</span> in your browser bar, then choose <strong>Add to Home Screen</strong>.</div>
+        <p id="installedMsg" class="instok" hidden>&#x2713; App is installed on this device.</p>
+      </div>
+    </div>
   </main>
   <footer>
     <p><strong>FLH Anesthesia Portal</strong></p>
@@ -136,7 +168,31 @@ window.addEventListener('pagereveal',function(e){if(e.viewTransition){var a=(win
 <script>
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('sw.js');
-}</script>
+}
+/* Device-aware PWA install control */
+(function(){
+  var btn = document.getElementById('installBtn');
+  var iosHint = document.getElementById('iosHint');
+  var okMsg = document.getElementById('installedMsg');
+  if (!btn) return;
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  if (standalone) { okMsg.hidden = false; return; }
+  var deferred = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferred = e; iosHint.hidden = true; btn.hidden = false;
+  });
+  btn.addEventListener('click', function(){
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.then(function(){ deferred = null; btn.hidden = true; });
+  });
+  window.addEventListener('appinstalled', function(){
+    btn.hidden = true; iosHint.hidden = true; okMsg.hidden = false;
+  });
+  var ua = window.navigator.userAgent || '';
+  var iOS = /iPad|iPhone|iPod/.test(ua) || (ua.indexOf('Mac') > -1 && 'ontouchend' in document);
+  if (iOS) { iosHint.hidden = false; }
+})();</script>
 <!-- Cloudflare Web Analytics -->
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
         data-cf-beacon='{"token": "77a9f4ec215946878e0567bef9fad4a9"}'></script>
